@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+flutter analyze
+dart format -l 80 —-set-exit-if-changed
+dart analyze --fatal-infos --fatal-warnings
+deno check supabase/**/**/*.ts
+deno fmt
+deno lint
+

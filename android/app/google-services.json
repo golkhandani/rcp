@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500834876642",
+    "project_id": "bestneighbourforver",
+    "storage_bucket": "bestneighbourforver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500834876642:android:d13f26d2871192d95db2bb",
+        "android_client_info": {
+          "package_name": "com.mobile.bnf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj7uy3tV5IT3z1Yl5U8qMk-hXkcK00TLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
