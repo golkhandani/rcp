@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
+import 'package:bnf/core/go_route_named.dart';
 import 'package:bnf/core/models/notification/user_notification_model.dart';
 import 'package:bnf/core/widgets/dashboard_screen_shell.dart';
 import 'package:bnf/core/widgets/sliver_title_bar.dart';
 
-final inboxRoute = GoRoute(
+final inboxRoute = GoRouteNamed(
   path: '/dashboard/inbox',
   name: 'inbox',
   builder: (context, state) => const InboxScreen(),

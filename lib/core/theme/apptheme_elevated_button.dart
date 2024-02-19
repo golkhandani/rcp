@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 
 class AppThemeElevatedButton extends StatelessWidget {
   final bool isLoading;
@@ -27,8 +27,8 @@ class AppThemeElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = background ?? context.colorTheme.primary;
-    final f = foreground ?? context.colorTheme.onPrimary;
+    final c = background ?? context.customTheme.pallete.primary;
+    final f = foreground ?? context.customTheme.pallete.onPrimary;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         fixedSize: constraints == null ? Size(width, height) : null,

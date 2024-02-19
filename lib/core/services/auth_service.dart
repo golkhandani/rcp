@@ -133,7 +133,7 @@ class AuthServie {
     await supabase.auth.signOut();
     final nav = locator.get<GlobalKey<NavigatorState>>();
     Router.neglect(nav.currentContext!, () {
-      nav.currentContext!.goNamed(signinRoute.name!);
+      nav.currentContext!.goNamed(signinRoute.name);
     });
   }
 }

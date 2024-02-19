@@ -53,7 +53,7 @@
 		<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-			<string>com.mobile.bnf</string>
+			<string>com.mrzg.recipe.collector</string>
 		</array>
 		</dict>
 	</array>

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 
 class ScaffoldShell extends StatelessWidget {
   final Widget child;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/theme/theme_extentions.dart';
-import 'package:bnf/core/theme/theme_system.dart';
 
 class AppThemeInputDecoration extends InputDecoration {
   const AppThemeInputDecoration._({
@@ -20,7 +20,7 @@ class AppThemeInputDecoration extends InputDecoration {
   });
 
   factory AppThemeInputDecoration({
-    required AppTheme appTheme,
+    required CustomThemeProvider appTheme,
     String? labelText,
     String? hintText,
     String? contentPadding,
@@ -29,7 +29,7 @@ class AppThemeInputDecoration extends InputDecoration {
     return AppThemeInputDecoration._(
       labelText: labelText,
       hintText: hintText,
-      labelStyle: appTheme.textTheme.subtitleMedium.onBackground.style,
+      labelStyle: appTheme.typoraphy.subtitleMedium.onBackground.textStyle,
       floatingLabelAlignment: FloatingLabelAlignment.start,
       alignLabelWithHint: true,
       contentPadding: const EdgeInsets.all(12),
@@ -37,36 +37,35 @@ class AppThemeInputDecoration extends InputDecoration {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primary,
+          color: appTheme.pallete.primary,
           width: 2.0,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primaryContainer,
+          color: appTheme.pallete.primaryContainer,
           width: 2.0,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color:
-              appTheme.colorTheme.cardBackground.darken(0.9).withOpacity(0.1),
+          color: appTheme.pallete.cardBackground.darken(0.9).withOpacity(0.1),
           width: 2.0,
         ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.errorContainer,
+          color: appTheme.pallete.errorContainer,
           width: 2.0,
         ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.error,
+          color: appTheme.pallete.error,
           width: 2.0,
         ),
       ),
@@ -74,7 +73,7 @@ class AppThemeInputDecoration extends InputDecoration {
   }
 
   factory AppThemeInputDecoration.onPrimaryBackground({
-    required AppTheme appTheme,
+    required CustomThemeProvider appTheme,
     String? labelText,
     String? hintText,
     String? contentPadding,
@@ -83,11 +82,11 @@ class AppThemeInputDecoration extends InputDecoration {
     return AppThemeInputDecoration._(
       labelText: labelText,
       hintText: hintText,
-      labelStyle: appTheme.textTheme.subtitleMedium
-          .withColor(
-            appTheme.colorTheme.onSecondary,
+      labelStyle: appTheme.typoraphy.subtitleMedium
+          .copyWithColor(
+            color: appTheme.pallete.onSecondary,
           )
-          .style,
+          .textStyle,
       floatingLabelAlignment: FloatingLabelAlignment.start,
       alignLabelWithHint: true,
       contentPadding: const EdgeInsets.all(12),
@@ -95,35 +94,35 @@ class AppThemeInputDecoration extends InputDecoration {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.onPrimary,
+          color: appTheme.pallete.onPrimary,
           width: 2.0,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primaryContainer,
+          color: appTheme.pallete.primaryContainer,
           width: 2.0,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.onPrimary.darken(0.9).withOpacity(0.1),
+          color: appTheme.pallete.onPrimary.darken(0.9).withOpacity(0.1),
           width: 2.0,
         ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.errorContainer,
+          color: appTheme.pallete.errorContainer,
           width: 2.0,
         ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.error,
+          color: appTheme.pallete.error,
           width: 2.0,
         ),
       ),
@@ -131,7 +130,7 @@ class AppThemeInputDecoration extends InputDecoration {
   }
 
   factory AppThemeInputDecoration.onSecondaryBackground({
-    required AppTheme appTheme,
+    required CustomThemeProvider appTheme,
     String? labelText,
     String? hintText,
     String? contentPadding,
@@ -140,11 +139,11 @@ class AppThemeInputDecoration extends InputDecoration {
     return AppThemeInputDecoration._(
       labelText: labelText,
       hintText: hintText,
-      labelStyle: appTheme.textTheme.subtitleMedium
-          .withColor(
-            appTheme.colorTheme.onSecondary,
+      labelStyle: appTheme.typoraphy.subtitleMedium
+          .copyWithColor(
+            color: appTheme.pallete.onSecondary,
           )
-          .style,
+          .textStyle,
       floatingLabelAlignment: FloatingLabelAlignment.start,
       alignLabelWithHint: true,
       contentPadding: const EdgeInsets.all(12),
@@ -152,35 +151,35 @@ class AppThemeInputDecoration extends InputDecoration {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.onSecondary,
+          color: appTheme.pallete.onSecondary,
           width: 2.0,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primaryContainer,
+          color: appTheme.pallete.primaryContainer,
           width: 2.0,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.onSecondary.darken(0.9).withOpacity(0.1),
+          color: appTheme.pallete.onSecondary.darken(0.9).withOpacity(0.1),
           width: 2.0,
         ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.errorContainer,
+          color: appTheme.pallete.errorContainer,
           width: 2.0,
         ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.error,
+          color: appTheme.pallete.error,
           width: 2.0,
         ),
       ),
@@ -200,34 +199,33 @@ class AppThemeInputDecorationTheme extends InputDecorationTheme {
   });
 
   factory AppThemeInputDecorationTheme({
-    required AppTheme appTheme,
+    required CustomThemeProvider appTheme,
     String? labelText,
     String? hintText,
   }) {
     return AppThemeInputDecorationTheme._(
-      labelStyle: appTheme.textTheme.subtitleMedium.onBackground.style,
+      labelStyle: appTheme.typoraphy.subtitleMedium.onBackground.textStyle,
       floatingLabelAlignment: FloatingLabelAlignment.start,
       alignLabelWithHint: true,
       contentPadding: const EdgeInsets.all(14),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primary,
+          color: appTheme.pallete.primary,
           width: 2,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: appTheme.colorTheme.primaryContainer,
+          color: appTheme.pallete.primaryContainer,
           width: 2.0,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color:
-              appTheme.colorTheme.cardBackground.darken(0.9).withOpacity(0.1),
+          color: appTheme.pallete.cardBackground.darken(0.9).withOpacity(0.1),
           width: 2.0,
         ),
       ),

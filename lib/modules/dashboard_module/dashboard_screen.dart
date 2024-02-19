@@ -5,39 +5,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:bnf/core/ioc.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/widgets/dashboard_shell.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
 import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
-import 'package:bnf/modules/home_module/request_around_module.dart';
+import 'package:bnf/modules/home_module/home_module.dart';
+import 'package:bnf/modules/setting_module/profile_module.dart';
 import 'package:bnf/modules/setting_module/setting_module.dart';
 import 'package:bnf/modules/user_inbox_module/inbox_module.dart';
-import 'package:bnf/modules/user_request_module/active_request_module.dart';
-import 'package:bnf/modules/user_request_module/request_id_module.dart';
 
 final dahboardItems = [
   DashboardLink(
     iconData: Icons.shopping_cart_outlined,
-    label: 'Around',
-    routeName: requestAroundRoute.name!,
+    label: 'Home',
+    routeName: homeRoute.name,
     index: 0,
   ),
   DashboardLink(
     iconData: Icons.list_alt_outlined,
-    label: 'Active',
-    routeName: activeRequestRoute.name!,
+    label: 'Inbox',
+    routeName: inboxRoute.name,
     index: 1,
   ),
   DashboardLink(
     iconData: Icons.inbox_outlined,
-    label: 'Inbox',
-    routeName: inboxRoute.name!,
+    label: 'Settings',
+    routeName: settingRoute.name,
     index: 2,
   ),
   DashboardLink(
     iconData: Icons.settings_applications_outlined,
-    label: 'Settings',
-    routeName: settingRoute.name!,
+    label: 'Profile',
+    routeName: profileRoute.name,
     index: 3,
   ),
 ];
@@ -126,14 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ? FloatingActionButton(
                   backgroundColor: color,
                   elevation: 1,
-                  onPressed: () {
-                    context.pushNamed(
-                      requestIdRoute.name!,
-                      pathParameters: {
-                        'id': 'new',
-                      },
-                    );
-                  },
+                  onPressed: () {},
                   child: Icon(
                     Icons.add,
                     color: context.colorTheme.onNavBackground,

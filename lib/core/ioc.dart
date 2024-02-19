@@ -10,7 +10,6 @@ import 'package:bnf/core/services/auth_service.dart';
 import 'package:bnf/core/services/notification_banner_service.dart';
 import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/modules/group_module/bloc/group_cubit.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -22,7 +21,7 @@ class StackLogger {
         (info) => '${_logger.levelPrefixes[info.level]} ====> ${info.message}';
   }
 
-  StackTrace get stack => StackTrace.current;
+  StackTrace get stack => StackTrace.empty;
 
   String? _getMessage(Object? object) {
     final message = object is Exception
@@ -33,7 +32,7 @@ class StackLogger {
     return message;
   }
 
-  String _getLog(Object? object, StackTrace stack) {
+  String _getLog(Object? object, StackTrace? stack) {
     return '\n==> Type: ${object.runtimeType} \n==> Message: ${_getMessage(object)} \n==> Stack: $stack \n${List.generate(100, (_) => '_').join()}';
   }
 
@@ -104,14 +103,6 @@ Future<void> setupBloc() async {
   locator.registerFactory(
     () => AuthenticationCubit(
       authServie: locator.get(),
-      banner: locator.get(),
-    ),
-  );
-
-  locator.registerFactory(
-    () => GroupCubit(
-      prefs: locator.get(),
-      supabase: locator.get(),
       banner: locator.get(),
     ),
   );

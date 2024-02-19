@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:bnf/core/theme/decorations.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/packages/components/raw_custom_dropdown.dart';
 
 class SyncDropdownMenu<T> extends StatelessWidget {
@@ -35,13 +35,13 @@ class SyncDropdownMenu<T> extends StatelessWidget {
       label: Text(labelText),
       textStyle: isEnabled
           ? null
-          : context.textTheme.hint
+          : context.typoraphyTheme.hint
               .copyWith(
-                fontSize: context.textTheme.bodyLarge.style.fontSize,
+                fontSize: context.typoraphyTheme.bodyLarge.textStyle.fontSize,
               )
-              .style,
+              .textStyle,
       inputDecorationTheme: AppThemeInputDecorationTheme(
-        appTheme: context.appTheme,
+        appTheme: context.customTheme,
       ),
       menuStyle: MenuStyle(
         maximumSize: const MaterialStatePropertyAll(
@@ -99,14 +99,14 @@ class AsyncDropdownMenu<T> extends StatelessWidget {
       label: labelText != null ? Text(labelText!) : null,
       textStyle: isEnabled
           ? null
-          : context.textTheme.hint
+          : context.typoraphyTheme.hint
               .copyWith(
-                fontSize: context.textTheme.bodyLarge.style.fontSize,
+                fontSize: context.typoraphyTheme.bodyLarge.textStyle.fontSize,
               )
-              .style,
+              .textStyle,
       trailingIcon: null,
       inputDecorationTheme: AppThemeInputDecorationTheme(
-        appTheme: context.appTheme,
+        appTheme: context.customTheme,
       ),
       menuStyle: MenuStyle(
         maximumSize: const MaterialStatePropertyAll(

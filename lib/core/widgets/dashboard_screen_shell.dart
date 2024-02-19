@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 
 class DashboardScreenShell extends StatelessWidget {
   final Widget child;

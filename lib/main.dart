@@ -8,17 +8,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/services/auth_service.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/theme/theme_extentions.dart';
-import 'package:bnf/core/theme/theme_system.dart';
 import 'package:bnf/environment.dart';
 import 'package:bnf/firebase_options.dart';
 import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
+import 'package:bnf/modules/app_onboarding_module/on_boarding_router.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
-import 'package:bnf/modules/group_module/create_group_module.dart';
-import 'package:bnf/modules/group_module/group_picker_module.dart';
-import 'package:bnf/modules/group_module/search_public_group_module.dart';
-import 'package:bnf/modules/on_boarding_module/on_boarding_router.dart';
 import 'package:bnf/utils/themes.dart';
 
 void main() async {
@@ -71,26 +68,20 @@ void main() async {
   // END CHECKS
 
   // START ROUTER INIT
-  final String initialPath = isLoggedIn
-      ? isGroupSelected
-          ? dashboardRoute.path
-          : groupPickerRoute.path
-      : signinRoute.path;
+  final String initialPath =
+      isLoggedIn ? dashboardRoute.path : signinRoute.path;
 
   final router = GoRouter(
     navigatorKey: locator.get(),
     initialLocation: !isIntroChecked ? onBoardingRoute.path : initialPath,
     routes: [
-      ...authRouter,
-      groupPickerRoute,
-      createGroupRoute,
-      searchPublicGroupRoute,
       onBoardingRoute,
+      ...authRouter,
       ...dashboardRoutes,
       GoRoute(
         path: '/*',
         redirect: (context, state) => state.namedLocation(
-          dashboardRoute.name!,
+          dashboardRoute.name,
         ),
       ),
     ],
@@ -113,14 +104,21 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final material = Theme.of(context);
-    final theme = trendyTheme;
+    const pallete = trendyTheme;
     return BlocProvider(
       create: (context) => _tenancyBloc,
-      child: AppTheme(
-        colorTheme: theme,
+      child: CustomThemeProvider(
+        pallete: pallete,
+        typoraphy: const CustomThemeTyporaphy(
+          textStyle: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Nunito',
+          ),
+          pallete: pallete,
+        ),
         child: Builder(builder: (context) {
           return MaterialApp.router(
-            theme: context.appTheme.materialBaseTheme(material),
+            theme: context.customTheme.materialBaseTheme(material),
             routerConfig: widget.router,
           );
         }),

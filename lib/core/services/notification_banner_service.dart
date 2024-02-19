@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/widgets/notification_banner.dart';
 
 class NotificationBannerService {
@@ -24,13 +24,13 @@ class NotificationBannerService {
 
   showErrorBanner(String message) {
     final sf = ScaffoldMessenger.of(context);
-    final foregroundStyle = context.textTheme.onErrorContainer.style;
+    final foregroundStyle = context.typoraphyTheme.onErrorContainer;
     final backgroundColor = context.colorTheme.errorContainer;
 
     sf.showMaterialBanner(
       NotificationBanner(
         message: message,
-        foregroundStyle: foregroundStyle,
+        foregroundStyle: foregroundStyle.textStyle,
         backgroundColor: backgroundColor,
         closePressed: closeBanner,
       ),
@@ -43,8 +43,8 @@ class NotificationBannerService {
 
   showSuccessBanner(String message) {
     final sf = ScaffoldMessenger.of(context);
-    final foregroundStyle = context.textTheme.onSuccessContainer.style;
-    final backgroundColor = context.colorTheme.successContainer;
+    final foregroundStyle = context.typoraphyTheme.onSuccessContainer.textStyle;
+    final backgroundColor = context.customTheme.pallete.successContainer;
 
     sf.showMaterialBanner(
       NotificationBanner(

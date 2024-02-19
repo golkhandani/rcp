@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 
 import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
@@ -60,11 +61,11 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void _goToDashboard() {
-    context.neglectNamed(dashboardRoute.name!);
+    context.neglectNamed(dashboardRoute.name);
   }
 
   void _goToSignup() {
-    context.neglectNamed(signupRoute.name!);
+    context.neglectNamed(signupRoute.name);
   }
 
   @override
@@ -91,15 +92,15 @@ class _SigninScreenState extends State<SigninScreen> {
                       Center(
                         child: Text(
                           'Welcome',
-                          style:
-                              context.textTheme.titleMedium.onBackground.style,
+                          style: context
+                              .typoraphyTheme.titleLarge.primary.textStyle,
                         ),
                       ),
                       const Gap(64),
                       Text(
                         'Email',
-                        style:
-                            context.textTheme.subtitleMedium.onBackground.style,
+                        style: context.typoraphyTheme.subtitleMedium
+                            .onBackground.textStyle,
                       ),
                       const Gap(4),
                       FormBuilderTextField(
@@ -117,8 +118,8 @@ class _SigninScreenState extends State<SigninScreen> {
                       const Gap(8),
                       Text(
                         'Password',
-                        style:
-                            context.textTheme.subtitleMedium.onBackground.style,
+                        style: context.typoraphyTheme.subtitleMedium
+                            .onBackground.textStyle,
                       ),
                       const Gap(4),
                       FormBuilderTextField(
@@ -158,7 +159,21 @@ class _SigninScreenState extends State<SigninScreen> {
                         child: Text(
                           'Signin',
                           style:
-                              context.textTheme.subtitleMedium.onPrimary.style,
+                              context.typoraphyTheme.subtitleMedium.textStyle,
+                        ),
+                      ),
+                      const Gap(32),
+                      AppThemeElevatedButton(
+                        background: context.colorTheme.cardBackground,
+                        width: MediaQuery.sizeOf(context).width,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          context.neglectNamed(resetPasswordRoute.name);
+                        },
+                        child: Text(
+                          'Forgot Password',
+                          style: context.typoraphyTheme.subtitleMedium
+                              .onCardBackground.textStyle,
                         ),
                       ),
                       const Gap(32),
@@ -168,7 +183,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             "OR",
-                            style: context.textTheme.hint.style,
+                            style: context.typoraphyTheme.hint.textStyle,
                           ),
                         ),
                         const Expanded(child: Divider()),
@@ -183,9 +198,8 @@ class _SigninScreenState extends State<SigninScreen> {
                         },
                         child: Text(
                           'Signup',
-                          style: context.textTheme.subtitleMedium
-                              .withColor(Colors.white)
-                              .style,
+                          style:
+                              context.typoraphyTheme.subtitleMedium.textStyle,
                         ),
                       ),
                       const Gap(16),

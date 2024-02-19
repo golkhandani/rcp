@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/theme/theme_extentions.dart';
 
 class CardContainer extends StatelessWidget {

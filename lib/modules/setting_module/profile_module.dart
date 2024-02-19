@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:customizable_space_bar/customizable_space_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+import 'package:bnf/core/go_route_named.dart';
 import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/widgets/back_button.dart';
 import 'package:bnf/core/widgets/dashboard_screen_shell.dart';
 import 'package:bnf/core/widgets/sliver_title_bar.dart';
@@ -16,8 +16,8 @@ import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:bnf/packages/components/card_container.dart';
 
-final profileRoute = GoRoute(
-  path: 'profile',
+final profileRoute = GoRouteNamed(
+  path: '/dashboard/profile',
   name: 'profile',
   builder: (context, state) => const ProfileScreen(),
 );
@@ -83,8 +83,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Text(
                                   state.user!.name,
                                   maxLines: 2,
-                                  style: context.textTheme.titleMedium
-                                      .onNavBackground.style,
+                                  style: context.typoraphyTheme.titleMedium
+                                      .onNavBackground.textStyle,
                                 ),
                               ),
                               const Gap(16)
@@ -108,8 +108,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: Text(
                             'Logout',
-                            style: context
-                                .textTheme.subtitleMedium.onSecondary.style,
+                            style: context.typoraphyTheme.subtitleMedium
+                                .onSecondary.textStyle,
                           ),
                         ),
                       ),
@@ -124,15 +124,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text(
                                 'Email: ${state.user!.email}',
                                 maxLines: 2,
-                                style: context
-                                    .textTheme.subtitleLarge.onTertiary.style,
+                                style: context.typoraphyTheme.subtitleLarge
+                                    .onTertiary.textStyle,
                               ),
                               const Gap(16),
                               Text(
                                 'Username: ${state.user!.name}',
                                 maxLines: 2,
-                                style: context
-                                    .textTheme.subtitleLarge.onTertiary.style,
+                                style: context.typoraphyTheme.subtitleLarge
+                                    .onTertiary.textStyle,
                               ),
                             ],
                           ),

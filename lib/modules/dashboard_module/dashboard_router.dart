@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
+import 'package:bnf/core/go_route_named.dart';
 import 'package:bnf/modules/dashboard_module/dashboard_screen.dart';
-import 'package:bnf/modules/home_module/request_around_module.dart';
+import 'package:bnf/modules/home_module/home_module.dart';
+import 'package:bnf/modules/setting_module/profile_module.dart';
 import 'package:bnf/modules/setting_module/setting_module.dart';
 import 'package:bnf/modules/user_inbox_module/inbox_module.dart';
-import 'package:bnf/modules/user_request_module/active_request_module.dart';
 
 Page<void> dashboardPageBuilder(GoRouterState state, Widget screen) {
   return CustomTransitionPage<void>(
@@ -25,11 +26,14 @@ Page<void> dashboardPageBuilder(GoRouterState state, Widget screen) {
   );
 }
 
-final dashboardRoute = GoRoute(
+final dashboardRoute = GoRouteNamed(
   name: 'dashboard',
   path: '/dashboard',
   redirect: (context, state) async {
     return state.namedLocation(dahboardItems.first.routeName);
+  },
+  builder: (context, state) {
+    return const Placeholder();
   },
 );
 
@@ -54,13 +58,13 @@ final dashboardShellRoutes = StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          name: requestAroundRoute.name!,
-          path: requestAroundRoute.path,
+          name: homeRoute.name,
+          path: homeRoute.path,
           pageBuilder: (context, state) => dashboardPageBuilder(
             state,
-            requestAroundRoute.builder!(context, state),
+            homeRoute.builder(context, state),
           ),
-          routes: requestAroundRoute.routes,
+          routes: homeRoute.routes,
         ),
       ],
     ),
@@ -68,27 +72,27 @@ final dashboardShellRoutes = StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          name: activeRequestRoute.name!,
-          path: activeRequestRoute.path,
-          pageBuilder: (context, state) => dashboardPageBuilder(
-            state,
-            activeRequestRoute.builder!(context, state),
-          ),
-          routes: activeRequestRoute.routes,
-        ),
-      ],
-    ),
-
-    StatefulShellBranch(
-      routes: <RouteBase>[
-        GoRoute(
-          name: inboxRoute.name!,
+          name: inboxRoute.name,
           path: inboxRoute.path,
           pageBuilder: (context, state) => dashboardPageBuilder(
             state,
-            inboxRoute.builder!(context, state),
+            inboxRoute.builder(context, state),
           ),
           routes: inboxRoute.routes,
+        ),
+      ],
+    ),
+
+    StatefulShellBranch(
+      routes: <RouteBase>[
+        GoRoute(
+          name: settingRoute.name,
+          path: settingRoute.path,
+          pageBuilder: (context, state) => dashboardPageBuilder(
+            state,
+            settingRoute.builder(context, state),
+          ),
+          routes: settingRoute.routes,
         ),
       ],
     ),
@@ -97,13 +101,13 @@ final dashboardShellRoutes = StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          name: settingRoute.name!,
-          path: settingRoute.path,
+          name: profileRoute.name,
+          path: profileRoute.path,
           pageBuilder: (context, state) => dashboardPageBuilder(
             state,
-            settingRoute.builder!(context, state),
+            profileRoute.builder(context, state),
           ),
-          routes: settingRoute.routes,
+          routes: profileRoute.routes,
         ),
       ],
     ),

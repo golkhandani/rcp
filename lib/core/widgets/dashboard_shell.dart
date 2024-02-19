@@ -7,7 +7,7 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:gap/gap.dart';
 
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/utils/extensions/context_ui_extension.dart';
 
 final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
@@ -272,9 +272,9 @@ class _DashboardShellState extends State<DashboardShell> {
           showUnselectedLabels: true,
           onTap: widget.onTap,
           selectedLabelStyle:
-              context.textTheme.subtitleMedium.onNavBackground.style,
+              context.typoraphyTheme.subtitleMedium.onNavBackground.textStyle,
           unselectedLabelStyle:
-              context.textTheme.subtitleSmall.onNavBackground.style,
+              context.typoraphyTheme.subtitleSmall.onNavBackground.textStyle,
           type: BottomNavigationBarType.fixed,
         ),
       ),
@@ -318,8 +318,8 @@ class _DashboardShellState extends State<DashboardShell> {
                     ? widget.navigationActiveColor
                     : widget.navigationInactiveColor;
                 final fontStyle = isSelected
-                    ? context.textTheme.subtitleMedium
-                    : context.textTheme.subtitleSmall;
+                    ? context.typoraphyTheme.subtitleMedium.textStyle
+                    : context.typoraphyTheme.subtitleSmall.textStyle;
                 return GestureDetector(
                   onTap: () => widget.onTap?.call(i),
                   behavior: HitTestBehavior.opaque,
@@ -334,12 +334,11 @@ class _DashboardShellState extends State<DashboardShell> {
                           size: (widget.height - 24) / 2,
                         ),
                       ),
-                      Text(
-                        e.label ?? '',
-                        style: fontStyle.copyWith(color: color).style.copyWith(
-                              height: 1,
-                            ),
-                      ),
+                      Text(e.label ?? '',
+                          style: fontStyle.copyWith(
+                            color: color,
+                            height: 1,
+                          )),
                     ],
                   ),
                 );

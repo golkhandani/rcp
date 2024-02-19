@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart' as intro;
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/packages/constants/ui_constants.dart';
 import 'package:bnf/utils/extensions/context_ui_extension.dart';
@@ -25,8 +25,12 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
     final fontColor = context.colorTheme.onBackground;
     final decoration = intro.PageDecoration(
       pageColor: context.colorTheme.background,
-      titleTextStyle: context.textTheme.titleSmall.withColor(fontColor).style,
-      bodyTextStyle: context.textTheme.bodyMedium.withColor(fontColor).style,
+      titleTextStyle: context.typoraphyTheme.titleSmall
+          .copyWithColor(color: fontColor)
+          .textStyle,
+      bodyTextStyle: context.typoraphyTheme.bodyMedium
+          .copyWithColor(color: fontColor)
+          .textStyle,
       pageMargin: EdgeInsets.zero,
       titlePadding: const EdgeInsets.only(top: 120),
       bodyPadding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
@@ -121,7 +125,7 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   void onDone() {
-    context.goNamed(signinRoute.name!);
+    context.goNamed(signinRoute.name);
   }
 
   Widget _buildButton(
@@ -143,7 +147,7 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
       child: Text(
         text,
-        style: context.textTheme.titleTiny.onSecondary.style,
+        style: context.typoraphyTheme.subtitleMedium.onPrimary.textStyle,
       ),
     );
   }

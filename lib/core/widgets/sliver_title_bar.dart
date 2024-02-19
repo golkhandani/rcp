@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sliver_tools/sliver_tools.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/widgets/back_button.dart';
 
 class SliverTitleBar extends StatelessWidget {
@@ -30,7 +30,7 @@ class SliverTitleBar extends StatelessWidget {
           leading: const MyBackButton(),
           title: Text(
             title,
-            style: context.textTheme.titleSmall.onNavBackground.style,
+            style: context.typoraphyTheme.titleSmall.onNavBackground.textStyle,
           ),
           shadowColor: Colors.black26,
         ),
@@ -72,11 +72,11 @@ class TitleBar extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: context.textTheme.titleSmall
-              .withColor(
-                foregroundColor ?? context.colorTheme.onNavBackground,
+          style: context.typoraphyTheme.titleSmall
+              .copyWithColor(
+                color: foregroundColor ?? context.colorTheme.onNavBackground,
               )
-              .style,
+              .textStyle,
         ),
         shadowColor: Colors.black26,
       ),

@@ -4,7 +4,7 @@ import 'package:customizable_space_bar/customizable_space_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:bnf/core/theme/theme_extentions.dart';
+import 'package:bnf/core/theme/dwew.dart';
 import 'package:bnf/core/widgets/sliver_title_bar.dart';
 import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
 import 'package:bnf/modules/setting_module/profile_module.dart';
@@ -72,8 +72,8 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                               child: Text(
                                 'Welcome,',
                                 maxLines: 2,
-                                style: context.textTheme.subtitleMedium
-                                    .onNavBackground.style,
+                                style: context.typoraphyTheme.subtitleMedium
+                                    .onNavBackground.textStyle,
                               ),
                             ),
                           FittedBox(
@@ -83,8 +83,8 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                                   ? state.user!.name
                                   : 'Date: ${state.selectedGroup?.name ?? ''}',
                               maxLines: 2,
-                              style: context.textTheme.subtitleLarge
-                                  .onNavBackground.style,
+                              style: context.typoraphyTheme.subtitleLarge
+                                  .onNavBackground.textStyle,
                             ),
                           ),
                           if (scrollingRate < 0.5)
@@ -93,8 +93,8 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                               child: Text(
                                 'Date: ${state.selectedGroup?.name ?? ''}',
                                 maxLines: 2,
-                                style: context
-                                    .textTheme.titleSmall.onNavBackground.style,
+                                style: context.typoraphyTheme.titleSmall
+                                    .onNavBackground.textStyle,
                               ),
                             ),
                         ],
@@ -102,7 +102,7 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.pushNamed(profileRoute.name!),
+                    onTap: () => context.pushNamed(profileRoute.name),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FittedBox(

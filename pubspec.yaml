@@ -58,6 +58,9 @@ dependencies:
   customizable_space_bar: ^0.2.0
   flutter_animate: ^4.5.0
   firebase_core: ^2.25.4
+  puppeteer: ^3.6.0
+  flutter_inappwebview: ^6.0.0
+  supabase_auth_ui: ^0.4.2
 
 dev_dependencies:
   flutter_test:
