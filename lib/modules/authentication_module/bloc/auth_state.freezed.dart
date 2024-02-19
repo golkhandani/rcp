@@ -22,6 +22,7 @@ AuthenticationState _$AuthenticationStateFromJson(Map<String, dynamic> json) {
 mixin _$AuthenticationState {
   bool get isLoading => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $AuthenticationStateCopyWith<$Res> {
           AuthenticationState value, $Res Function(AuthenticationState) then) =
       _$AuthenticationStateCopyWithImpl<$Res, AuthenticationState>;
   @useResult
-  $Res call({bool isLoading, String? userId});
+  $Res call({bool isLoading, String? userId, String? email});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$AuthenticationStateCopyWithImpl<$Res, $Val extends AuthenticationState>
   $Res call({
     Object? isLoading = null,
     Object? userId = freezed,
+    Object? email = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -62,6 +64,10 @@ class _$AuthenticationStateCopyWithImpl<$Res, $Val extends AuthenticationState>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -75,7 +81,7 @@ abstract class _$$AuthenticationStateImplCopyWith<$Res>
       __$$AuthenticationStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, String? userId});
+  $Res call({bool isLoading, String? userId, String? email});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$AuthenticationStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? userId = freezed,
+    Object? email = freezed,
   }) {
     return _then(_$AuthenticationStateImpl(
       isLoading: null == isLoading
@@ -101,6 +108,10 @@ class __$$AuthenticationStateImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -108,7 +119,8 @@ class __$$AuthenticationStateImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AuthenticationStateImpl implements _AuthenticationState {
-  const _$AuthenticationStateImpl({required this.isLoading, this.userId});
+  const _$AuthenticationStateImpl(
+      {required this.isLoading, this.userId, this.email});
 
   factory _$AuthenticationStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthenticationStateImplFromJson(json);
@@ -117,10 +129,12 @@ class _$AuthenticationStateImpl implements _AuthenticationState {
   final bool isLoading;
   @override
   final String? userId;
+  @override
+  final String? email;
 
   @override
   String toString() {
-    return 'AuthenticationState(isLoading: $isLoading, userId: $userId)';
+    return 'AuthenticationState(isLoading: $isLoading, userId: $userId, email: $email)';
   }
 
   @override
@@ -130,12 +144,13 @@ class _$AuthenticationStateImpl implements _AuthenticationState {
             other is _$AuthenticationStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.email, email) || other.email == email));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading, userId);
+  int get hashCode => Object.hash(runtimeType, isLoading, userId, email);
 
   @JsonKey(ignore: true)
   @override
@@ -155,7 +170,8 @@ class _$AuthenticationStateImpl implements _AuthenticationState {
 abstract class _AuthenticationState implements AuthenticationState {
   const factory _AuthenticationState(
       {required final bool isLoading,
-      final String? userId}) = _$AuthenticationStateImpl;
+      final String? userId,
+      final String? email}) = _$AuthenticationStateImpl;
 
   factory _AuthenticationState.fromJson(Map<String, dynamic> json) =
       _$AuthenticationStateImpl.fromJson;
@@ -164,6 +180,8 @@ abstract class _AuthenticationState implements AuthenticationState {
   bool get isLoading;
   @override
   String? get userId;
+  @override
+  String? get email;
   @override
   @JsonKey(ignore: true)
   _$$AuthenticationStateImplCopyWith<_$AuthenticationStateImpl> get copyWith =>

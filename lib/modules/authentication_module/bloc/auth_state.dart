@@ -8,6 +8,7 @@ class AuthenticationState with _$AuthenticationState {
   const factory AuthenticationState({
     required bool isLoading,
     String? userId,
+    String? email,
   }) = _AuthenticationState;
 
   factory AuthenticationState.init() =>

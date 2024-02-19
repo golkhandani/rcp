@@ -260,7 +260,7 @@ class _DashboardShellState extends State<DashboardShell> {
                     color: i == widget.currentIndex
                         ? widget.navigationActiveColor
                         : widget.navigationInactiveColor,
-                    size: (widget.height - 24) / 2,
+                    size: (widget.height - 20) / 2,
                   ),
                   label: e.label,
                 ),
@@ -319,7 +319,7 @@ class _DashboardShellState extends State<DashboardShell> {
                     : widget.navigationInactiveColor;
                 final fontStyle = isSelected
                     ? context.typoraphyTheme.subtitleMedium.textStyle
-                    : context.typoraphyTheme.subtitleSmall.textStyle;
+                    : context.typoraphyTheme.subtitleMedium.textStyle;
                 return GestureDetector(
                   onTap: () => widget.onTap?.call(i),
                   behavior: HitTestBehavior.opaque,
@@ -327,11 +327,11 @@ class _DashboardShellState extends State<DashboardShell> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(bottom: 4),
                         child: Icon(
                           e.iconData,
                           color: color,
-                          size: (widget.height - 24) / 2,
+                          size: (widget.height - 16) / 2,
                         ),
                       ),
                       Text(e.label ?? '',

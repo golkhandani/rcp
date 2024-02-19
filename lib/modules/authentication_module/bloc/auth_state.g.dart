@@ -11,6 +11,7 @@ _$AuthenticationStateImpl _$$AuthenticationStateImplFromJson(
     _$AuthenticationStateImpl(
       isLoading: json['isLoading'] as bool,
       userId: json['userId'] as String?,
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$$AuthenticationStateImplToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$AuthenticationStateImplToJson(
     <String, dynamic>{
       'isLoading': instance.isLoading,
       'userId': instance.userId,
+      'email': instance.email,
     };

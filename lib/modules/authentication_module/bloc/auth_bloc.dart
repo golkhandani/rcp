@@ -21,7 +21,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, email: email));
     try {
       final res =
           await authServie.loginWithEmail(email: email, password: password);
@@ -47,7 +47,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, email: email));
     try {
       final user = await authServie.signUpWithEmail(
         email: email,
@@ -67,8 +67,88 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  logout() async {
+  requestResetPassword({
+    required String email,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    emit(state.copyWith(isLoading: true, email: email));
+    try {
+      await authServie.requestResetPassword(
+        email: email,
+      );
+      banner.showSuccessBanner('Please check your email inbox!');
+      onSuccess();
+    } on AuthException catch (e) {
+      banner.showErrorBanner(e.message);
+      onFailure();
+    } catch (e) {
+      banner.showErrorBanner('Something went wrong: ${e.toString()}');
+      onFailure();
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  loginWithOtp({
+    required String otp,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
     emit(state.copyWith(isLoading: true));
+    try {
+      if (state.email == null) {
+        banner.showErrorBanner("No email provided!");
+        return;
+      }
+      final user = await authServie.loginWithResetPasswordOtp(
+        email: state.email!,
+        token: otp,
+      );
+      emit(state.copyWith(isLoading: false, userId: user.id));
+      banner.showSuccessBanner('Please update your password!');
+      onSuccess();
+    } on AuthException catch (e) {
+      banner.showErrorBanner(e.message);
+      onFailure();
+    } catch (e) {
+      banner.showErrorBanner('Something went wrong: ${e.toString()}');
+      onFailure();
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  updatePassword({
+    required String password,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      if (state.email == null) {
+        banner.showErrorBanner("No email provided!");
+        return;
+      }
+      final user = await authServie.updatePassword(
+        password: password,
+      );
+      emit(state.copyWith(isLoading: false, userId: user.id));
+      banner.showSuccessBanner('Password updated!');
+      onSuccess();
+    } on AuthException catch (e) {
+      banner.showErrorBanner(e.message);
+      onFailure();
+    } catch (e) {
+      banner.showErrorBanner('Something went wrong: ${e.toString()}');
+      onFailure();
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  logout() async {
+    emit(state.copyWith(isLoading: true, email: null));
     await authServie.logout();
     emit(state.copyWith(isLoading: false));
   }

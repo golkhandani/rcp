@@ -21,10 +21,13 @@ final resetPasswordRoute = GoRouteNamed(
   path: '/reset_password',
   name: 'reset_password',
   builder: (context, state) => const ResetPasswordScreen(),
+  routes: [
+    confrimOtpCodeRoute,
+  ],
 );
 
 final confrimOtpCodeRoute = GoRouteNamed(
-  path: '/confrim_otp_code',
+  path: 'confrim_otp_code',
   name: 'confrim_otp_code',
   builder: (context, state) => const ConfirmOtpCodeScreen(),
 );
@@ -39,6 +42,5 @@ final authRouter = [
   signinRoute,
   signupRoute,
   resetPasswordRoute,
-  confrimOtpCodeRoute,
   confrimPasswordRoute,
 ];

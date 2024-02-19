@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
 import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
@@ -22,7 +21,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final AuthenticationCubit signupCubit = locator.get();
+  late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -51,7 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    signupCubit.signupWithEmail(
+    authCubit.signupWithEmail(
       email: _emailController.text,
       password: _passwordController.text,
       onSuccess: _goToSignin,
@@ -103,7 +102,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _emailController,
-                        decoration: context.inputDecoration(),
                         keyboardType: TextInputType.emailAddress,
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
@@ -122,8 +120,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _passwordController,
-                        decoration: context.inputDecoration(
-                          suffix: IconButton(
+                        decoration: context.themeData.inputDecoration.copyWith(
+                          suffixIcon: IconButton(
                             style: const ButtonStyle(
                                 splashFactory: NoSplash.splashFactory),
                             splashColor: Colors.transparent,
@@ -156,10 +154,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _passwordConfirmationController,
-                        decoration: context.inputDecoration(
-                          suffix: IconButton(
+                        decoration: context.themeData.inputDecoration.copyWith(
+                          suffixIcon: IconButton(
                             style: const ButtonStyle(
-                                splashFactory: NoSplash.splashFactory),
+                              splashFactory: NoSplash.splashFactory,
+                            ),
                             splashColor: Colors.transparent,
                             icon: Icon(_obscurePassword
                                 ? Icons.visibility

@@ -9,12 +9,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/services/auth_service.dart';
 import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/environment.dart';
 import 'package:bnf/firebase_options.dart';
 import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
 import 'package:bnf/modules/app_onboarding_module/on_boarding_router.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
+import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
 import 'package:bnf/utils/themes.dart';
 
@@ -101,12 +101,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _tenancyBloc = locator.get<AppTenancyBloc>();
+  final _authBloc = locator.get<AuthenticationCubit>();
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
     const pallete = trendyTheme;
-    return BlocProvider(
-      create: (context) => _tenancyBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _authBloc),
+        BlocProvider.value(value: _tenancyBloc),
+      ],
       child: CustomThemeProvider(
         pallete: pallete,
         typoraphy: const CustomThemeTyporaphy(
@@ -118,7 +121,9 @@ class _MyAppState extends State<MyApp> {
         ),
         child: Builder(builder: (context) {
           return MaterialApp.router(
-            theme: context.customTheme.materialBaseTheme(material),
+            theme: context.customTheme.data,
+            darkTheme: context.customTheme.data,
+            themeMode: ThemeMode.light,
             routerConfig: widget.router,
           );
         }),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+
 class CustomThemeTyporaphy {
   final CustomThemePallete _pallete;
   final TextStyle textStyle;
@@ -14,6 +16,7 @@ class CustomThemeTyporaphy {
     Color? color,
     double? fontSize,
     FontWeight? fontWeight,
+    TextDecoration? decoration,
   }) {
     return CustomThemeTyporaphy(
       pallete: _pallete,
@@ -21,6 +24,8 @@ class CustomThemeTyporaphy {
         color: color,
         fontSize: fontSize,
         fontWeight: fontWeight,
+        decoration: decoration,
+        decorationColor: color,
       ),
     );
   }
@@ -111,6 +116,15 @@ class CustomThemePallete extends ColorScheme {
     required this.onCardBackground,
     required this.backBtnBackground,
     required this.onBackBtnBackground,
+    required super.scrim,
+    required super.inverseSurface,
+    required super.onInverseSurface,
+    required super.inversePrimary,
+    required super.surfaceTint,
+    required super.outlineVariant,
+    required super.outline,
+    required super.onSurfaceVariant,
+    required super.surfaceVariant,
   });
 }
 
@@ -127,7 +141,47 @@ class CustomThemeProvider extends InheritedWidget {
 
   CustomThemePallete get pallete => _pallete;
   CustomThemeTyporaphy get typoraphy => _typoraphy;
+  ThemeData get _flex => FlexThemeData.light(
+        scheme: FlexScheme.custom,
+        colorScheme: pallete,
 
+        subThemesData: const FlexSubThemesData(
+          blendOnColors: false,
+          blendTextTheme: true,
+          useTextTheme: true,
+          thinBorderWidth: 2.0,
+          thickBorderWidth: 2.0,
+          defaultRadius: 12.0,
+          inputDecoratorSchemeColor: SchemeColor.background,
+          inputDecoratorBorderSchemeColor: SchemeColor.primary,
+          inputDecoratorPrefixIconSchemeColor: SchemeColor.onPrimaryContainer,
+          inputCursorSchemeColor: SchemeColor.onPrimaryContainer,
+          inputSelectionSchemeColor: SchemeColor.primaryContainer,
+          alignedDropdown: true,
+          tooltipRadius: 4,
+          tooltipSchemeColor: SchemeColor.inverseSurface,
+          tooltipOpacity: 0.9,
+          useInputDecoratorThemeInDialogs: true,
+          snackBarElevation: 6,
+          snackBarBackgroundSchemeColor: SchemeColor.inverseSurface,
+          navigationBarSelectedLabelSchemeColor: SchemeColor.onSurface,
+          navigationBarUnselectedLabelSchemeColor: SchemeColor.onSurface,
+          navigationRailLabelType: NavigationRailLabelType.none,
+        ),
+        keyColors: const FlexKeyColors(),
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+        useMaterial3: true,
+        swapLegacyOnMaterial3: true,
+
+        // To use the Playground font, add GoogleFonts package and uncomment
+        // fontFamily: GoogleFonts.notoSans().fontFamily,
+      );
+  ThemeData get data => _flex.copyWith(
+        inputDecorationTheme: _flex.inputDecorationTheme.copyWith(
+          contentPadding: const EdgeInsets.all(15),
+        ),
+      );
+  Brightness get brightness => pallete.brightness;
   static CustomThemeProvider of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<CustomThemeProvider>()!;
   }
@@ -154,14 +208,22 @@ extension ThemedText on CustomThemeTyporaphy {
 
   /// COLORS
   CustomThemeTyporaphy get primary => copyWith(color: pallete.primary);
+  CustomThemeTyporaphy get primaryLink => primary.copyWith(
+        decoration: TextDecoration.underline,
+      );
   CustomThemeTyporaphy get onPrimary => copyWithColor(color: pallete.onPrimary);
   CustomThemeTyporaphy get primaryContainer =>
       copyWithColor(color: pallete.primaryContainer);
+
   CustomThemeTyporaphy get onPrimaryContainer =>
       copyWithColor(color: pallete.onPrimaryContainer);
   CustomThemeTyporaphy get secondary => copyWithColor(color: pallete.secondary);
+  CustomThemeTyporaphy get secondaryLink => secondary.copyWith(
+        decoration: TextDecoration.underline,
+      );
   CustomThemeTyporaphy get onSecondary =>
       copyWithColor(color: pallete.onSecondary);
+
   CustomThemeTyporaphy get secondaryContainer =>
       copyWithColor(color: pallete.secondaryContainer);
   CustomThemeTyporaphy get onSecondaryContainer =>
@@ -271,4 +333,43 @@ extension CustomTheme on BuildContext {
   CustomThemeTyporaphy get typoraphyTheme =>
       CustomThemeProvider.of(this).typoraphy;
   CustomThemePallete get colorTheme => CustomThemeProvider.of(this).pallete;
+  ThemeData get themeData => CustomThemeProvider.of(this).data;
+}
+
+extension Decorations on ThemeData {
+  InputDecoration get inputDecoration {
+    return InputDecoration(
+      iconColor: inputDecorationTheme.iconColor,
+      labelStyle: inputDecorationTheme.labelStyle,
+      floatingLabelStyle: inputDecorationTheme.floatingLabelStyle,
+      helperStyle: inputDecorationTheme.helperStyle,
+      helperMaxLines: inputDecorationTheme.helperMaxLines,
+      hintStyle: inputDecorationTheme.hintStyle,
+      hintFadeDuration: inputDecorationTheme.hintFadeDuration,
+      errorStyle: inputDecorationTheme.errorStyle,
+      errorMaxLines: inputDecorationTheme.errorMaxLines,
+      floatingLabelBehavior: inputDecorationTheme.floatingLabelBehavior,
+      floatingLabelAlignment: inputDecorationTheme.floatingLabelAlignment,
+      isCollapsed: inputDecorationTheme.isCollapsed,
+      isDense: inputDecorationTheme.isDense,
+      contentPadding: inputDecorationTheme.contentPadding,
+      prefixStyle: inputDecorationTheme.prefixStyle,
+      prefixIconColor: inputDecorationTheme.prefixIconColor,
+      suffixStyle: inputDecorationTheme.suffixStyle,
+      suffixIconColor: inputDecorationTheme.suffixIconColor,
+      counterStyle: inputDecorationTheme.counterStyle,
+      filled: inputDecorationTheme.filled,
+      fillColor: inputDecorationTheme.fillColor,
+      focusColor: inputDecorationTheme.focusColor,
+      hoverColor: inputDecorationTheme.hoverColor,
+      errorBorder: inputDecorationTheme.errorBorder,
+      focusedBorder: inputDecorationTheme.focusedBorder,
+      focusedErrorBorder: inputDecorationTheme.focusedErrorBorder,
+      disabledBorder: inputDecorationTheme.disabledBorder,
+      enabledBorder: inputDecorationTheme.enabledBorder,
+      border: inputDecorationTheme.border,
+      alignLabelWithHint: inputDecorationTheme.alignLabelWithHint,
+      constraints: inputDecorationTheme.constraints,
+    );
+  }
 }

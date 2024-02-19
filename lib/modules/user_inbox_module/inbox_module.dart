@@ -115,6 +115,55 @@ class _InboxScreenState extends State<InboxScreen>
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: CustomScrollView(
+                    slivers: [
+                      const SliverGap(16),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final notification = fakeNotifications[index];
+                            return Card(
+                              elevation: 2.0,
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.all(16.0),
+                                title: Text(
+                                  notification.title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(height: 8.0),
+                                    Text(notification.message),
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      '${notification.timestamp}',
+                                      style: const TextStyle(
+                                        fontSize: 12.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  // Handle onTap action here
+                                },
+                              ),
+                            );
+                          },
+                          childCount: fakeNotifications
+                              .length, // Total number of list items
+                        ),
+                      ),
+                      const SliverGap(16),
+                    ],
+                  ),
+                ),
               ],
             ),
           )

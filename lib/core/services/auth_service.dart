@@ -57,6 +57,70 @@ class AuthServie {
     }
   }
 
+  Future<bool> requestResetPassword({
+    required String email,
+  }) async {
+    try {
+      await _supabase.auth.resetPasswordForEmail(
+        email,
+      );
+
+      return true;
+    } on AuthException catch (e) {
+      locator.logger.error(e);
+      rethrow;
+    } on Exception catch (e) {
+      locator.logger.error(e);
+      throw Exception('Invalid login');
+    }
+  }
+
+  Future<User> loginWithResetPasswordOtp(
+      {required String email, required String token}) async {
+    try {
+      final AuthResponse res = await _supabase.auth.verifyOTP(
+        email: email,
+        token: token,
+        type: OtpType.recovery,
+      );
+
+      final User? user = res.user;
+
+      if (user == null) {
+        throw Exception('Invalid login');
+      }
+
+      return user;
+    } on AuthException catch (e) {
+      locator.logger.error(e);
+      rethrow;
+    } on Exception catch (e) {
+      locator.logger.error(e);
+      throw Exception('Invalid login');
+    }
+  }
+
+  Future<User> updatePassword({
+    required String password,
+  }) async {
+    try {
+      final res =
+          await _supabase.auth.updateUser(UserAttributes(password: password));
+      final User? user = res.user;
+
+      if (user == null) {
+        throw Exception('Invalid login');
+      }
+      return user;
+    } on AuthException catch (e) {
+      locator.logger.error(e);
+      rethrow;
+    } on Exception catch (e) {
+      locator.logger.error(e);
+      throw Exception('Invalid login');
+    }
+  }
+
   Future<User> signUpWithEmail({
     required String email,
     required String password,
@@ -79,7 +143,7 @@ class AuthServie {
       rethrow;
     } on Exception catch (e) {
       locator.logger.error(e);
-      rethrow;
+      throw Exception('Invalid login');
     }
   }
 

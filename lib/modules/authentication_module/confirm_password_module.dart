@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
 import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
+import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
 import 'package:bnf/utils/extensions/context_go_extension.dart';
@@ -21,7 +21,7 @@ class ConfirmPasswordScreen extends StatefulWidget {
 }
 
 class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
-  final AuthenticationCubit signupCubit = locator.get();
+  late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _passwordController = TextEditingController();
@@ -83,8 +83,8 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _passwordController,
-                        decoration: context.inputDecoration(
-                          suffix: IconButton(
+                        decoration: context.themeData.inputDecoration.copyWith(
+                          suffixIcon: IconButton(
                             style: const ButtonStyle(
                                 splashFactory: NoSplash.splashFactory),
                             splashColor: Colors.transparent,
@@ -117,8 +117,8 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _passwordConfirmationController,
-                        decoration: context.inputDecoration(
-                          suffix: IconButton(
+                        decoration: context.themeData.inputDecoration.copyWith(
+                          suffixIcon: IconButton(
                             style: const ButtonStyle(
                                 splashFactory: NoSplash.splashFactory),
                             splashColor: Colors.transparent,
@@ -148,7 +148,12 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         width: MediaQuery.sizeOf(context).width,
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          context.neglectNamed(dashboardRoute.name);
+                          authCubit.updatePassword(
+                            password: _passwordController.text,
+                            onSuccess: () =>
+                                context.neglectNamed(dashboardRoute.name),
+                            onFailure: () {},
+                          );
                         },
                         child: Text(
                           'Update Password',
@@ -157,6 +162,15 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         ),
                       ),
                       const Gap(32),
+                      TextButton(
+                        onPressed: () {
+                          context.neglectNamed(signinRoute.name);
+                        },
+                        child: Text(
+                          'Back to Login',
+                          style: context.typoraphyTheme.primaryLink.textStyle,
+                        ),
+                      ),
                     ],
                   ),
                 ),

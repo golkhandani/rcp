@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
 import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
@@ -23,7 +22,7 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  final AuthenticationCubit signupCubit = locator.get();
+  late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -52,16 +51,12 @@ class _SigninScreenState extends State<SigninScreen> {
       return;
     }
 
-    signupCubit.signinWithEmail(
+    authCubit.signinWithEmail(
       email: _emailController.text,
       password: _passwordController.text,
-      onSuccess: _goToDashboard,
+      onSuccess: () => context.neglectNamed(dashboardRoute.name),
       onFailure: () {},
     );
-  }
-
-  void _goToDashboard() {
-    context.neglectNamed(dashboardRoute.name);
   }
 
   void _goToSignup() {
@@ -87,7 +82,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Center(
                         child: Text(
@@ -101,6 +96,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         'Email',
                         style: context.typoraphyTheme.subtitleMedium
                             .onBackground.textStyle,
+                        textAlign: TextAlign.start,
                       ),
                       const Gap(4),
                       FormBuilderTextField(
@@ -108,7 +104,6 @@ class _SigninScreenState extends State<SigninScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _emailController,
-                        decoration: context.inputDecoration(),
                         keyboardType: TextInputType.emailAddress,
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
@@ -120,6 +115,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         'Password',
                         style: context.typoraphyTheme.subtitleMedium
                             .onBackground.textStyle,
+                        textAlign: TextAlign.start,
                       ),
                       const Gap(4),
                       FormBuilderTextField(
@@ -127,14 +123,14 @@ class _SigninScreenState extends State<SigninScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _passwordController,
-                        decoration: context.inputDecoration(
-                          suffix: IconButton(
-                            style: const ButtonStyle(
-                                splashFactory: NoSplash.splashFactory),
+                        decoration: context.themeData.inputDecoration.copyWith(
+                          suffixIcon: IconButton(
                             splashColor: Colors.transparent,
-                            icon: Icon(_obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                             onPressed: () {
                               setState(() {
                                 _obscurePassword = !_obscurePassword;
@@ -162,21 +158,17 @@ class _SigninScreenState extends State<SigninScreen> {
                               context.typoraphyTheme.subtitleMedium.textStyle,
                         ),
                       ),
-                      const Gap(32),
-                      AppThemeElevatedButton(
-                        background: context.colorTheme.cardBackground,
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
+                      const Gap(16),
+                      TextButton(
                         onPressed: () {
                           context.neglectNamed(resetPasswordRoute.name);
                         },
                         child: Text(
                           'Forgot Password',
-                          style: context.typoraphyTheme.subtitleMedium
-                              .onCardBackground.textStyle,
+                          style: context.typoraphyTheme.primaryLink.textStyle,
                         ),
                       ),
-                      const Gap(32),
+                      const Gap(16),
                       Row(children: <Widget>[
                         const Expanded(child: Divider()),
                         Padding(
@@ -188,7 +180,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                         const Expanded(child: Divider()),
                       ]),
-                      const Gap(32),
+                      const Gap(16),
                       AppThemeElevatedButton(
                         width: MediaQuery.sizeOf(context).width,
                         padding: EdgeInsets.zero,

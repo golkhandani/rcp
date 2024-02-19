@@ -119,7 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           contentBackgroundColor: context.colorTheme.background,
           safeAreaColor: color,
           height: 56,
-          useFloatingNavBar: false,
+          useFloatingNavBar: true,
           handleTopSafePadding: false,
           floatingActionButton: currentIndex == 0
               ? FloatingActionButton(

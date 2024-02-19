@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/ioc.dart';
 import 'package:bnf/core/theme/apptheme_elevated_button.dart';
 import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/theme/theme_extentions.dart';
 import 'package:bnf/core/widgets/scaffold_shell.dart';
 import 'package:bnf/modules/authentication_module/auth_router.dart';
 import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
@@ -21,7 +20,7 @@ class ConfirmOtpCodeScreen extends StatefulWidget {
 }
 
 class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
-  final AuthenticationCubit signupCubit = locator.get();
+  late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _otpController = TextEditingController();
@@ -72,7 +71,6 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
                         onTapOutside: (_) =>
                             FocusManager.instance.primaryFocus?.unfocus(),
                         controller: _otpController,
-                        decoration: context.inputDecoration(),
                         keyboardType: TextInputType.emailAddress,
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
@@ -85,8 +83,13 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
                         width: MediaQuery.sizeOf(context).width,
                         padding: EdgeInsets.zero,
                         onPressed: () {
+                          authCubit.loginWithOtp(
+                            otp: _otpController.text,
+                            onSuccess: () =>
+                                context.neglectNamed(confrimPasswordRoute.name),
+                            onFailure: () {},
+                          );
                           // update password and go to dashboard
-                          context.neglectNamed(confrimPasswordRoute.name);
                         },
                         child: Text(
                           'Submit',
@@ -99,7 +102,10 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
                         onPressed: () {
                           context.neglectNamed(signinRoute.name);
                         },
-                        child: const Text('Login'),
+                        child: Text(
+                          'Back to Login',
+                          style: context.typoraphyTheme.primaryLink.textStyle,
+                        ),
                       ),
                     ],
                   ),
