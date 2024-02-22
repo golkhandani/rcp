@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "500834876642",
-    "project_id": "bestneighbourforver",
-    "storage_bucket": "bestneighbourforver.appspot.com"
+    "project_number": "566969417122",
+    "project_id": "random-project-concept",
+    "storage_bucket": "random-project-concept.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:500834876642:android:d13f26d2871192d95db2bb",
+        "mobilesdk_app_id": "1:566969417122:android:38927941bad4e9ffda06fb",
         "android_client_info": {
           "package_name": "com.mrzg.rcp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCj7uy3tV5IT3z1Yl5U8qMk-hXkcK00TLQ"
+          "current_key": "AIzaSyCVZ6okVse-QudQK4cOJ87CcF1cI4i49K0"
         }
       ],
       "services": {
