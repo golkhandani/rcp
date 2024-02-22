@@ -1,4 +1,4 @@
-package com.mrzg.recipe.collector
+package com.mrzg.rcp
 
 import io.flutter.embedding.android.FlutterActivity
 

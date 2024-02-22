@@ -4,10 +4,11 @@ import 'package:customizable_space_bar/customizable_space_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/sliver_title_bar.dart';
-import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
-import 'package:bnf/modules/setting_module/profile_module.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/sliver_title_bar.dart';
+import 'package:rcp/gen/assets.gen.dart';
+import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
+import 'package:rcp/modules/setting_module/profile_module.dart';
 
 class TenancyTitleBar extends StatefulWidget {
   const TenancyTitleBar({
@@ -80,7 +81,7 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                             fit: BoxFit.cover,
                             child: Text(
                               scrollingRate < 0.5
-                                  ? state.user!.name
+                                  ? state.user!.metadata.username
                                   : 'Date: ${state.selectedGroup?.name ?? ''}',
                               maxLines: 2,
                               style: context.typoraphyTheme.subtitleLarge
@@ -108,9 +109,12 @@ class _UserSliverTitleBarState extends State<UserSliverTitleBar> {
                       child: FittedBox(
                         fit: BoxFit.cover,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            state.user!.imageUrl,
-                          ), // Replace with user avatar URL
+                          backgroundImage:
+                              state.user?.metadata.avatarUrl == null
+                                  ? Assets.images.profilePlaceholder.provider()
+                                  : NetworkImage(
+                                      state.user!.metadata.avatarUrl!,
+                                    ), // Replace with user avatar URL
                           radius: 32,
                         ),
                       ),

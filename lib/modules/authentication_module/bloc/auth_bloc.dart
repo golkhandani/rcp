@@ -3,9 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/services/auth_service.dart';
-import 'package:bnf/core/services/notification_banner_service.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/core/models/user/user_data.dart';
+import 'package:rcp/core/services/auth_service.dart';
+import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final AuthServie authServie;
@@ -42,6 +43,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   signupWithEmail({
+    required String username,
     required String email,
     required String password,
     required VoidCallback onSuccess,
@@ -49,10 +51,16 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }) async {
     emit(state.copyWith(isLoading: true, email: email));
     try {
+      final metadata = UserMetadata(
+        username: username,
+        avatarUrl: null,
+      );
       final user = await authServie.signUpWithEmail(
         email: email,
         password: password,
+        metadata: metadata,
       );
+
       emit(state.copyWith(isLoading: false, userId: user.id));
       banner.showSuccessBanner('Please check your email inbox!');
       onSuccess();

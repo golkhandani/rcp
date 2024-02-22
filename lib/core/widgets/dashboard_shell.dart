@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,11 +7,17 @@ import 'package:collection/collection.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/utils/extensions/context_ui_extension.dart';
+import 'package:rcp/core/theme/apptheme_elevated_button.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/theme/theme_extentions.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
+
+extension SafePadding on BuildContext {
+  double get bottomSafePadding => MediaQuery.paddingOf(this).bottom;
+  double get topSafePadding => MediaQuery.paddingOf(this).top;
+}
 
 class DashboardLink {
   final IconData iconData;
@@ -87,7 +94,9 @@ class _DashboardShellState extends State<DashboardShell> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: ColorfulSafeArea(
-        color: widget.safeAreaColor,
+        topColor: widget.safeAreaColor,
+        bottomColor: Colors.transparent,
+        bottom: false,
         child: Scaffold(
           extendBody: true,
           extendBodyBehindAppBar: true,
@@ -121,15 +130,18 @@ class _DashboardShellState extends State<DashboardShell> {
 
   Widget _buildNarrowContainer() {
     if (widget.useFloatingNavBar) {
+      final btm = MediaQuery.paddingOf(context).bottom;
+      final width = min(
+        MediaQuery.sizeOf(context).width,
+        widget.items.length * 120,
+      );
       return Stack(
         children: [
           widget.child,
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: LimitedBox(
-              maxWidth: widget.items.length * 120,
-              child: _buildFloatingNavigationBar(),
-            ),
+          Positioned(
+            bottom: btm,
+            width: width.toDouble(),
+            child: _buildFloatingNavigationBar(),
           ),
         ],
       );
@@ -289,9 +301,10 @@ class _DashboardShellState extends State<DashboardShell> {
         borderRadius: BorderRadius.circular(widget.borderRadius),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            offset: const Offset(.2, .2),
+            offset: const Offset(0, 2),
             blurRadius: 1,
-            color: context.colorTheme.shadow,
+            color:
+                widget.navigationBackgroundColor.darken(0.8).withOpacity(0.2),
           )
         ],
       ),

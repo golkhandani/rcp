@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
-import 'package:bnf/core/theme/dwew.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
 
 class ScaffoldShell extends StatelessWidget {
   final Widget child;
@@ -30,6 +30,8 @@ class ScaffoldShell extends StatelessWidget {
             : SystemUiOverlayStyle.light,
         child: ColorfulSafeArea(
           color: safeareaColor ?? context.colorTheme.navBackground,
+          bottom: false,
+          top: false,
           child: Scaffold(
             extendBody: false,
             extendBodyBehindAppBar: false,

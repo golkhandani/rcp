@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:bnf/core/go_route_named.dart';
-import 'package:bnf/modules/dashboard_module/dashboard_screen.dart';
-import 'package:bnf/modules/home_module/home_module.dart';
-import 'package:bnf/modules/setting_module/profile_module.dart';
-import 'package:bnf/modules/setting_module/setting_module.dart';
-import 'package:bnf/modules/user_inbox_module/inbox_module.dart';
+import 'package:rcp/core/go_route_named.dart';
+import 'package:rcp/modules/dashboard_module/dashboard_screen.dart';
+import 'package:rcp/modules/home_module/home_module.dart';
+import 'package:rcp/modules/setting_module/profile_module.dart';
+import 'package:rcp/modules/setting_module/setting_module.dart';
+import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
 Page<void> dashboardPageBuilder(GoRouterState state, Widget screen) {
   return CustomTransitionPage<void>(

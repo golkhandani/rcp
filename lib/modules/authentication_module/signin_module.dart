@@ -5,14 +5,18 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
-import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/scaffold_shell.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
-import 'package:bnf/utils/extensions/context_go_extension.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/modules/authentication_module/reset_password_module.dart';
+import 'package:rcp/modules/authentication_module/signup_module.dart';
+import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
+import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -31,6 +35,7 @@ class _SigninScreenState extends State<SigninScreen> {
       TextEditingController();
 
   bool _obscurePassword = true;
+  bool _signedinWithEmail = false;
 
   @override
   void initState() {
@@ -46,6 +51,9 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void _signin() async {
+    setState(() {
+      _signedinWithEmail = true;
+    });
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) {
       return;
@@ -55,7 +63,11 @@ class _SigninScreenState extends State<SigninScreen> {
       email: _emailController.text,
       password: _passwordController.text,
       onSuccess: () => context.neglectNamed(dashboardRoute.name),
-      onFailure: () {},
+      onFailure: () {
+        setState(() {
+          _signedinWithEmail = false;
+        });
+      },
     );
   }
 
@@ -68,10 +80,10 @@ class _SigninScreenState extends State<SigninScreen> {
     return ScaffoldShell(
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(16).copyWith(top: 64),
+        child: BasicBackgroundContainer(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: FormBuilder(
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -84,25 +96,12 @@ class _SigninScreenState extends State<SigninScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Center(
-                        child: Text(
-                          'Welcome',
-                          style: context
-                              .typoraphyTheme.titleLarge.primary.textStyle,
-                        ),
-                      ),
-                      const Gap(64),
-                      Text(
-                        'Email',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                        textAlign: TextAlign.start,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'email_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
+                      const Gap(48),
+                      const AppLogo(labelText: 'Welcome Back!'),
+                      const Gap(24),
+                      BasicTextInput(
+                        fieldName: 'email_field',
+                        labelText: 'Email',
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: FormBuilderValidators.compose([
@@ -111,87 +110,83 @@ class _SigninScreenState extends State<SigninScreen> {
                         ]),
                       ),
                       const Gap(8),
-                      Text(
-                        'Password',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                        textAlign: TextAlign.start,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'password_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
+                      BasicTextInput(
+                        fieldName: 'password_field',
+                        labelText: 'Password',
                         controller: _passwordController,
-                        decoration: context.themeData.inputDecoration.copyWith(
-                          suffixIcon: IconButton(
-                            splashColor: Colors.transparent,
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.none,
+                        keyboardType: TextInputType.text,
                         obscureText: _obscurePassword,
                         validator: ValidationBuilder()
                             .minLength(8)
                             .maxLength(16)
                             .build(),
-                      ),
-                      const Gap(16),
-                      AppThemeElevatedButton(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          _signin();
-                        },
-                        child: Text(
-                          'Signin',
-                          style:
-                              context.typoraphyTheme.subtitleMedium.textStyle,
+                        suffix: IconButton(
+                          splashColor: Colors.transparent,
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                         ),
                       ),
                       const Gap(16),
-                      TextButton(
+                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                        builder: (context, state) {
+                          return Hero(
+                            tag: ResetPasswordScreen.heroTag,
+                            child: BasicElevatedButton(
+                              isLoading: state.isLoading,
+                              labelText: 'Signin',
+                              width: MediaQuery.sizeOf(context).width,
+                              onPressed: () {
+                                _signin();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(16),
+                      BasicLinkButton(
+                        foreground: context.colorTheme.primary,
+                        labelText: 'Forgot Password?',
                         onPressed: () {
                           context.neglectNamed(resetPasswordRoute.name);
                         },
-                        child: Text(
-                          'Forgot Password',
-                          style: context.typoraphyTheme.primaryLink.textStyle,
-                        ),
                       ),
                       const Gap(16),
-                      Row(children: <Widget>[
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "OR",
-                            style: context.typoraphyTheme.hint.textStyle,
-                          ),
-                        ),
-                        const Expanded(child: Divider()),
-                      ]),
+                      SupaSocialsAuth(
+                          showSuccessSnackBar: false,
+                          socialProviders: const [
+                            OAuthProvider.google,
+                            OAuthProvider.apple,
+                          ],
+                          onSuccess: (session) {
+                            if (_signedinWithEmail) {
+                              return;
+                            }
+                            context.neglectNamed(dashboardRoute.name);
+                          }),
                       const Gap(16),
-                      AppThemeElevatedButton(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
-                        background: context.colorTheme.secondary,
-                        onPressed: () {
-                          _goToSignup();
-                        },
-                        child: Text(
-                          'Signup',
-                          style:
-                              context.typoraphyTheme.subtitleMedium.textStyle,
+                      const BasicTextDivider(
+                        labelText: "Don't have an account?",
+                      ),
+                      const Gap(24),
+                      Hero(
+                        tag: SignupScreen.heroTag,
+                        child: BasicElevatedButton(
+                          labelText: 'Signup',
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.zero,
+                          background: context.colorTheme.secondary,
+                          foreground: context.colorTheme.onSecondary,
+                          onPressed: () {
+                            _goToSignup();
+                          },
                         ),
                       ),
                       const Gap(16),

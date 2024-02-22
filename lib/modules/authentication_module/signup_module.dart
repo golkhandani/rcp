@@ -6,14 +6,16 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/scaffold_shell.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/utils/extensions/context_go_extension.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class SignupScreen extends StatefulWidget {
+  static String heroTag = 'signup_btn_hero';
   const SignupScreen({super.key});
 
   @override
@@ -24,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
   late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController =
@@ -51,6 +54,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     authCubit.signupWithEmail(
+      username: _usernameController.text,
       email: _emailController.text,
       password: _passwordController.text,
       onSuccess: _goToSignin,
@@ -67,10 +71,10 @@ class _SignupScreenState extends State<SignupScreen> {
     return ScaffoldShell(
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(16).copyWith(top: 64),
+        child: BasicBackgroundContainer(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: FormBuilder(
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
@@ -81,26 +85,17 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Center(
-                        child: Text(
-                          'Welcome',
-                          style: context.typoraphyTheme.titleMedium.onBackground
-                              .textStyle,
-                        ),
+                      const Gap(48),
+                      AppLogo(
+                        labelText: 'Join us!',
+                        foregroundColor: context.colorTheme.secondary,
                       ),
-                      const Gap(64),
-                      Text(
-                        'Email',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'email_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
+                      const Gap(24),
+                      BasicTextInput.secondary(
+                        fieldName: 'email_field',
+                        labelText: 'Email',
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: FormBuilderValidators.compose([
@@ -109,68 +104,47 @@ class _SignupScreenState extends State<SignupScreen> {
                         ]),
                       ),
                       const Gap(8),
-                      Text(
-                        'Password',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'password_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        controller: _passwordController,
-                        decoration: context.themeData.inputDecoration.copyWith(
-                          suffixIcon: IconButton(
-                            style: const ButtonStyle(
-                                splashFactory: NoSplash.splashFactory),
-                            splashColor: Colors.transparent,
-                            icon: Icon(_obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.none,
-                        obscureText: _obscurePassword,
+                      BasicTextInput.secondary(
+                        fieldName: 'username_field',
+                        labelText: 'Username',
+                        controller: _usernameController,
+                        keyboardType: TextInputType.emailAddress,
                         validator: ValidationBuilder()
                             .minLength(8)
                             .maxLength(16)
                             .build(),
                       ),
-                      const Gap(16),
-                      Text(
-                        'Confirm Password',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'password_confirmation_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        controller: _passwordConfirmationController,
-                        decoration: context.themeData.inputDecoration.copyWith(
-                          suffixIcon: IconButton(
-                            style: const ButtonStyle(
-                              splashFactory: NoSplash.splashFactory,
-                            ),
-                            splashColor: Colors.transparent,
-                            icon: Icon(_obscurePassword
+                      const Gap(8),
+                      BasicTextInput.secondary(
+                        fieldName: 'password_field',
+                        labelText: 'Password',
+                        controller: _passwordController,
+                        keyboardType: TextInputType.text,
+                        obscureText: _obscurePassword,
+                        validator: ValidationBuilder()
+                            .minLength(8)
+                            .maxLength(16)
+                            .build(),
+                        suffix: IconButton(
+                          splashColor: Colors.transparent,
+                          icon: Icon(
+                            _obscurePassword
                                 ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
+                                : Icons.visibility_off,
                           ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                         ),
-                        keyboardType: TextInputType.none,
+                      ),
+                      const Gap(8),
+                      BasicTextInput.secondary(
+                        fieldName: 'password_confirmation_field',
+                        labelText: 'Confirm Password',
+                        controller: _passwordConfirmationController,
+                        keyboardType: TextInputType.text,
                         obscureText: _obscurePassword,
                         validator: (value) {
                           if (_formKey.currentState?.fields['password_field']
@@ -181,44 +155,30 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
-                      const Gap(16),
-                      AppThemeElevatedButton(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          _signup();
+                      const Gap(32),
+                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                        builder: (context, state) {
+                          return Hero(
+                            tag: SignupScreen.heroTag,
+                            child: BasicElevatedButton(
+                              background: context.colorTheme.secondary,
+                              foreground: context.colorTheme.onSecondary,
+                              isLoading: state.isLoading,
+                              width: MediaQuery.sizeOf(context).width,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _signup();
+                              },
+                              labelText: 'Signup',
+                            ),
+                          );
                         },
-                        child: Text(
-                          'Signup',
-                          style: context.typoraphyTheme.subtitleMedium.onPrimary
-                              .textStyle,
-                        ),
                       ),
                       const Gap(32),
-                      Row(children: <Widget>[
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "OR",
-                            style: context.typoraphyTheme.hint.textStyle,
-                          ),
-                        ),
-                        const Expanded(child: Divider()),
-                      ]),
-                      const Gap(32),
-                      AppThemeElevatedButton(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
-                        background: context.colorTheme.secondary,
-                        onPressed: () {
-                          _goToSignin();
-                        },
-                        child: Text(
-                          'Signin',
-                          style: context.typoraphyTheme.subtitleMedium
-                              .onSecondary.textStyle,
-                        ),
+                      BasicLinkButton(
+                        foreground: context.colorTheme.primary,
+                        labelText: 'Signin!',
+                        onPressed: _goToSignin,
                       ),
                     ],
                   ),

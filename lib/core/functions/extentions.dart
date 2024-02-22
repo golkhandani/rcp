@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/ioc.dart';
-import 'package:bnf/environment.dart';
+import 'package:rcp/core/ioc.dart';
+import 'package:rcp/environment.dart';
 
 extension FunctionsTenancyClient on FunctionsClient {
   Future<FunctionResponse> tenancyInvoke(

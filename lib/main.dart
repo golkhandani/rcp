@@ -1,27 +1,34 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/ioc.dart';
-import 'package:bnf/core/services/auth_service.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/environment.dart';
-import 'package:bnf/firebase_options.dart';
-import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
-import 'package:bnf/modules/app_onboarding_module/on_boarding_router.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
-import 'package:bnf/utils/themes.dart';
+import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/services/auth_service.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/environment.dart';
+import 'package:rcp/firebase_options.dart';
+import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
+import 'package:rcp/modules/app_onboarding_module/on_boarding_router.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
+import 'package:rcp/utils/themes.dart';
 
 void main() async {
   // START APP INIT
   // initialize widget and supabase
   WidgetsFlutterBinding.ensureInitialized();
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -46,6 +53,11 @@ void main() async {
   // if user is logged in restore the session
   if (isLoggedIn) {
     authService.restoreSession();
+  }
+
+  final user = await authService.getCurrentUser();
+  if (user == null) {
+    authService.logout();
   }
   locator.logger.info("AUTH INIT DONE!, isLoggedIn: $isLoggedIn");
 
@@ -112,10 +124,10 @@ class _MyAppState extends State<MyApp> {
       ],
       child: CustomThemeProvider(
         pallete: pallete,
-        typoraphy: const CustomThemeTyporaphy(
+        typoraphy: CustomThemeTyporaphy(
           textStyle: TextStyle(
             fontSize: 16,
-            fontFamily: 'Nunito',
+            fontFamily: GoogleFonts.nunito().fontFamily,
           ),
           pallete: pallete,
         ),

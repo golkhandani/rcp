@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Bnf</string>
+	<string>RCPAppName</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>bnf</string>
+	<string>RCPAppName</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,7 +53,7 @@
 		<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-			<string>com.mrzg.recipe.collector</string>
+			<string>com.mrzg.rcp</string>
 		</array>
 		</dict>
 	</array>

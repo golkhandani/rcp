@@ -18,3 +18,21 @@ class GoRouteNamed extends GoRoute {
     super.routes = const <RouteBase>[],
   });
 }
+
+class GoRouteNamedPage extends GoRoute {
+  @override
+  String get name => super.name!;
+  @override
+  Page<dynamic> Function(BuildContext, GoRouterState)? get pageBuilder =>
+      super.pageBuilder!;
+  GoRouteNamedPage({
+    required super.path,
+    required super.name,
+    super.builder,
+    required super.pageBuilder,
+    super.parentNavigatorKey,
+    super.redirect,
+    super.onExit,
+    super.routes = const <RouteBase>[],
+  });
+}

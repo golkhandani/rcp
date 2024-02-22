@@ -34,6 +34,8 @@ Before running the project, follow the steps below:
 deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts
 ```
 
+Create a bucked called `avatars` and make sure user can read and write on it;
+
 ## Local Development
 
 1. **Set Up Supabase Local Environment**:
@@ -49,7 +51,7 @@ deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0
 
    ```
    $ supabase login
-   $ supabase link --project-ref ndhorlcmrjrjakflkgfc
+   $ supabase link --project-ref hhahtffbqirozvtxskgd
    $ supabase start
    ```
 

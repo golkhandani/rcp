@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="bnf"
+        android:label="RCPAppName"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                android:scheme="com.mrzg.recipe.collector"
+                android:scheme="com.mrzg.rcp"
                 android:host="signup-callback" />
             </intent-filter>
         </activity>

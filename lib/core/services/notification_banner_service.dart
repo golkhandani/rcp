@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/notification_banner.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/notification_banner.dart';
 
 class NotificationBannerService {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -22,41 +24,47 @@ class NotificationBannerService {
     sf.hideCurrentMaterialBanner();
   }
 
-  showErrorBanner(String message) {
-    final sf = ScaffoldMessenger.of(context);
-    final foregroundStyle = context.typoraphyTheme.onErrorContainer;
-    final backgroundColor = context.colorTheme.errorContainer;
-
-    sf.showMaterialBanner(
-      NotificationBanner(
-        message: message,
-        foregroundStyle: foregroundStyle.textStyle,
-        backgroundColor: backgroundColor,
-        closePressed: closeBanner,
-      ),
-    );
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 3000), () {
-      closeBanner();
-    });
-  }
-
-  showSuccessBanner(String message) {
-    final sf = ScaffoldMessenger.of(context);
-    final foregroundStyle = context.typoraphyTheme.onSuccessContainer.textStyle;
-    final backgroundColor = context.customTheme.pallete.successContainer;
-
-    sf.showMaterialBanner(
+  void _showCustomBanner({
+    required String message,
+    required TextStyle foregroundStyle,
+    required Color backgroundColor,
+  }) {
+    final overlay = navigatorKey.currentState?.overlay;
+    if (overlay == null) {
+      return;
+    }
+    return showTopSnackBar(
+      overlay,
       NotificationBanner(
         message: message,
         foregroundStyle: foregroundStyle,
         backgroundColor: backgroundColor,
-        closePressed: closeBanner,
       ),
+      dismissType: DismissType.onSwipe,
+      displayDuration: const Duration(milliseconds: 1000),
+      curve: Curves.fastLinearToSlowEaseIn,
     );
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 3000), () {
-      closeBanner();
-    });
+  }
+
+  showErrorBanner(String message) {
+    final foregroundStyle = context.typoraphyTheme.onError;
+    final backgroundColor = context.colorTheme.error;
+
+    _showCustomBanner(
+      message: message,
+      foregroundStyle: foregroundStyle.textStyle,
+      backgroundColor: backgroundColor,
+    );
+  }
+
+  showSuccessBanner(String message) {
+    final foregroundStyle = context.typoraphyTheme.onSuccessContainer;
+    final backgroundColor = context.customTheme.pallete.successContainer;
+
+    _showCustomBanner(
+      message: message,
+      foregroundStyle: foregroundStyle.textStyle,
+      backgroundColor: backgroundColor,
+    );
   }
 }

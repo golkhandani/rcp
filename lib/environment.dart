@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/functions/extentions.dart';
-import 'package:bnf/core/ioc.dart';
+import 'package:rcp/core/functions/extentions.dart';
+import 'package:rcp/core/ioc.dart';
 
 class Environment {
   static const String supabaseUrl = String.fromEnvironment('SUPABASE_URL');

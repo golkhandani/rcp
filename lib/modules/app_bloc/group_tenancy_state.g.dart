@@ -16,7 +16,7 @@ _$AppTenancyStateImpl _$$AppTenancyStateImplFromJson(
           : Group.fromJson(json['selectedGroup'] as Map<String, dynamic>),
       user: json['user'] == null
           ? null
-          : UserData.fromJson(json['user'] as Map<String, dynamic>),
+          : UserInfo.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AppTenancyStateImplToJson(

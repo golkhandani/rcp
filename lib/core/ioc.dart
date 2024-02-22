@@ -6,10 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/services/auth_service.dart';
-import 'package:bnf/core/services/notification_banner_service.dart';
-import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/core/services/auth_service.dart';
+import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -21,7 +22,7 @@ class StackLogger {
         (info) => '${_logger.levelPrefixes[info.level]} ====> ${info.message}';
   }
 
-  StackTrace get stack => StackTrace.empty;
+  StackTrace get stack => StackTrace.current;
 
   String? _getMessage(Object? object) {
     final message = object is Exception
@@ -37,7 +38,7 @@ class StackLogger {
   }
 
   info(Object? object) {
-    _logger.info(_getLog(object, stack));
+    _logger.info(_getLog(object, StackTrace.empty));
   }
 
   warn(Object? object) {
@@ -103,6 +104,12 @@ Future<void> setupBloc() async {
   locator.registerFactory(
     () => AuthenticationCubit(
       authServie: locator.get(),
+      banner: locator.get(),
+    ),
+  );
+  locator.registerFactory(
+    () => ProfileBloc(
+      supabase: locator.get(),
       banner: locator.get(),
     ),
   );

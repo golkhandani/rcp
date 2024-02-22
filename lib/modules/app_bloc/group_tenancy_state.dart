@@ -6,11 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/models/group/group_model.dart';
-import 'package:bnf/core/models/user/user_data.dart';
-import 'package:bnf/core/services/notification_banner_service.dart';
-import 'package:bnf/environment.dart';
-import 'package:bnf/utils/extensions/string_extensions.dart';
+import 'package:rcp/core/models/group/group_model.dart';
+import 'package:rcp/core/models/user/user_data.dart';
+import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/environment.dart';
 
 part 'group_tenancy_state.freezed.dart';
 part 'group_tenancy_state.g.dart';
@@ -21,7 +20,7 @@ class AppTenancyState with _$AppTenancyState {
     required bool isLoading,
     String? selectedGroupId,
     Group? selectedGroup,
-    UserData? user,
+    UserInfo? user,
   }) = _AppTenancyState;
 
   factory AppTenancyState.init() => const AppTenancyState(
@@ -41,24 +40,6 @@ class AppTenancyBloc extends Cubit<AppTenancyState> {
     required this.supabase,
     required this.banner,
   }) : super(AppTenancyState.init());
-
-  getUserInfo() {
-    final user = supabase.auth.currentUser;
-    if (user == null) return;
-
-    final userData = UserData(
-      id: user.id,
-      email: user.email,
-      phone: user.phone,
-      name: user.appMetadata['name'] ??
-          user.email?.split('@')[0].toCapitalized() ??
-          '-',
-      imageUrl: user.appMetadata['imageUrl'] ??
-          'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-    );
-
-    emit(state.copyWith(user: userData));
-  }
 
   setCurrentGroup(String groupId, VoidCallback cb) async {
     await prefs.setString(Environment.selectedGroupKey, groupId);

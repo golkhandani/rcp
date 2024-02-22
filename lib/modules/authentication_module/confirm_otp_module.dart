@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/scaffold_shell.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/utils/extensions/context_go_extension.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class ConfirmOtpCodeScreen extends StatefulWidget {
   const ConfirmOtpCodeScreen({super.key});
@@ -52,60 +52,39 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          'Reset Password Code',
-                          style: context
-                              .typoraphyTheme.titleLarge.primary.textStyle,
-                        ),
-                      ),
-                      const Gap(64),
-                      Text(
-                        'Code',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'otp_code_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
+                      const Gap(48),
+                      const AppLogo(labelText: 'Update Password'),
+                      const Gap(24),
+                      BasicTextInput(
+                        fieldName: 'otp_code_field',
+                        labelText: 'Code',
                         controller: _otpController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.email(),
-                        ]),
+                        keyboardType: TextInputType.number,
                       ),
                       const Gap(32),
-                      AppThemeElevatedButton(
-                        background: context.colorTheme.cardBackground,
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          authCubit.loginWithOtp(
-                            otp: _otpController.text,
-                            onSuccess: () =>
-                                context.neglectNamed(confrimPasswordRoute.name),
-                            onFailure: () {},
+                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                        builder: (context, state) {
+                          return BasicElevatedButton(
+                            width: MediaQuery.sizeOf(context).width,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              authCubit.loginWithOtp(
+                                otp: _otpController.text,
+                                onSuccess: () => context
+                                    .neglectNamed(confrimPasswordRoute.name),
+                                onFailure: () {},
+                              );
+                            },
+                            labelText: 'Submit',
                           );
-                          // update password and go to dashboard
                         },
-                        child: Text(
-                          'Submit',
-                          style: context.typoraphyTheme.subtitleMedium
-                              .onCardBackground.textStyle,
-                        ),
                       ),
                       const Gap(16),
-                      TextButton(
+                      BasicLinkButton(
                         onPressed: () {
                           context.neglectNamed(signinRoute.name);
                         },
-                        child: Text(
-                          'Back to Login',
-                          style: context.typoraphyTheme.primaryLink.textStyle,
-                        ),
+                        labelText: 'Back to Login',
                       ),
                     ],
                   ),

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:bnf/core/types/uuid_extention.dart';
+import 'package:rcp/core/types/uuid_extention.dart';
 
 part 'group_model.freezed.dart';
 part 'group_model.g.dart';

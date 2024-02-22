@@ -5,13 +5,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:bnf/core/theme/apptheme_elevated_button.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/scaffold_shell.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:bnf/modules/dashboard_module/dashboard_router.dart';
-import 'package:bnf/utils/extensions/context_go_extension.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
+import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
   const ConfirmPasswordScreen({super.key});
@@ -48,131 +49,90 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(16).copyWith(top: 64),
-            child: FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightForFinite(
-                    width: 420,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Update Password',
-                          style: context.typoraphyTheme.titleMedium.onBackground
-                              .textStyle,
+          child: FormBuilder(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.disabled,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints.tightForFinite(
+                  width: 420,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(48),
+                    const AppLogo(labelText: 'Update Password'),
+                    const Gap(24),
+                    BasicTextInput(
+                      fieldName: 'password_field',
+                      labelText: 'Password',
+                      controller: _passwordController,
+                      keyboardType: TextInputType.text,
+                      obscureText: _obscurePassword,
+                      validator: ValidationBuilder()
+                          .minLength(8)
+                          .maxLength(16)
+                          .build(),
+                      suffix: IconButton(
+                        splashColor: Colors.transparent,
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
-                      ),
-                      const Gap(64),
-                      const Gap(8),
-                      Text(
-                        'Password',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'password_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        controller: _passwordController,
-                        decoration: context.themeData.inputDecoration.copyWith(
-                          suffixIcon: IconButton(
-                            style: const ButtonStyle(
-                                splashFactory: NoSplash.splashFactory),
-                            splashColor: Colors.transparent,
-                            icon: Icon(_obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.none,
-                        obscureText: _obscurePassword,
-                        validator: ValidationBuilder()
-                            .minLength(8)
-                            .maxLength(16)
-                            .build(),
-                      ),
-                      const Gap(16),
-                      Text(
-                        'Confirm Password',
-                        style: context.typoraphyTheme.subtitleMedium
-                            .onBackground.textStyle,
-                      ),
-                      const Gap(4),
-                      FormBuilderTextField(
-                        name: 'password_confirmation_field',
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        controller: _passwordConfirmationController,
-                        decoration: context.themeData.inputDecoration.copyWith(
-                          suffixIcon: IconButton(
-                            style: const ButtonStyle(
-                                splashFactory: NoSplash.splashFactory),
-                            splashColor: Colors.transparent,
-                            icon: Icon(_obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.none,
-                        obscureText: _obscurePassword,
-                        validator: (value) {
-                          if (_formKey.currentState?.fields['password_field']
-                                  ?.value !=
-                              value) {
-                            return 'Password Confirmation does not match!';
-                          }
-                          return null;
-                        },
-                      ),
-                      const Gap(16),
-                      AppThemeElevatedButton(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.zero,
                         onPressed: () {
-                          authCubit.updatePassword(
-                            password: _passwordController.text,
-                            onSuccess: () =>
-                                context.neglectNamed(dashboardRoute.name),
-                            onFailure: () {},
-                          );
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
                         },
-                        child: Text(
-                          'Update Password',
-                          style: context.typoraphyTheme.subtitleMedium.onPrimary
-                              .textStyle,
-                        ),
                       ),
-                      const Gap(32),
-                      TextButton(
-                        onPressed: () {
-                          context.neglectNamed(signinRoute.name);
-                        },
-                        child: Text(
-                          'Back to Login',
-                          style: context.typoraphyTheme.primaryLink.textStyle,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const Gap(16),
+                    BasicTextInput(
+                      fieldName: 'password_confirmation_field',
+                      labelText: 'Confirm Password',
+                      controller: _passwordConfirmationController,
+                      keyboardType: TextInputType.text,
+                      obscureText: _obscurePassword,
+                      validator: (value) {
+                        if (_formKey.currentState?.fields['password_field']
+                                ?.value !=
+                            value) {
+                          return 'Password Confirmation does not match!';
+                        }
+                        return null;
+                      },
+                    ),
+                    const Gap(16),
+                    BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                      builder: (context, state) {
+                        return BasicElevatedButton(
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            authCubit.updatePassword(
+                              password: _passwordController.text,
+                              onSuccess: () =>
+                                  context.neglectNamed(dashboardRoute.name),
+                              onFailure: () {},
+                            );
+                          },
+                          labelText: 'Update Password',
+                        );
+                      },
+                    ),
+                    const Gap(8),
+                    const Gap(16),
+                    BasicLinkButton(
+                      onPressed: () {
+                        context.neglectNamed(signinRoute.name);
+                      },
+                      labelText: 'Back to Login',
+                    ),
+                  ],
                 ),
               ),
             ),

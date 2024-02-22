@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart' as intro;
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
-import 'package:bnf/packages/constants/ui_constants.dart';
-import 'package:bnf/utils/extensions/context_ui_extension.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/packages/constants/ui_constants.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sliver_tools/sliver_tools.dart';
 
-import 'package:bnf/core/theme/dwew.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
 
 class SliverCardContainer extends StatelessWidget {
   const SliverCardContainer({

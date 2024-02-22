@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:bnf/core/models/group/group_model.dart';
+import 'package:rcp/core/models/group/group_model.dart';
 
 part 'index.freezed.dart';
 part 'index.g.dart';

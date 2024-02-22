@@ -23,7 +23,7 @@ mixin _$AppTenancyState {
   bool get isLoading => throw _privateConstructorUsedError;
   String? get selectedGroupId => throw _privateConstructorUsedError;
   Group? get selectedGroup => throw _privateConstructorUsedError;
-  UserData? get user => throw _privateConstructorUsedError;
+  UserInfo? get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,10 +41,10 @@ abstract class $AppTenancyStateCopyWith<$Res> {
       {bool isLoading,
       String? selectedGroupId,
       Group? selectedGroup,
-      UserData? user});
+      UserInfo? user});
 
   $GroupCopyWith<$Res>? get selectedGroup;
-  $UserDataCopyWith<$Res>? get user;
+  $UserInfoCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -81,7 +81,7 @@ class _$AppTenancyStateCopyWithImpl<$Res, $Val extends AppTenancyState>
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserData?,
+              as UserInfo?,
     ) as $Val);
   }
 
@@ -99,12 +99,12 @@ class _$AppTenancyStateCopyWithImpl<$Res, $Val extends AppTenancyState>
 
   @override
   @pragma('vm:prefer-inline')
-  $UserDataCopyWith<$Res>? get user {
+  $UserInfoCopyWith<$Res>? get user {
     if (_value.user == null) {
       return null;
     }
 
-    return $UserDataCopyWith<$Res>(_value.user!, (value) {
+    return $UserInfoCopyWith<$Res>(_value.user!, (value) {
       return _then(_value.copyWith(user: value) as $Val);
     });
   }
@@ -122,12 +122,12 @@ abstract class _$$AppTenancyStateImplCopyWith<$Res>
       {bool isLoading,
       String? selectedGroupId,
       Group? selectedGroup,
-      UserData? user});
+      UserInfo? user});
 
   @override
   $GroupCopyWith<$Res>? get selectedGroup;
   @override
-  $UserDataCopyWith<$Res>? get user;
+  $UserInfoCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -162,7 +162,7 @@ class __$$AppTenancyStateImplCopyWithImpl<$Res>
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserData?,
+              as UserInfo?,
     ));
   }
 }
@@ -188,7 +188,7 @@ class _$AppTenancyStateImpl
   @override
   final Group? selectedGroup;
   @override
-  final UserData? user;
+  final UserInfo? user;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -245,7 +245,7 @@ abstract class _AppTenancyState implements AppTenancyState {
       {required final bool isLoading,
       final String? selectedGroupId,
       final Group? selectedGroup,
-      final UserData? user}) = _$AppTenancyStateImpl;
+      final UserInfo? user}) = _$AppTenancyStateImpl;
 
   factory _AppTenancyState.fromJson(Map<String, dynamic> json) =
       _$AppTenancyStateImpl.fromJson;
@@ -257,7 +257,7 @@ abstract class _AppTenancyState implements AppTenancyState {
   @override
   Group? get selectedGroup;
   @override
-  UserData? get user;
+  UserInfo? get user;
   @override
   @JsonKey(ignore: true)
   _$$AppTenancyStateImplCopyWith<_$AppTenancyStateImpl> get copyWith =>

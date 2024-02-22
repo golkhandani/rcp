@@ -144,15 +144,15 @@ class CustomThemeProvider extends InheritedWidget {
   ThemeData get _flex => FlexThemeData.light(
         scheme: FlexScheme.custom,
         colorScheme: pallete,
-
-        subThemesData: const FlexSubThemesData(
+        subThemesData: FlexSubThemesData(
           blendOnColors: false,
           blendTextTheme: true,
           useTextTheme: true,
           thinBorderWidth: 2.0,
           thickBorderWidth: 2.0,
           defaultRadius: 12.0,
-          inputDecoratorSchemeColor: SchemeColor.background,
+          inputDecoratorSchemeColor: SchemeColor.surface,
+          inputDecoratorFillColor: pallete.onTextFieldBackground,
           inputDecoratorBorderSchemeColor: SchemeColor.primary,
           inputDecoratorPrefixIconSchemeColor: SchemeColor.onPrimaryContainer,
           inputCursorSchemeColor: SchemeColor.onPrimaryContainer,
@@ -171,8 +171,9 @@ class CustomThemeProvider extends InheritedWidget {
         keyColors: const FlexKeyColors(),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
+        surfaceTint: Colors.transparent,
         swapLegacyOnMaterial3: true,
-
+        fontFamily: typoraphy.textStyle.fontFamily,
         // To use the Playground font, add GoogleFonts package and uncomment
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       );
@@ -208,7 +209,8 @@ extension ThemedText on CustomThemeTyporaphy {
 
   /// COLORS
   CustomThemeTyporaphy get primary => copyWith(color: pallete.primary);
-  CustomThemeTyporaphy get primaryLink => primary.copyWith(
+  CustomThemeTyporaphy get primaryLink => subtitleMedium.copyWith(
+        color: pallete.primary,
         decoration: TextDecoration.underline,
       );
   CustomThemeTyporaphy get onPrimary => copyWithColor(color: pallete.onPrimary);

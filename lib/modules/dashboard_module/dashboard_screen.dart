@@ -4,37 +4,39 @@ import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:bnf/core/ioc.dart';
-import 'package:bnf/core/theme/dwew.dart';
-import 'package:bnf/core/widgets/dashboard_shell.dart';
-import 'package:bnf/core/widgets/scaffold_shell.dart';
-import 'package:bnf/modules/app_bloc/group_tenancy_state.dart';
-import 'package:bnf/modules/home_module/home_module.dart';
-import 'package:bnf/modules/setting_module/profile_module.dart';
-import 'package:bnf/modules/setting_module/setting_module.dart';
-import 'package:bnf/modules/user_inbox_module/inbox_module.dart';
+import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/dashboard_shell.dart';
+import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/home_module/home_module.dart';
+import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
+import 'package:rcp/modules/setting_module/profile_module.dart';
+import 'package:rcp/modules/setting_module/setting_module.dart';
+import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
 final dahboardItems = [
   DashboardLink(
-    iconData: Icons.shopping_cart_outlined,
+    iconData: Icons.home,
     label: 'Home',
     routeName: homeRoute.name,
     index: 0,
   ),
   DashboardLink(
-    iconData: Icons.list_alt_outlined,
+    iconData: Icons.inbox,
     label: 'Inbox',
     routeName: inboxRoute.name,
     index: 1,
   ),
   DashboardLink(
-    iconData: Icons.inbox_outlined,
+    iconData: Icons.settings,
     label: 'Settings',
     routeName: settingRoute.name,
     index: 2,
   ),
   DashboardLink(
-    iconData: Icons.settings_applications_outlined,
+    iconData: Icons.person,
     label: 'Profile',
     routeName: profileRoute.name,
     index: 3,
@@ -53,7 +55,9 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late final _tenancyBloc = context.read<AppTenancyBloc>();
+  late final AppTenancyBloc _tenancyBloc = context.read();
+  late final AuthenticationCubit _authenticationCubit = context.read();
+  final ProfileBloc _profileBloc = locator.get();
 
   void onItemTapped(int index) {
     widget.child.goBranch(
@@ -73,9 +77,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    _tenancyBloc
-      ..getCurrentGroup()
-      ..getUserInfo();
+    _tenancyBloc.getCurrentGroup();
+    _profileBloc.getUserInfo();
   }
 
   @override
@@ -84,57 +87,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final color =
         dahboardItems[currentIndex].color ?? context.colorTheme.navBackground;
 
-    return BlocConsumer<AppTenancyBloc, AppTenancyState>(
-      bloc: _tenancyBloc,
-      listenWhen: (previous, current) =>
-          !current.isLoading &&
-          previous.selectedGroupId != null &&
-          current.selectedGroupId != null &&
-          previous.selectedGroupId != current.selectedGroupId,
-      listener: (context, state) {
-        locator.logger.info("GROUP UPDATED! >> ${state.selectedGroup?.name}");
-        if (state.selectedGroupId != null &&
-            state.selectedGroup?.id != state.selectedGroupId) {
-          _tenancyBloc.getCurrentGroup();
-        }
-      },
-      builder: (context, state) {
-        if (state.isLoading) {
-          return ScaffoldShell(
-            bodyColor: context.colorTheme.navBackground,
-            child: Center(
-              child: CircularProgressIndicator.adaptive(
-                backgroundColor: context.colorTheme.onNavUnselected,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _authenticationCubit),
+        BlocProvider.value(value: _profileBloc),
+      ],
+      child: BlocConsumer<AppTenancyBloc, AppTenancyState>(
+        bloc: _tenancyBloc,
+        listenWhen: (previous, current) =>
+            !current.isLoading &&
+            previous.selectedGroupId != null &&
+            current.selectedGroupId != null &&
+            previous.selectedGroupId != current.selectedGroupId,
+        listener: (context, state) {
+          locator.logger.info("GROUP UPDATED! >> ${state.selectedGroup?.name}");
+          if (state.selectedGroupId != null &&
+              state.selectedGroup?.id != state.selectedGroupId) {
+            _tenancyBloc.getCurrentGroup();
+          }
+        },
+        builder: (context, state) {
+          if (state.isLoading) {
+            return ScaffoldShell(
+              bodyColor: context.colorTheme.navBackground,
+              child: Center(
+                child: CircularProgressIndicator.adaptive(
+                  backgroundColor: context.colorTheme.onNavUnselected,
+                ),
               ),
-            ),
+            );
+          }
+          return DashboardShell(
+            items: dahboardItems,
+            currentIndex: currentIndex,
+            onTap: onItemTapped,
+            navigationActiveColor: context.colorTheme.onNavSelected,
+            navigationInactiveColor: context.colorTheme.onNavUnselected,
+            navigationBackgroundColor: color,
+            contentBackgroundColor: context.colorTheme.background,
+            safeAreaColor: color,
+            height: 56,
+            useFloatingNavBar: true,
+            handleTopSafePadding: false,
+            floatingActionButton: null,
+            child: widget.child,
           );
-        }
-        return DashboardShell(
-          items: dahboardItems,
-          currentIndex: currentIndex,
-          onTap: onItemTapped,
-          navigationActiveColor: context.colorTheme.onNavSelected,
-          navigationInactiveColor: context.colorTheme.onNavUnselected,
-          navigationBackgroundColor: color,
-          contentBackgroundColor: context.colorTheme.background,
-          safeAreaColor: color,
-          height: 56,
-          useFloatingNavBar: true,
-          handleTopSafePadding: false,
-          floatingActionButton: currentIndex == 0
-              ? FloatingActionButton(
-                  backgroundColor: color,
-                  elevation: 1,
-                  onPressed: () {},
-                  child: Icon(
-                    Icons.add,
-                    color: context.colorTheme.onNavBackground,
-                  ),
-                )
-              : null,
-          child: widget.child,
-        );
-      },
+        },
+      ),
     );
   }
 }

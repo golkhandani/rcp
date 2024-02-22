@@ -6,11 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:bnf/core/ioc.dart';
-import 'package:bnf/core/services/notification_banner_service.dart';
-import 'package:bnf/core/types/user_session.dart';
-import 'package:bnf/environment.dart';
-import 'package:bnf/modules/authentication_module/auth_router.dart';
+import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/models/user/user_data.dart';
+import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/core/types/user_session.dart';
+import 'package:rcp/environment.dart';
+import 'package:rcp/modules/authentication_module/auth_router.dart';
 
 class AuthServie {
   final SupabaseClient _supabase;
@@ -124,11 +125,13 @@ class AuthServie {
   Future<User> signUpWithEmail({
     required String email,
     required String password,
+    required UserMetadata metadata,
   }) async {
     try {
       final AuthResponse res = await _supabase.auth.signUp(
         email: email,
         password: password,
+        data: metadata.toJson(),
       );
 
       final User? user = res.user;
@@ -148,8 +151,14 @@ class AuthServie {
   }
 
   Future<User?> getCurrentUser() async {
-    final User? user = _supabase.auth.currentUser;
-    return user;
+    try {
+      await _supabase.auth.refreshSession();
+      final User? user = _supabase.auth.currentUser;
+      return user;
+    } catch (e) {
+      locator.logger.error(e);
+      return null;
+    }
   }
 
   Future<void> restoreSession() async {
@@ -191,13 +200,20 @@ class AuthServie {
   }
 
   Future<void> logout() async {
-    final prefs = locator.get<SharedPreferences>();
-    final supabase = locator.get<SupabaseClient>();
-    await prefs.clear();
-    await supabase.auth.signOut();
-    final nav = locator.get<GlobalKey<NavigatorState>>();
-    Router.neglect(nav.currentContext!, () {
-      nav.currentContext!.goNamed(signinRoute.name);
-    });
+    try {
+      final prefs = locator.get<SharedPreferences>();
+      final supabase = locator.get<SupabaseClient>();
+      await prefs.clear();
+      await supabase.auth.signOut();
+    } catch (e) {
+      locator.logger.error("logout: $e");
+    } finally {
+      final nav = locator.get<GlobalKey<NavigatorState>>();
+      if (nav.currentContext != null) {
+        Router.neglect(nav.currentContext!, () {
+          nav.currentContext!.goNamed(signinRoute.name);
+        });
+      }
+    }
   }
 }
