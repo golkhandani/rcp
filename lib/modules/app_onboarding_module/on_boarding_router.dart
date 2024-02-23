@@ -1,8 +1,8 @@
-import 'package:go_router/go_router.dart';
-
+import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/modules/app_onboarding_module/on_boarding_screen.dart';
 
-final onBoardingRoute = GoRoute(
+final onBoardingRoute = GoRouteNamedPage(
   path: '/on_boarding',
-  builder: (context, state) => const OnBoardingScreen(),
+  name: 'on_boarding',
+  pageBuilder: animatedPageBuilder(const OnBoardingScreen()),
 );

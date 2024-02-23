@@ -36,3 +36,18 @@ class GoRouteNamedPage extends GoRoute {
     super.routes = const <RouteBase>[],
   });
 }
+
+Page<dynamic> Function(BuildContext, GoRouterState)? animatedPageBuilder(
+  Widget page,
+) =>
+    (
+      BuildContext context,
+      GoRouterState state,
+    ) {
+      return CustomTransitionPage<void>(
+          key: state.pageKey,
+          restorationId: state.pageKey.value,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+          child: page);
+    };

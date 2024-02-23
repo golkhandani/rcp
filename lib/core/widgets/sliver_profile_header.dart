@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/gen/assets.gen.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class SliverProfileHeader extends StatelessWidget {
   final String? username;
@@ -24,76 +25,79 @@ class SliverProfileHeader extends StatelessWidget {
     return SliverAppBar(
       forceElevated: true,
       pinned: true,
-      elevation: 20,
-      shadowColor: Colors.black,
+      elevation: 4,
+      shadowColor: Colors.black45,
       backgroundColor: context.colorTheme.navBackground,
       toolbarHeight: 180,
       expandedHeight: 240,
       flexibleSpace: CustomizableSpaceBar(
         builder: (context, scrollingRate) {
-          return Column(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: onEditAvatarClicked,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Badge(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      backgroundColor: context.colorTheme.primary,
-                      largeSize: 32,
-                      alignment: Alignment.bottomRight,
-                      offset: const Offset(0, -16),
-                      label: Row(children: [
-                        Icon(
-                          Icons.edit,
-                          size: 16,
-                          color: context.colorTheme.onPrimary,
+          return Padding(
+            padding:
+                EdgeInsets.only(top: context.topSafePadding + 16, bottom: 16),
+            child: Column(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: onEditAvatarClicked,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Badge(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
                         ),
-                      ]),
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: context.colorTheme.primary,
-                            backgroundImage: avatarUrl == null
-                                ? Assets.images.profilePlaceholder.provider()
-                                : NetworkImage(avatarUrl!),
-                            radius: 64,
+                        backgroundColor: context.colorTheme.primary,
+                        largeSize: 32,
+                        alignment: Alignment.bottomRight,
+                        offset: const Offset(0, -16),
+                        label: Row(children: [
+                          Icon(
+                            Icons.edit,
+                            size: 16,
+                            color: context.colorTheme.onPrimary,
                           ),
-                          if (isLoadingAvatar)
-                            Positioned.fill(
-                              child: Container(
-                                width: 64,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: context.colorTheme.background
-                                      .withOpacity(0.8),
+                        ]),
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: context.colorTheme.primary,
+                              backgroundImage: avatarUrl == null
+                                  ? Assets.images.profilePlaceholder.provider()
+                                  : NetworkImage(avatarUrl!),
+                              radius: 64,
+                            ),
+                            if (isLoadingAvatar)
+                              Positioned.fill(
+                                child: Container(
+                                  width: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: context.colorTheme.background
+                                        .withOpacity(0.8),
+                                  ),
+                                  child: const Center(
+                                    child: CircularProgressIndicator.adaptive(),
+                                  ),
                                 ),
-                                child: const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                ),
-                              ),
-                            )
-                        ],
+                              )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const Gap(8),
-              FittedBox(
-                fit: BoxFit.cover,
-                child: Text(
-                  username ?? '-',
-                  maxLines: 1,
-                  style: context.typoraphyTheme.titleMedium.primary.textStyle,
+                const Gap(8),
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: Text(
+                    username ?? '-',
+                    maxLines: 1,
+                    style: context.typoraphyTheme.titleMedium.primary.textStyle,
+                  ),
                 ),
-              ),
-              const Gap(16)
-            ],
+              ],
+            ),
           );
         },
       ),

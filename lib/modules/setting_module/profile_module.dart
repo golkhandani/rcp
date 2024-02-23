@@ -38,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return DashboardScreenShell(
+      useSafeArea: false,
       child: CustomScrollView(
         slivers: [
           BlocBuilder<ProfileBloc, ProfileBlocState>(

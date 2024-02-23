@@ -133,6 +133,7 @@ class _MyAppState extends State<MyApp> {
         ),
         child: Builder(builder: (context) {
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             theme: context.customTheme.data,
             darkTheme: context.customTheme.data,
             themeMode: ThemeMode.light,

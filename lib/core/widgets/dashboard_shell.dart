@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,16 +7,13 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:gap/gap.dart';
 
 import 'package:rcp/core/theme/apptheme_elevated_button.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/theme/theme_extentions.dart';
+import 'package:rcp/core/widgets/card_container.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
-
-extension SafePadding on BuildContext {
-  double get bottomSafePadding => MediaQuery.paddingOf(this).bottom;
-  double get topSafePadding => MediaQuery.paddingOf(this).top;
-}
 
 class DashboardLink {
   final IconData iconData;
@@ -55,8 +51,10 @@ class DashboardShell extends StatefulWidget {
     this.handleTopSafePadding = true,
     this.handleBottomSafePadding = false,
     this.floatingActionButton,
+    this.useMobileFrameOnWideScreen = false,
   });
 
+  final bool useMobileFrameOnWideScreen;
   final double extendedWidth;
   final double collapsedWidth;
   final double height;
@@ -124,24 +122,41 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   Widget _buildBodyContainer() {
-    return context.isNarrowWith
-        ? _buildNarrowContainer()
-        : _buildWideContainer();
+    if (context.isNarrowWith) {
+      return _buildNarrowContainer();
+    } else if (widget.useMobileFrameOnWideScreen) {
+      return BasicBackgroundContainer(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: CardContainer(
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.circular(12),
+              width: 420,
+              child: _buildNarrowContainer(),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return _buildWideContainer();
+    }
   }
 
   Widget _buildNarrowContainer() {
     if (widget.useFloatingNavBar) {
       final btm = MediaQuery.paddingOf(context).bottom;
-      final width = min(
-        MediaQuery.sizeOf(context).width,
-        widget.items.length * 120,
-      );
+      // final width = min(
+      //   MediaQuery.sizeOf(context).width,
+      //   widget.items.length * 120,
+      // );
       return Stack(
         children: [
           widget.child,
           Positioned(
             bottom: btm,
-            width: width.toDouble(),
+            right: 0,
+            left: 0,
             child: _buildFloatingNavigationBar(),
           ),
         ],

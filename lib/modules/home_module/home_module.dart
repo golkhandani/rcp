@@ -11,6 +11,8 @@ import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
 import 'package:rcp/gen/assets.gen.dart';
 import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
 import 'package:rcp/modules/setting_module/profile_module.dart';
+import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 final homeRoute = GoRouteNamed(
   path: '/dashboard/home',
@@ -39,108 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       useSafeArea: false,
       child: CustomScrollView(
         slivers: [
-          BlocBuilder<ProfileBloc, ProfileBlocState>(
-            bloc: context.read(),
-            builder: (context, state) {
-              if (state.user == null) {
-                return SliverAppBar(
-                  forceElevated: true,
-                  pinned: true,
-                  elevation: 4,
-                  shadowColor: Colors.black,
-                  backgroundColor: context.colorTheme.navBackground,
-                  toolbarHeight: 64,
-                  expandedHeight: 92,
-                );
-              }
-
-              return SliverAppBar(
-                forceElevated: false,
-                pinned: true,
-                elevation: 2,
-                shadowColor: Colors.black38,
-                backgroundColor: context.colorTheme.background,
-                toolbarHeight: 64,
-                expandedHeight: 92,
-                flexibleSpace: CustomizableSpaceBar(
-                  builder: (context, scrollingRate) {
-                    return AnimatedContainer(
-                      color: context.colorTheme.navBackground
-                          .withOpacity(scrollingRate),
-                      padding: const EdgeInsets.only(top: 48),
-                      duration: const Duration(milliseconds: 200),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    if (scrollingRate < 0.9)
-                                      SizedBox(
-                                        height: (1 - scrollingRate) * 24,
-                                        child: FittedBox(
-                                          fit: BoxFit.cover,
-                                          child: Text(
-                                            'Welcome,',
-                                            maxLines: 2,
-                                            style: context
-                                                .typoraphyTheme
-                                                .subtitleLarge
-                                                .onNavBackground
-                                                .textStyle,
-                                          ),
-                                        ),
-                                      ),
-                                    Expanded(
-                                      child: FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: Text(
-                                          state.user?.metadata.username ?? '',
-                                          maxLines: 2,
-                                          style: context
-                                              .typoraphyTheme
-                                              .titleMedium
-                                              .onNavBackground
-                                              .textStyle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => context.goNamed(profileRoute.name),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: FittedBox(
-                                  fit: BoxFit.cover,
-                                  child: CircleAvatar(
-                                    backgroundImage: state
-                                                .user?.metadata.avatarUrl ==
-                                            null
-                                        ? Assets.images.profilePlaceholder
-                                            .provider()
-                                        : NetworkImage(
-                                            state.user!.metadata.avatarUrl!,
-                                          ), // // Replace with user avatar URL
-                                    radius: 32,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+          const SliverProfileSummaryHeader(),
           SliverList.builder(
               itemCount: items.length,
               itemBuilder: (context, index) {
@@ -155,6 +56,116 @@ class _HomeScreenState extends State<HomeScreen> {
           const SliverGap(120)
         ],
       ),
+    );
+  }
+}
+
+class SliverProfileSummaryHeader extends StatelessWidget {
+  const SliverProfileSummaryHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileBlocState>(
+      bloc: context.read(),
+      builder: (context, state) {
+        if (state.user == null) {
+          return SliverAppBar(
+            forceElevated: true,
+            pinned: true,
+            elevation: 4,
+            shadowColor: Colors.black,
+            backgroundColor: context.colorTheme.background,
+            toolbarHeight: 64,
+            expandedHeight: 92,
+          );
+        }
+
+        return SliverAppBar(
+          forceElevated: false,
+          pinned: true,
+          elevation: 2,
+          shadowColor: Colors.black38,
+          backgroundColor: context.colorTheme.background,
+          toolbarHeight: 64,
+          expandedHeight: 92,
+          flexibleSpace: CustomizableSpaceBar(
+            builder: (context, scrollingRate) {
+              return AnimatedContainer(
+                color:
+                    context.colorTheme.navBackground.withOpacity(scrollingRate),
+                padding: EdgeInsets.only(
+                    top: context.topSafePadding + 16, bottom: 16),
+                duration: const Duration(milliseconds: 200),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Gap(16),
+                      GestureDetector(
+                        onTap: () => context.goNamed(profileRoute.name),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: CircleAvatar(
+                              backgroundImage: state.user?.metadata.avatarUrl ==
+                                      null
+                                  ? Assets.images.profilePlaceholder.provider()
+                                  : NetworkImage(
+                                      state.user!.metadata.avatarUrl!,
+                                    ), // // Replace with user avatar URL
+                              radius: 32,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (scrollingRate < 0.9)
+                              SizedBox(
+                                height: (1 - scrollingRate) * 24,
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Text(
+                                    'Welcome,',
+                                    maxLines: 2,
+                                    style: context.typoraphyTheme.subtitleLarge
+                                        .onNavBackground.textStyle,
+                                  ),
+                                ),
+                              ),
+                            Expanded(
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Text(
+                                  state.user?.metadata.username ?? '',
+                                  maxLines: 2,
+                                  style: context.typoraphyTheme.titleMedium
+                                      .onNavBackground.textStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => context.goNamed(inboxRoute.name),
+                        icon: const Icon(Icons.notifications_outlined),
+                      ),
+                      const Gap(16),
+                    ]),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

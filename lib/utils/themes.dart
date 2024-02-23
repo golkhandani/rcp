@@ -61,7 +61,7 @@ const trendyTheme = CustomThemePallete(
   backBtnBackground: Color.fromARGB(255, 181, 196, 231), // Deep orange
   onBackBtnBackground: Color.fromARGB(255, 31, 22, 87),
   navBackground: Color.fromARGB(255, 217, 241, 255), // Brown
-  onNavBackground: Color.fromARGB(255, 48, 39, 176),
+  onNavBackground: Color.fromARGB(255, 20, 15, 86),
   onNavUnselected: Color(0xFF212121), // Dark gray
   onNavSelected: Color.fromARGB(255, 39, 112, 176), // Deep orange
 

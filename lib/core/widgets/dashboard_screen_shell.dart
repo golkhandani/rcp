@@ -28,8 +28,6 @@ class DashboardScreenShell extends StatelessWidget {
             ? ColorfulSafeArea(
                 topColor: safeAreaColor ?? context.colorTheme.navBackground,
                 bottomColor: Colors.transparent,
-                bottom: false,
-                top: true,
                 child: child,
               )
             : child,

@@ -8,7 +8,6 @@ import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/widgets/dashboard_shell.dart';
 import 'package:rcp/core/widgets/scaffold_shell.dart';
-import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/home_module/home_module.dart';
 import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
@@ -28,7 +27,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late final AppTenancyBloc _tenancyBloc = context.read();
   late final AuthenticationCubit _authenticationCubit = context.read();
   final ProfileBloc _profileBloc = locator.get();
 
@@ -79,7 +77,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    _tenancyBloc.getCurrentGroup();
     _profileBloc.getUserInfo();
   }
 
@@ -96,19 +93,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         BlocProvider.value(value: _authenticationCubit),
         BlocProvider.value(value: _profileBloc),
       ],
-      child: BlocConsumer<AppTenancyBloc, AppTenancyState>(
-        bloc: _tenancyBloc,
+      child: BlocConsumer<ProfileBloc, ProfileBlocState>(
+        bloc: _profileBloc,
         listenWhen: (previous, current) =>
-            !current.isLoading &&
-            previous.selectedGroupId != null &&
-            current.selectedGroupId != null &&
-            previous.selectedGroupId != current.selectedGroupId,
+            previous.user?.id == null && current.user?.id != null,
         listener: (context, state) {
-          locator.logger.info("GROUP UPDATED! >> ${state.selectedGroup?.name}");
-          if (state.selectedGroupId != null &&
-              state.selectedGroup?.id != state.selectedGroupId) {
-            _tenancyBloc.getCurrentGroup();
-          }
+          locator.logger.info("TENANT UPDATED! >> $state");
         },
         builder: (context, state) {
           if (state.isLoading) {
@@ -134,6 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             useFloatingNavBar: true,
             handleTopSafePadding: false,
             floatingActionButton: null,
+            useMobileFrameOnWideScreen: true,
             child: widget.child,
           );
         },

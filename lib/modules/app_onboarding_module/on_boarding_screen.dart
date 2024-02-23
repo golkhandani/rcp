@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart' as intro;
 import 'package:introduction_screen/introduction_screen.dart';
 
+import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
-import 'package:rcp/packages/constants/ui_constants.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
     const bg = Colors.transparent;
     final fontColor = context.colorTheme.onBackground;
     final decoration = intro.PageDecoration(
-      pageColor: context.colorTheme.background,
+      pageColor: bg,
       titleTextStyle: context.typoraphyTheme.titleSmall
           .copyWithColor(color: fontColor)
           .textStyle,
@@ -79,11 +79,14 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
         ),
       )
     ];
-    return Container(
-      color: context.colorTheme.background,
-      child: Stack(
-        children: [
-          intro.IntroductionScreen(
+    return BasicBackgroundContainer(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints.tightForFinite(
+            width: 420,
+          ),
+          child: intro.IntroductionScreen(
+            key: introKey,
             globalBackgroundColor: bg,
             controlsPadding: const EdgeInsets.all(32),
             dotsDecorator: intro.DotsDecorator(
@@ -113,42 +116,30 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
               surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
               overlayColor: MaterialStatePropertyAll(Colors.transparent),
             ),
-            skip: _buildButton('Skip', context),
-            next: _buildButton('Next', context),
-            done: _buildButton('Done', context),
+            skip: BasicElevatedButton(
+              width: MediaQuery.sizeOf(context).width,
+              labelText: 'Skip',
+              onPressed: () => introKey.currentState!.skipToEnd(),
+            ),
+            next: BasicElevatedButton(
+              width: MediaQuery.sizeOf(context).width,
+              labelText: 'Next',
+              onPressed: () => introKey.currentState!.next(),
+            ),
+            done: BasicElevatedButton(
+              width: MediaQuery.sizeOf(context).width,
+              labelText: 'Done',
+              onPressed: onDone,
+            ),
             onDone: () => onDone(),
             onSkip: () => onDone(),
           ),
-        ],
+        ),
       ),
     );
   }
 
   void onDone() {
     context.goNamed(signinRoute.name);
-  }
-
-  Widget _buildButton(
-    String text,
-    BuildContext context,
-  ) {
-    return Container(
-      padding: kTinyPadding,
-      alignment: Alignment.center,
-      constraints: const BoxConstraints.expand(height: 48),
-      decoration: ShapeDecoration(
-        color: context.colorTheme.primary,
-        shape: const StadiumBorder(
-          side: BorderSide(
-            width: 0,
-            color: Colors.transparent,
-          ),
-        ),
-      ),
-      child: Text(
-        text,
-        style: context.typoraphyTheme.subtitleMedium.onPrimary.textStyle,
-      ),
-    );
   }
 }

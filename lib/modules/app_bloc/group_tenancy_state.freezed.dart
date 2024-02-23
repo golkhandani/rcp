@@ -21,8 +21,6 @@ AppTenancyState _$AppTenancyStateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AppTenancyState {
   bool get isLoading => throw _privateConstructorUsedError;
-  String? get selectedGroupId => throw _privateConstructorUsedError;
-  Group? get selectedGroup => throw _privateConstructorUsedError;
   UserInfo? get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,13 +35,8 @@ abstract class $AppTenancyStateCopyWith<$Res> {
           AppTenancyState value, $Res Function(AppTenancyState) then) =
       _$AppTenancyStateCopyWithImpl<$Res, AppTenancyState>;
   @useResult
-  $Res call(
-      {bool isLoading,
-      String? selectedGroupId,
-      Group? selectedGroup,
-      UserInfo? user});
+  $Res call({bool isLoading, UserInfo? user});
 
-  $GroupCopyWith<$Res>? get selectedGroup;
   $UserInfoCopyWith<$Res>? get user;
 }
 
@@ -61,8 +54,6 @@ class _$AppTenancyStateCopyWithImpl<$Res, $Val extends AppTenancyState>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? selectedGroupId = freezed,
-    Object? selectedGroup = freezed,
     Object? user = freezed,
   }) {
     return _then(_value.copyWith(
@@ -70,31 +61,11 @@ class _$AppTenancyStateCopyWithImpl<$Res, $Val extends AppTenancyState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      selectedGroupId: freezed == selectedGroupId
-          ? _value.selectedGroupId
-          : selectedGroupId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedGroup: freezed == selectedGroup
-          ? _value.selectedGroup
-          : selectedGroup // ignore: cast_nullable_to_non_nullable
-              as Group?,
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserInfo?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $GroupCopyWith<$Res>? get selectedGroup {
-    if (_value.selectedGroup == null) {
-      return null;
-    }
-
-    return $GroupCopyWith<$Res>(_value.selectedGroup!, (value) {
-      return _then(_value.copyWith(selectedGroup: value) as $Val);
-    });
   }
 
   @override
@@ -118,14 +89,8 @@ abstract class _$$AppTenancyStateImplCopyWith<$Res>
       __$$AppTenancyStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {bool isLoading,
-      String? selectedGroupId,
-      Group? selectedGroup,
-      UserInfo? user});
+  $Res call({bool isLoading, UserInfo? user});
 
-  @override
-  $GroupCopyWith<$Res>? get selectedGroup;
   @override
   $UserInfoCopyWith<$Res>? get user;
 }
@@ -142,8 +107,6 @@ class __$$AppTenancyStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? selectedGroupId = freezed,
-    Object? selectedGroup = freezed,
     Object? user = freezed,
   }) {
     return _then(_$AppTenancyStateImpl(
@@ -151,14 +114,6 @@ class __$$AppTenancyStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      selectedGroupId: freezed == selectedGroupId
-          ? _value.selectedGroupId
-          : selectedGroupId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      selectedGroup: freezed == selectedGroup
-          ? _value.selectedGroup
-          : selectedGroup // ignore: cast_nullable_to_non_nullable
-              as Group?,
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -172,11 +127,7 @@ class __$$AppTenancyStateImplCopyWithImpl<$Res>
 class _$AppTenancyStateImpl
     with DiagnosticableTreeMixin
     implements _AppTenancyState {
-  const _$AppTenancyStateImpl(
-      {required this.isLoading,
-      this.selectedGroupId,
-      this.selectedGroup,
-      this.user});
+  const _$AppTenancyStateImpl({required this.isLoading, this.user});
 
   factory _$AppTenancyStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppTenancyStateImplFromJson(json);
@@ -184,15 +135,11 @@ class _$AppTenancyStateImpl
   @override
   final bool isLoading;
   @override
-  final String? selectedGroupId;
-  @override
-  final Group? selectedGroup;
-  @override
   final UserInfo? user;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppTenancyState(isLoading: $isLoading, selectedGroupId: $selectedGroupId, selectedGroup: $selectedGroup, user: $user)';
+    return 'AppTenancyState(isLoading: $isLoading, user: $user)';
   }
 
   @override
@@ -201,8 +148,6 @@ class _$AppTenancyStateImpl
     properties
       ..add(DiagnosticsProperty('type', 'AppTenancyState'))
       ..add(DiagnosticsProperty('isLoading', isLoading))
-      ..add(DiagnosticsProperty('selectedGroupId', selectedGroupId))
-      ..add(DiagnosticsProperty('selectedGroup', selectedGroup))
       ..add(DiagnosticsProperty('user', user));
   }
 
@@ -213,17 +158,12 @@ class _$AppTenancyStateImpl
             other is _$AppTenancyStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.selectedGroupId, selectedGroupId) ||
-                other.selectedGroupId == selectedGroupId) &&
-            (identical(other.selectedGroup, selectedGroup) ||
-                other.selectedGroup == selectedGroup) &&
             (identical(other.user, user) || other.user == user));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, isLoading, selectedGroupId, selectedGroup, user);
+  int get hashCode => Object.hash(runtimeType, isLoading, user);
 
   @JsonKey(ignore: true)
   @override
@@ -243,8 +183,6 @@ class _$AppTenancyStateImpl
 abstract class _AppTenancyState implements AppTenancyState {
   const factory _AppTenancyState(
       {required final bool isLoading,
-      final String? selectedGroupId,
-      final Group? selectedGroup,
       final UserInfo? user}) = _$AppTenancyStateImpl;
 
   factory _AppTenancyState.fromJson(Map<String, dynamic> json) =
@@ -252,10 +190,6 @@ abstract class _AppTenancyState implements AppTenancyState {
 
   @override
   bool get isLoading;
-  @override
-  String? get selectedGroupId;
-  @override
-  Group? get selectedGroup;
   @override
   UserInfo? get user;
   @override
