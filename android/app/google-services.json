@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "566969417122",
-    "project_id": "random-project-concept",
-    "storage_bucket": "random-project-concept.appspot.com"
+    "project_number": "756385223651",
+    "project_id": "random-concept-projects",
+    "storage_bucket": "random-concept-projects.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:566969417122:android:38927941bad4e9ffda06fb",
+        "mobilesdk_app_id": "1:756385223651:android:544077dc19baf7fea606d6",
         "android_client_info": {
           "package_name": "com.mrzg.rcp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCVZ6okVse-QudQK4cOJ87CcF1cI4i49K0"
+          "current_key": "AIzaSyA7nEpVEWe6hYUnjdcXmL7QjrOU-ZbcC4I"
         }
       ],
       "services": {

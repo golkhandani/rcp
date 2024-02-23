@@ -97,9 +97,10 @@ class _DashboardShellState extends State<DashboardShell> {
         topColor: widget.safeAreaColor,
         bottomColor: Colors.transparent,
         bottom: false,
+        top: false,
         child: Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
+          extendBody: false,
+          extendBodyBehindAppBar: false,
           backgroundColor: widget.contentBackgroundColor,
           resizeToAvoidBottomInset: true,
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

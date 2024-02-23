@@ -145,7 +145,7 @@ class CustomThemeProvider extends InheritedWidget {
         scheme: FlexScheme.custom,
         colorScheme: pallete,
         subThemesData: FlexSubThemesData(
-          blendOnColors: false,
+          blendOnColors: true,
           blendTextTheme: true,
           useTextTheme: true,
           thinBorderWidth: 2.0,
@@ -167,6 +167,7 @@ class CustomThemeProvider extends InheritedWidget {
           navigationBarSelectedLabelSchemeColor: SchemeColor.onSurface,
           navigationBarUnselectedLabelSchemeColor: SchemeColor.onSurface,
           navigationRailLabelType: NavigationRailLabelType.none,
+          navigationBarElevation: 210,
         ),
         keyColors: const FlexKeyColors(),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,

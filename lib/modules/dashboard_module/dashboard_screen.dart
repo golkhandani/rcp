@@ -16,33 +16,6 @@ import 'package:rcp/modules/setting_module/profile_module.dart';
 import 'package:rcp/modules/setting_module/setting_module.dart';
 import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
-final dahboardItems = [
-  DashboardLink(
-    iconData: Icons.home,
-    label: 'Home',
-    routeName: homeRoute.name,
-    index: 0,
-  ),
-  DashboardLink(
-    iconData: Icons.inbox,
-    label: 'Inbox',
-    routeName: inboxRoute.name,
-    index: 1,
-  ),
-  DashboardLink(
-    iconData: Icons.settings,
-    label: 'Settings',
-    routeName: settingRoute.name,
-    index: 2,
-  ),
-  DashboardLink(
-    iconData: Icons.person,
-    label: 'Profile',
-    routeName: profileRoute.name,
-    index: 3,
-  ),
-];
-
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({
     super.key,
@@ -58,6 +31,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late final AppTenancyBloc _tenancyBloc = context.read();
   late final AuthenticationCubit _authenticationCubit = context.read();
   final ProfileBloc _profileBloc = locator.get();
+
+  late final dahboardItems = [
+    DashboardLink(
+      iconData: Icons.home,
+      label: 'Home',
+      routeName: homeRoute.name,
+      index: 0,
+      color: context.colorTheme.navBackground,
+    ),
+    DashboardLink(
+      iconData: Icons.inbox,
+      label: 'Inbox',
+      routeName: inboxRoute.name,
+      index: 1,
+    ),
+    DashboardLink(
+      iconData: Icons.settings,
+      label: 'Settings',
+      routeName: settingRoute.name,
+      index: 2,
+    ),
+    DashboardLink(
+      iconData: Icons.person,
+      label: 'Profile',
+      routeName: profileRoute.name,
+      index: 3,
+      color: context.colorTheme.navBackground,
+    ),
+  ];
 
   void onItemTapped(int index) {
     widget.child.goBranch(
@@ -80,6 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _tenancyBloc.getCurrentGroup();
     _profileBloc.getUserInfo();
   }
+
+  final List<String> items = List.generate(100, (index) => 'Item ${index + 1}');
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +127,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTap: onItemTapped,
             navigationActiveColor: context.colorTheme.onNavSelected,
             navigationInactiveColor: context.colorTheme.onNavUnselected,
-            navigationBackgroundColor: color,
-            contentBackgroundColor: context.colorTheme.background,
+            navigationBackgroundColor: context.colorTheme.navBackground,
+            contentBackgroundColor: Colors.white,
             safeAreaColor: color,
             height: 56,
             useFloatingNavBar: true,

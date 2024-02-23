@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isLoadingAvatar: state.isLoadingAvatar,
                     onEditAvatarClicked: _profileBloc.updateProfileImage,
                   ),
+                  const SliverGap(32),
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
                     sliver: MultiSliver(children: [

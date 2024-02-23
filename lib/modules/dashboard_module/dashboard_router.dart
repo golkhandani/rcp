@@ -30,7 +30,7 @@ final dashboardRoute = GoRouteNamed(
   name: 'dashboard',
   path: '/dashboard',
   redirect: (context, state) async {
-    return state.namedLocation(dahboardItems.first.routeName);
+    return state.namedLocation(homeRoute.name);
   },
   builder: (context, state) {
     return const Placeholder();

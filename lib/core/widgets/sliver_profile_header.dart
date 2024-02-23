@@ -22,83 +22,78 @@ class SliverProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      forceElevated: true, //* here
-      elevation: 2,
-      backgroundColor: context.colorTheme.navBackground,
-      toolbarHeight: 48,
-      expandedHeight: 300,
-      scrolledUnderElevation: 2,
-      automaticallyImplyLeading: false,
+      forceElevated: true,
       pinned: true,
-      floating: false,
+      elevation: 20,
+      shadowColor: Colors.black,
+      backgroundColor: context.colorTheme.navBackground,
+      toolbarHeight: 180,
+      expandedHeight: 240,
       flexibleSpace: CustomizableSpaceBar(
         builder: (context, scrollingRate) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 42),
-            child: Column(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: onEditAvatarClicked,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Badge(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+          return Column(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: onEditAvatarClicked,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Badge(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      backgroundColor: context.colorTheme.primary,
+                      largeSize: 32,
+                      alignment: Alignment.bottomRight,
+                      offset: const Offset(0, -16),
+                      label: Row(children: [
+                        Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: context.colorTheme.onPrimary,
                         ),
-                        backgroundColor: context.colorTheme.primary,
-                        largeSize: 32,
-                        alignment: Alignment.bottomRight,
-                        offset: const Offset(0, -16),
-                        label: Row(children: [
-                          Icon(
-                            Icons.edit,
-                            size: 16,
-                            color: context.colorTheme.onPrimary,
+                      ]),
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: context.colorTheme.primary,
+                            backgroundImage: avatarUrl == null
+                                ? Assets.images.profilePlaceholder.provider()
+                                : NetworkImage(avatarUrl!),
+                            radius: 64,
                           ),
-                        ]),
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: context.colorTheme.primary,
-                              backgroundImage: avatarUrl == null
-                                  ? Assets.images.profilePlaceholder.provider()
-                                  : NetworkImage(avatarUrl!),
-                              radius: 64,
-                            ),
-                            if (isLoadingAvatar)
-                              Positioned.fill(
-                                child: Container(
-                                  width: 64,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: context.colorTheme.background
-                                        .withOpacity(0.8),
-                                  ),
-                                  child: const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  ),
+                          if (isLoadingAvatar)
+                            Positioned.fill(
+                              child: Container(
+                                width: 64,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: context.colorTheme.background
+                                      .withOpacity(0.8),
                                 ),
-                              )
-                          ],
-                        ),
+                                child: const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              ),
+                            )
+                        ],
                       ),
                     ),
                   ),
                 ),
-                const Gap(8),
-                FittedBox(
-                  fit: BoxFit.cover,
-                  child: Text(
-                    username ?? '-',
-                    maxLines: 1,
-                    style: context.typoraphyTheme.titleMedium.primary.textStyle,
-                  ),
+              ),
+              const Gap(8),
+              FittedBox(
+                fit: BoxFit.cover,
+                child: Text(
+                  username ?? '-',
+                  maxLines: 1,
+                  style: context.typoraphyTheme.titleMedium.primary.textStyle,
                 ),
-                const Gap(16)
-              ],
-            ),
+              ),
+              const Gap(16)
+            ],
           );
         },
       ),
