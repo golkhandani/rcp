@@ -109,11 +109,11 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                           child: FittedBox(
                             fit: BoxFit.cover,
                             child: CircleAvatar(
-                              backgroundImage: state.user?.metadata.avatarUrl ==
+                              backgroundImage: state.user?.profile.avatarUrl ==
                                       null
                                   ? Assets.images.profilePlaceholder.provider()
                                   : NetworkImage(
-                                      state.user!.metadata.avatarUrl!,
+                                      state.user!.profile.avatarUrl!,
                                     ), // // Replace with user avatar URL
                               radius: 32,
                             ),
@@ -143,7 +143,7 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                               child: FittedBox(
                                 fit: BoxFit.cover,
                                 child: Text(
-                                  state.user?.metadata.username ?? '',
+                                  state.user?.profile.username ?? '',
                                   maxLines: 2,
                                   style: context.typoraphyTheme.titleMedium
                                       .onNavBackground.textStyle,
@@ -153,7 +153,6 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Spacer(),
                       IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () => context.goNamed(inboxRoute.name),

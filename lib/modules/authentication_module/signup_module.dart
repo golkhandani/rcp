@@ -54,8 +54,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     authCubit.signupWithEmail(
-      username: _usernameController.text,
-      email: _emailController.text,
+      username: _usernameController.text.trim(),
+      email: _emailController.text.trim(),
       password: _passwordController.text,
       onSuccess: _goToSignin,
       onFailure: () {},
@@ -112,6 +112,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         validator: ValidationBuilder()
                             .minLength(8)
                             .maxLength(16)
+                            .required()
+                            .regExp(
+                              RegExp(r"^\S+\w{8,32}\S{1,}"),
+                              'Username should not contains space or special characters!',
+                            )
                             .build(),
                       ),
                       const Gap(8),

@@ -13,6 +13,7 @@ import 'package:rcp/core/widgets/sliver_title_bar.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
 import 'package:rcp/packages/components/card_container.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 final profileRoute = GoRouteNamed(
   path: '/dashboard/profile',
@@ -35,6 +36,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _authenticationCubit.logout();
   }
 
+  void _delete() {
+    _authenticationCubit.delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DashboardScreenShell(
@@ -50,26 +55,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return MultiSliver(
                 children: [
                   SliverProfileHeader(
-                    username: state.user?.metadata.username,
-                    avatarUrl: state.user?.metadata.avatarUrl,
+                    username: state.user?.profile.username,
+                    avatarUrl: state.user?.profile.avatarUrl,
                     isLoadingAvatar: state.isLoadingAvatar,
+                    isLoadingUsername: state.isLoadingUsername,
                     onEditAvatarClicked: _profileBloc.updateProfileImage,
+                    onEditUsernameCompleted: (username) =>
+                        _profileBloc.updateProfileUsername(username: username),
                   ),
-                  const SliverGap(32),
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
                     sliver: MultiSliver(children: [
-                      SliverToBoxAdapter(
-                        child: BasicElevatedButton(
-                          background: context.colorTheme.error,
-                          foreground: context.colorTheme.onError,
-                          width: MediaQuery.sizeOf(context).width,
-                          padding: EdgeInsets.zero,
-                          onPressed: _logout,
-                          labelText: 'Logout',
-                        ),
-                      ),
-                      const SliverGap(16),
                       SliverToBoxAdapter(
                         child: CardContainer(
                           color: context.colorTheme.primary,
@@ -83,15 +79,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 style: context.typoraphyTheme.subtitleLarge
                                     .onTertiary.textStyle,
                               ),
-                              const Gap(16),
-                              Text(
-                                'Username: ${state.user!.metadata.username}',
-                                maxLines: 2,
-                                style: context.typoraphyTheme.subtitleLarge
-                                    .onTertiary.textStyle,
-                              ),
                             ],
                           ),
+                        ),
+                      ),
+                      SliverGap(context.vHeight - 560),
+                      SliverToBoxAdapter(
+                        child: BasicElevatedButton(
+                          background: context.colorTheme.warning,
+                          foreground: context.colorTheme.onWarning,
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.zero,
+                          onPressed: _logout,
+                          labelText: 'Logout',
+                        ),
+                      ),
+                      const SliverGap(16),
+                      SliverToBoxAdapter(
+                        child: BasicElevatedButton(
+                          background: context.colorTheme.error,
+                          foreground: context.colorTheme.onError,
+                          width: MediaQuery.sizeOf(context).width,
+                          padding: EdgeInsets.zero,
+                          onPressed: _delete,
+                          labelText: 'Delete',
                         ),
                       ),
                       const SliverGap(16),

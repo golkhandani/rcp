@@ -6,8 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:rcp/core/functions/user_delete/index.dart';
+import 'package:rcp/core/functions/user_profile/index.dart';
+import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
-import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/core/types/user_session.dart';
 import 'package:rcp/environment.dart';
@@ -48,6 +50,9 @@ class AuthServie {
       if (user == null || session == null) {
         throw Exception('Invalid login');
       }
+
+      await _supabase.auth.refreshSession();
+
       return (user: user, session: session);
     } on AuthException catch (e) {
       locator.logger.error(e);
@@ -125,13 +130,25 @@ class AuthServie {
   Future<User> signUpWithEmail({
     required String email,
     required String password,
-    required UserMetadata metadata,
+    required String username,
   }) async {
     try {
+      // TODO: check if username is not taken
+      // procced if username is available
+      // throw error if user name is taken
+
+      final checked = await _supabase.userUsernameIsAvailable(
+        body: UserUsernameIsAvailableInput(
+          username: username,
+        ),
+      );
+      if (!checked.isAvailable) {
+        throw const AuthException('Username is already taken!');
+      }
+
       final AuthResponse res = await _supabase.auth.signUp(
         email: email,
         password: password,
-        data: metadata.toJson(),
       );
 
       final User? user = res.user;
@@ -139,6 +156,16 @@ class AuthServie {
       if (user == null) {
         throw Exception('Invalid login');
       }
+
+      await _supabase.auth.refreshSession();
+
+      await _supabase.userProfileUpdate(
+        body: UserProfileUpdateInput(
+          username: username,
+          fullName: null,
+          avatarUrl: null,
+        ),
+      );
 
       return user;
     } on AuthException catch (e) {
@@ -205,15 +232,25 @@ class AuthServie {
       final supabase = locator.get<SupabaseClient>();
       await prefs.clear();
       await supabase.auth.signOut();
-    } catch (e) {
-      locator.logger.error("logout: $e");
-    } finally {
       final nav = locator.get<GlobalKey<NavigatorState>>();
       if (nav.currentContext != null) {
         Router.neglect(nav.currentContext!, () {
           nav.currentContext!.goNamed(signinRoute.name);
         });
       }
+    } catch (e) {
+      locator.logger.error("logout: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> delete() async {
+    try {
+      await _supabase.userDelete();
+      logout();
+    } catch (e) {
+      locator.logger.error("logout: $e");
+      rethrow;
     }
   }
 }

@@ -57,7 +57,7 @@ void main() async {
 
   final user = await authService.getCurrentUser();
   if (user == null) {
-    authService.logout();
+    await authService.logout();
   }
   locator.logger.info("AUTH INIT DONE!, isLoggedIn: $isLoggedIn");
 

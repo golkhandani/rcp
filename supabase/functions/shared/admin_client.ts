@@ -29,6 +29,7 @@ export const getClients = (req: Request) => {
 	const admin = supabaseAdminClient();
 	const supabase = supabaseUserClient(authHeader);
 	return {
+		authHeader,
 		admin,
 		supabase,
 	};

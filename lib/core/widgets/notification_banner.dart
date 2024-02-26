@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:rcp/core/widgets/card_container.dart';
-
 class NotificationBanner extends StatelessWidget {
   final String message;
   final TextStyle foregroundStyle;
@@ -16,12 +14,20 @@ class NotificationBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: CardContainer(
-        borderRadius: BorderRadius.circular(12),
-        color: backgroundColor,
-        child: Text(
-          message,
-          style: foregroundStyle,
+      color: Colors.transparent,
+      child: Center(
+        child: Container(
+          width: 420,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: backgroundColor,
+          ),
+          child: Text(
+            message,
+            style: foregroundStyle,
+            softWrap: true,
+          ),
         ),
       ),
     );

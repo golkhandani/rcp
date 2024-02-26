@@ -10,7 +10,8 @@ class CardContainer extends StatelessWidget {
       this.color,
       this.borderRadius = BorderRadius.zero,
       this.hasShadow = false,
-      this.width = double.infinity});
+      this.width = double.infinity,
+      this.height});
 
   final Widget child;
   final EdgeInsets padding;
@@ -18,6 +19,7 @@ class CardContainer extends StatelessWidget {
   final BorderRadius borderRadius;
   final bool hasShadow;
   final double width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class CardContainer extends StatelessWidget {
     return RepaintBoundary(
       child: Container(
         width: width,
+        height: height,
         decoration: BoxDecoration(
           color: bg,
           boxShadow: hasShadow

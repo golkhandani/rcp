@@ -11,6 +11,7 @@ _$ProfileBlocStateImpl _$$ProfileBlocStateImplFromJson(
     _$ProfileBlocStateImpl(
       isLoading: json['isLoading'] as bool,
       isLoadingAvatar: json['isLoadingAvatar'] as bool,
+      isLoadingUsername: json['isLoadingUsername'] as bool,
       user: json['user'] == null
           ? null
           : UserInfo.fromJson(json['user'] as Map<String, dynamic>),
@@ -21,5 +22,6 @@ Map<String, dynamic> _$$ProfileBlocStateImplToJson(
     <String, dynamic>{
       'isLoading': instance.isLoading,
       'isLoadingAvatar': instance.isLoadingAvatar,
+      'isLoadingUsername': instance.isLoadingUsername,
       'user': instance.user,
     };

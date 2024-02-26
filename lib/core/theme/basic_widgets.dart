@@ -117,6 +117,7 @@ class BasicTextInput extends StatelessWidget {
     this.validator,
     this.keyboardType = TextInputType.none,
     this.obscureText = false,
+    this.enabled = true,
   }) : _decorationType = BasicTextInputDecoration.primary;
 
   const BasicTextInput.secondary({
@@ -128,6 +129,7 @@ class BasicTextInput extends StatelessWidget {
     this.validator,
     this.keyboardType = TextInputType.none,
     this.obscureText = false,
+    this.enabled = true,
   }) : _decorationType = BasicTextInputDecoration.secondary;
 
   final String fieldName;
@@ -137,6 +139,7 @@ class BasicTextInput extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final bool obscureText;
+  final bool enabled;
 
   final BasicTextInputDecoration _decorationType;
 
@@ -173,7 +176,9 @@ class BasicTextInput extends StatelessWidget {
           const Gap(4),
         ],
         FormBuilderTextField(
+          enabled: enabled,
           name: fieldName,
+          textAlign: TextAlign.center,
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: controller,
           decoration: decoration.copyWith(

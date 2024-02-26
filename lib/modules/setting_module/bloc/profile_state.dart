@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:image/image.dart' as img;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:rcp/core/functions/user_profile/index.dart';
+import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
-import 'package:rcp/core/services/storage_service.dart';
 
 part 'profile_state.freezed.dart';
 part 'profile_state.g.dart';
@@ -19,10 +19,12 @@ class ProfileBlocState with _$ProfileBlocState {
   const factory ProfileBlocState({
     required bool isLoading,
     required bool isLoadingAvatar,
+    required bool isLoadingUsername,
     UserInfo? user,
   }) = _ProfileBlocState;
 
   factory ProfileBlocState.init() => const ProfileBlocState(
+        isLoadingUsername: false,
         isLoadingAvatar: false,
         isLoading: false,
       );
@@ -45,28 +47,13 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       final user = supabase.auth.currentUser;
       if (user == null) return;
 
-      final metadata = user.userMetadata;
-
-      final filePath = metadata?[UserMetadata.avatarUrlKey];
-
-      String? imageUrlResponse;
-
-      if (filePath != null) {
-        imageUrlResponse = await supabase.storage
-            .from('avatars')
-            .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
-      }
+      final userProfile = await supabase.userProfileGet();
 
       final userData = UserInfo(
         id: user.id,
         email: user.email,
         phone: user.phone,
-        metadata: UserMetadata(
-          username: metadata?[UserMetadata.usernameKey] ??
-              user.email?.split('@')[0] ??
-              '-',
-          avatarUrl: imageUrlResponse,
-        ),
+        profile: userProfile,
       );
 
       emit(state.copyWith(user: userData));
@@ -78,19 +65,57 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
     }
   }
 
-  Future<Uint8List> _compress(Uint8List pngBytes) async {
-    final pngImage = img.decodeImage(pngBytes);
-    final pngImageResized = img.copyResize(pngImage!, width: 400);
-    return img.encodeJpg(pngImageResized, quality: 60);
+  updateProfileUsername({
+    required String username,
+  }) async {
+    try {
+      emit(state.copyWith(isLoadingUsername: true));
+      final user = state.user;
+      if (user == null) return;
+
+      final checked = await supabase.userUsernameIsAvailable(
+        body: UserUsernameIsAvailableInput(
+          username: username,
+        ),
+      );
+      if (!checked.isAvailable) {
+        throw const AuthException('Username is already taken!');
+      }
+
+      final updatedUserProfile = await supabase.userProfileUpdate(
+        body: UserProfileUpdateInput(
+          username: username,
+        ),
+      );
+
+      final userData = state.user?.copyWith(
+        profile: updatedUserProfile,
+      );
+
+      emit(state.copyWith(user: userData));
+    } on Exception catch (error) {
+      var code = 0;
+      if (error is AuthException) {
+        banner.showErrorBanner(error.message);
+        rethrow;
+      }
+
+      if (error is StorageException) {
+        code = int.tryParse(error.statusCode ?? '-1') ?? 0;
+      }
+      locator.logger.error(error);
+      banner.showErrorBanner("Something went wrong! ($code)");
+      rethrow;
+    } finally {
+      emit(state.copyWith(isLoadingUsername: false));
+    }
   }
 
   updateProfileImage() async {
-    emit(state.copyWith(isLoadingAvatar: true));
-
     try {
-      final user = supabase.auth.currentUser;
+      emit(state.copyWith(isLoadingAvatar: true));
+      final user = state.user;
       if (user == null) return;
-      final filePath = user.avatarFilePath;
 
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -99,43 +124,18 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
         lockParentWindow: true,
       );
 
+      // like when user has closed the picker
       if (result == null) {
-        // like when user has closed the picker
         return;
       }
 
       PlatformFile file = result.files.first;
 
-      if (file.bytes == null) {
-        throw BasicException.imageWithNoData;
-      }
+      final updatedUserProfile =
+          await supabase.userProfileUpdateAvatar(file: file);
 
-      final compresssedFile = await _compress(file.bytes!);
-      if (user.avatarUrl != null) {
-        await supabase.storage
-            .from(StorageServie.avatarsBucketId)
-            .remove([filePath]);
-      }
-      await supabase.storage.from(StorageServie.avatarsBucketId).uploadBinary(
-            filePath,
-            compresssedFile,
-          );
-
-      final imageUrlResponse = await supabase.storage
-          .from(StorageServie.avatarsBucketId)
-          .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
-
-      await supabase.auth.updateUser(
-        UserAttributes(
-          data: {
-            ...?state.user?.metadata.toJson(),
-            UserMetadata.avatarUrlKey: filePath,
-          },
-        ),
-      );
-
-      final userData = state.user?.copyWith.metadata(
-        avatarUrl: imageUrlResponse,
+      final userData = state.user?.copyWith(
+        profile: updatedUserProfile,
       );
 
       emit(state.copyWith(user: userData));
