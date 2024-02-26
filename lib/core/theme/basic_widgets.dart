@@ -317,9 +317,9 @@ class MobileFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.isNarrowWith) {
-      return child;
-    }
+    // if (context.isNarrowWith) {
+    //   return child;
+    // }
 
     final c = (color ?? context.colorTheme.background).withOpacity(0.3);
     return Center(
@@ -334,7 +334,7 @@ class MobileFrame extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
-                width: 420,
+                width: context.isNarrowWith ? context.vWidth : 420,
                 height: context.vHeight,
                 color: c,
                 child: child,
