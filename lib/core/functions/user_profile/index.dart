@@ -74,6 +74,9 @@ extension UserProfileFunctions on SupabaseClient {
   Future<UserProfile> userProfileGet() async {
     try {
       final res = await functions.invoke(user_profile_get);
+      if (res.data == null) {
+        throw FunctionException(status: 404);
+      }
       var profile = UserProfile.fromJson(res.data);
 
       if (profile.avatarUrl != null) {

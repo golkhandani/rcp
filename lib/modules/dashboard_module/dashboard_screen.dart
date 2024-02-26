@@ -10,8 +10,8 @@ import 'package:rcp/core/widgets/dashboard_shell.dart';
 import 'package:rcp/core/widgets/scaffold_shell.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/home_module/home_module.dart';
-import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
-import 'package:rcp/modules/setting_module/profile_module.dart';
+import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
+import 'package:rcp/modules/profile_module/profile_module.dart';
 import 'package:rcp/modules/setting_module/setting_module.dart';
 import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 

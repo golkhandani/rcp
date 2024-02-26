@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:rcp/core/functions/user_profile/index.dart';
+import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/services/auth_service.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
@@ -11,9 +13,11 @@ import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final AuthServie authServie;
   final NotificationBannerService banner;
+  final SupabaseClient supabase;
   AuthenticationCubit({
     required this.authServie,
     required this.banner,
+    required this.supabase,
   }) : super(AuthenticationState.init());
 
   signinWithEmail({
@@ -42,7 +46,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   signupWithEmail({
-    required String username,
     required String email,
     required String password,
     required VoidCallback onSuccess,
@@ -53,7 +56,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       final user = await authServie.signUpWithEmail(
         email: email,
         password: password,
-        username: username,
       );
 
       emit(state.copyWith(isLoading: false, userId: user.id));
@@ -173,6 +175,36 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       banner.showErrorBanner(
         e is AuthException ? e.message : 'Something went wrong!',
       );
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  createProfile({
+    required String username,
+    required String fullname,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      await supabase.userUsernameIsAvailable(
+        body: UserUsernameIsAvailableInput(username: username),
+      );
+      await supabase.userProfileUpdate(
+        body: UserProfileUpdateInput(
+          username: username,
+          fullName: fullname,
+        ),
+      );
+      await authServie.hasProfile(force: true);
+      onSuccess();
+    } catch (e) {
+      locator.logger.error(e);
+      banner.showErrorBanner(
+        e is AuthException ? e.message : 'Something went wrong!',
+      );
+      onFailure();
     } finally {
       emit(state.copyWith(isLoading: false));
     }

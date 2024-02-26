@@ -26,7 +26,6 @@ class _SignupScreenState extends State<SignupScreen> {
   late final AuthenticationCubit authCubit = context.read();
   final _formKey = GlobalKey<FormBuilderState>();
 
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController =
@@ -54,7 +53,6 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     authCubit.signupWithEmail(
-      username: _usernameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
       onSuccess: _goToSignin,
@@ -102,22 +100,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           FormBuilderValidators.required(),
                           FormBuilderValidators.email(),
                         ]),
-                      ),
-                      const Gap(8),
-                      BasicTextInput.secondary(
-                        fieldName: 'username_field',
-                        labelText: 'Username',
-                        controller: _usernameController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: ValidationBuilder()
-                            .minLength(8)
-                            .maxLength(16)
-                            .required()
-                            .regExp(
-                              RegExp(r"^\S+\w{8,32}\S{1,}"),
-                              'Username should not contains space or special characters!',
-                            )
-                            .build(),
                       ),
                       const Gap(8),
                       BasicTextInput.secondary(

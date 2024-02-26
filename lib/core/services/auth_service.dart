@@ -8,7 +8,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/functions/user_delete/index.dart';
 import 'package:rcp/core/functions/user_profile/index.dart';
-import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/core/types/user_session.dart';
@@ -19,6 +18,7 @@ class AuthServie {
   final SupabaseClient _supabase;
   AuthServie({required SupabaseClient supabase}) : _supabase = supabase {
     _supabase.auth.onAuthStateChange.listen((event) async {
+      await hasProfile(force: true);
       switch (event.event) {
         case AuthChangeEvent.signedOut:
           _timer?.cancel();
@@ -130,21 +130,11 @@ class AuthServie {
   Future<User> signUpWithEmail({
     required String email,
     required String password,
-    required String username,
   }) async {
     try {
       // TODO: check if username is not taken
       // procced if username is available
       // throw error if user name is taken
-
-      final checked = await _supabase.userUsernameIsAvailable(
-        body: UserUsernameIsAvailableInput(
-          username: username,
-        ),
-      );
-      if (!checked.isAvailable) {
-        throw const AuthException('Username is already taken!');
-      }
 
       final AuthResponse res = await _supabase.auth.signUp(
         email: email,
@@ -156,16 +146,6 @@ class AuthServie {
       if (user == null) {
         throw Exception('Invalid login');
       }
-
-      await _supabase.auth.refreshSession();
-
-      await _supabase.userProfileUpdate(
-        body: UserProfileUpdateInput(
-          username: username,
-          fullName: null,
-          avatarUrl: null,
-        ),
-      );
 
       return user;
     } on AuthException catch (e) {
@@ -251,6 +231,30 @@ class AuthServie {
     } catch (e) {
       locator.logger.error("logout: $e");
       rethrow;
+    }
+  }
+
+  bool? _hasProfile;
+  Future<bool> hasProfile({bool force = false}) async {
+    if (_hasProfile == null || force) {
+      return await _checkUserHasProfile();
+    }
+    return _hasProfile ?? false;
+  }
+
+  Future<bool> _checkUserHasProfile() async {
+    try {
+      if (!isLoggedIn) {
+        throw const AuthException("Not LoggedIn");
+      }
+      final userProfile = await _supabase.userProfileGet();
+      locator.logger.info(userProfile);
+      _hasProfile = true;
+      return _hasProfile!;
+    } catch (e) {
+      locator.logger.error(e is AuthException ? e.message : e);
+      _hasProfile = false;
+      return _hasProfile!;
     }
   }
 }

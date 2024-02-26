@@ -11,7 +11,7 @@ import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
 import 'package:rcp/core/widgets/sliver_profile_header.dart';
 import 'package:rcp/core/widgets/sliver_title_bar.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
+import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/packages/components/card_container.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 

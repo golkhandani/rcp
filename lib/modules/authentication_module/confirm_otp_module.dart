@@ -70,8 +70,9 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
                             onPressed: () {
                               authCubit.loginWithOtp(
                                 otp: _otpController.text,
-                                onSuccess: () => context
-                                    .neglectNamed(confrimPasswordRoute.name),
+                                onSuccess: () => context.neglectNamed(
+                                  updatePasswordRoute.name,
+                                ),
                                 onFailure: () {},
                               );
                             },

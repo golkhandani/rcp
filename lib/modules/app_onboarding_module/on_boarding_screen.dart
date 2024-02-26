@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:introduction_screen/introduction_screen.dart' as intro;
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/environment.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
@@ -140,6 +143,12 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   void onDone() {
-    context.goNamed(signinRoute.name);
+    // change it to false so we don't see it next time
+    // TODO, move it to intro done function
+    // to only change it to seen when user is actually done with intro
+    locator
+        .get<SharedPreferences>()
+        .setBool(Environment.isIntroCheckedKey, true)
+        .then((_) => context.goNamed(authRoute.name));
   }
 }

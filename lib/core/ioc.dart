@@ -10,7 +10,7 @@ import 'package:rcp/core/services/auth_service.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
+import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -105,6 +105,7 @@ Future<void> setupBloc() async {
     () => AuthenticationCubit(
       authServie: locator.get(),
       banner: locator.get(),
+      supabase: locator.get(),
     ),
   );
   locator.registerFactory(

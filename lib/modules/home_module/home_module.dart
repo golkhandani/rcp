@@ -9,8 +9,8 @@ import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
 import 'package:rcp/gen/assets.gen.dart';
-import 'package:rcp/modules/setting_module/bloc/profile_state.dart';
-import 'package:rcp/modules/setting_module/profile_module.dart';
+import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
+import 'package:rcp/modules/profile_module/profile_module.dart';
 import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 

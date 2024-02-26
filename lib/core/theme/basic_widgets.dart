@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gap/gap.dart';
@@ -118,6 +119,8 @@ class BasicTextInput extends StatelessWidget {
     this.keyboardType = TextInputType.none,
     this.obscureText = false,
     this.enabled = true,
+    this.inputFormatters = const [],
+    this.textAlign = TextAlign.start,
   }) : _decorationType = BasicTextInputDecoration.primary;
 
   const BasicTextInput.secondary({
@@ -130,6 +133,8 @@ class BasicTextInput extends StatelessWidget {
     this.keyboardType = TextInputType.none,
     this.obscureText = false,
     this.enabled = true,
+    this.inputFormatters = const [],
+    this.textAlign = TextAlign.start,
   }) : _decorationType = BasicTextInputDecoration.secondary;
 
   final String fieldName;
@@ -140,6 +145,8 @@ class BasicTextInput extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final bool enabled;
+  final List<TextInputFormatter> inputFormatters;
+  final TextAlign textAlign;
 
   final BasicTextInputDecoration _decorationType;
 
@@ -178,7 +185,8 @@ class BasicTextInput extends StatelessWidget {
         FormBuilderTextField(
           enabled: enabled,
           name: fieldName,
-          textAlign: TextAlign.center,
+          inputFormatters: inputFormatters,
+          textAlign: textAlign,
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: controller,
           decoration: decoration.copyWith(

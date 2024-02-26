@@ -71,12 +71,7 @@ void main() async {
   // check if user has seen the intro page
   final bool isIntroChecked =
       prefs.getBool(Environment.isIntroCheckedKey) ?? isLoggedIn;
-  // change it to false so we don't see it next time
-  // TODO, move it to intro done function
-  // to only change it to seen when user is actually done with intro
-  await locator
-      .get<SharedPreferences>()
-      .setBool(Environment.isIntroCheckedKey, true);
+
   // END CHECKS
 
   // START ROUTER INIT
@@ -86,9 +81,57 @@ void main() async {
   final router = GoRouter(
     navigatorKey: locator.get(),
     initialLocation: !isIntroChecked ? onBoardingRoute.path : initialPath,
+    redirect: (context, state) async {
+      final isAuthenticated = authService.isLoggedIn;
+      final isIntroChecked = isAuthenticated
+          ? true
+          : prefs.getBool(Environment.isIntroCheckedKey) ?? false;
+      final isAuthRoute = state.fullPath?.contains(authRoute.path) ?? false;
+
+      final hasProfile = await authService.hasProfile();
+      final isDashboardRoute =
+          state.fullPath?.contains(dashboardRoute.path) ?? false;
+
+      // print("____________________");
+      // print("isAuthenticated ${isAuthenticated}");
+      // print("isIntroChecked ${isIntroChecked}");
+      // print("isAuthRoute ${isAuthRoute}");
+      // print("hasProfile ${hasProfile}");
+      // print("isDashboardRoute ${isDashboardRoute}");
+      // print("state.fullPath ${state.fullPath}");
+      // print("____________________");
+      // DASHBOARD
+      if (isAuthenticated && hasProfile && !isDashboardRoute) {
+        return dashboardRoute.path;
+      } else if (isAuthenticated && !hasProfile && isDashboardRoute) {
+        return '${authRoute.path}/${profileCreationRoute.path}';
+      } else if (isAuthenticated && hasProfile && isDashboardRoute) {
+        return null;
+      }
+
+      // END DASHBOARD
+
+      // INTRO
+      if (!isIntroChecked) {
+        return onBoardingRoute.path;
+      }
+      // END INTRO
+
+      // AUTHENTICATION
+      if (!isAuthenticated && isAuthRoute) {
+        return null;
+      } else if (!isAuthenticated && !isAuthRoute) {
+        return '${authRoute.path}/${signinRoute.path}';
+      } else if (isAuthenticated && !hasProfile) {
+        return '${authRoute.path}/${profileCreationRoute.path}';
+      }
+      // END AUTHENTICATION
+
+      return '${authRoute.path}/${signinRoute.path}';
+    },
     routes: [
       onBoardingRoute,
-      ...authRouter,
+      authRoute,
       ...dashboardRoutes,
       GoRoute(
         path: '/*',
