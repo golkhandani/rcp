@@ -83,7 +83,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      SliverGap(context.vHeight - 560),
+                      SliverGap(context.vHeight -
+                          106 -
+                          240 -
+                          148 -
+                          64 -
+                          context.bottomSafePadding -
+                          context.topSafePadding),
                       SliverToBoxAdapter(
                         child: BasicElevatedButton(
                           background: context.colorTheme.warning,
@@ -105,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           labelText: 'Delete',
                         ),
                       ),
-                      const SliverGap(16),
+                      const SliverGap(106),
                     ]),
                   )
                 ],
