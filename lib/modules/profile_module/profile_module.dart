@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import 'package:rcp/core/go_route_named.dart';
+import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
@@ -75,6 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Text(
                                 'Email: ${state.user!.email}',
+                                maxLines: 2,
+                                style: context.typoraphyTheme.subtitleLarge
+                                    .onTertiary.textStyle,
+                              ),
+                              Text(
+                                'Full Name: ${state.user!.fullName}',
                                 maxLines: 2,
                                 style: context.typoraphyTheme.subtitleLarge
                                     .onTertiary.textStyle,

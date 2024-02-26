@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,6 +8,7 @@ import 'package:gap/gap.dart';
 
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/gen/assets.gen.dart';
+import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class BasicElevatedButton extends StatelessWidget {
   final bool isLoading;
@@ -299,6 +302,47 @@ class BasicBackgroundContainer extends StatelessWidget {
         ),
       ),
       child: child,
+    );
+  }
+}
+
+class MobileFrame extends StatelessWidget {
+  final Widget child;
+  final Color? color;
+  const MobileFrame({
+    super.key,
+    required this.child,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (context.isNarrowWith) {
+      return child;
+    }
+
+    final c = (color ?? context.colorTheme.background).withOpacity(0.3);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Material(
+          elevation: 0,
+          color: c,
+          borderRadius: BorderRadius.circular(12),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                width: 420,
+                height: context.vHeight,
+                color: c,
+                child: child,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

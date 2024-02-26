@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
+import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 
 class ScaffoldShell extends StatelessWidget {
@@ -10,12 +11,14 @@ class ScaffoldShell extends StatelessWidget {
   final Color? safeareaColor;
   final Color? bodyColor;
   final EdgeInsets padding;
+  final bool useMobileFrameOnWideScreen;
   const ScaffoldShell({
     super.key,
     required this.child,
     this.safeareaColor,
     this.bodyColor,
     this.padding = EdgeInsets.zero,
+    this.useMobileFrameOnWideScreen = false,
   });
 
   @override
@@ -37,10 +40,12 @@ class ScaffoldShell extends StatelessWidget {
             extendBodyBehindAppBar: false,
             backgroundColor: bodyColor ?? context.colorTheme.background,
             resizeToAvoidBottomInset: true,
-            body: Padding(
-              padding: padding,
-              child: child,
-            ),
+            body: useMobileFrameOnWideScreen
+                ? MobileFrame(child: child)
+                : Padding(
+                    padding: padding,
+                    child: child,
+                  ),
           ),
         ),
       ),

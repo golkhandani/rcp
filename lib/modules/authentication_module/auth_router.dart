@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/modules/authentication_module/confirm_otp_module.dart';
 import 'package:rcp/modules/authentication_module/confirm_password_module.dart';
-import 'package:rcp/modules/authentication_module/profile_creation_module.dart';
 import 'package:rcp/modules/authentication_module/reset_password_module.dart';
 import 'package:rcp/modules/authentication_module/signin_module.dart';
 import 'package:rcp/modules/authentication_module/signup_module.dart';
@@ -21,7 +20,6 @@ final authRoute = GoRouteNamed(
     resetPasswordRoute,
     updatePasswordRoute,
     signupRoute,
-    profileCreationRoute,
   ],
 );
 
@@ -73,10 +71,4 @@ final updatePasswordRoute = GoRouteNamed(
   path: 'confrim_password',
   name: 'confrim_password',
   builder: (context, state) => const ConfirmPasswordScreen(),
-);
-
-final profileCreationRoute = GoRouteNamed(
-  path: 'profile_creation',
-  name: 'profile_creation',
-  builder: (context, state) => const ProfileCreationScreen(),
 );

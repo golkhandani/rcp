@@ -83,60 +83,55 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       )
     ];
     return BasicBackgroundContainer(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints.tightForFinite(
-            width: 420,
+      child: MobileFrame(
+        child: intro.IntroductionScreen(
+          key: introKey,
+          globalBackgroundColor: bg,
+          controlsPadding: const EdgeInsets.all(32),
+          dotsDecorator: intro.DotsDecorator(
+            size: const Size.square(10.0),
+            activeSize: const Size(50.0, 10.0),
+            activeColor: context.colorTheme.primary,
+            color: fontColor,
+            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+            activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0)),
           ),
-          child: intro.IntroductionScreen(
-            key: introKey,
-            globalBackgroundColor: bg,
-            controlsPadding: const EdgeInsets.all(32),
-            dotsDecorator: intro.DotsDecorator(
-              size: const Size.square(10.0),
-              activeSize: const Size(50.0, 10.0),
-              activeColor: context.colorTheme.primary,
-              color: fontColor,
-              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-              activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0)),
-            ),
-            dotsContainerDecorator: const BoxDecoration(color: bg),
-            pages: pages,
-            showSkipButton: true,
-            skipStyle: const ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
-              overlayColor: MaterialStatePropertyAll(Colors.transparent),
-            ),
-            nextStyle: const ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
-              overlayColor: MaterialStatePropertyAll(Colors.transparent),
-            ),
-            doneStyle: const ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
-              overlayColor: MaterialStatePropertyAll(Colors.transparent),
-            ),
-            skip: BasicElevatedButton(
-              width: MediaQuery.sizeOf(context).width,
-              labelText: 'Skip',
-              onPressed: () => introKey.currentState!.skipToEnd(),
-            ),
-            next: BasicElevatedButton(
-              width: MediaQuery.sizeOf(context).width,
-              labelText: 'Next',
-              onPressed: () => introKey.currentState!.next(),
-            ),
-            done: BasicElevatedButton(
-              width: MediaQuery.sizeOf(context).width,
-              labelText: 'Done',
-              onPressed: onDone,
-            ),
-            onDone: () => onDone(),
-            onSkip: () => onDone(),
+          dotsContainerDecorator: const BoxDecoration(color: bg),
+          pages: pages,
+          showSkipButton: true,
+          skipStyle: const ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            overlayColor: MaterialStatePropertyAll(Colors.transparent),
           ),
+          nextStyle: const ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            overlayColor: MaterialStatePropertyAll(Colors.transparent),
+          ),
+          doneStyle: const ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            surfaceTintColor: MaterialStatePropertyAll(Colors.transparent),
+            overlayColor: MaterialStatePropertyAll(Colors.transparent),
+          ),
+          skip: BasicElevatedButton(
+            width: MediaQuery.sizeOf(context).width,
+            labelText: 'Skip',
+            onPressed: () => introKey.currentState!.skipToEnd(),
+          ),
+          next: BasicElevatedButton(
+            width: MediaQuery.sizeOf(context).width,
+            labelText: 'Next',
+            onPressed: () => introKey.currentState!.next(),
+          ),
+          done: BasicElevatedButton(
+            width: MediaQuery.sizeOf(context).width,
+            labelText: 'Done',
+            onPressed: onDone,
+          ),
+          onDone: () => onDone(),
+          onSkip: () => onDone(),
         ),
       ),
     );

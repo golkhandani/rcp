@@ -18,6 +18,7 @@ import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
 import 'package:rcp/modules/app_onboarding_module/on_boarding_router.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/profile_creation_module.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
 import 'package:rcp/utils/themes.dart';
 
@@ -83,55 +84,63 @@ void main() async {
     initialLocation: !isIntroChecked ? onBoardingRoute.path : initialPath,
     redirect: (context, state) async {
       final isAuthenticated = authService.isLoggedIn;
-      final isIntroChecked = isAuthenticated
-          ? true
-          : prefs.getBool(Environment.isIntroCheckedKey) ?? false;
-      final isAuthRoute = state.fullPath?.contains(authRoute.path) ?? false;
-
       final hasProfile = await authService.hasProfile();
+
+      ///
+
+      final isAuthRoute = state.fullPath?.contains(authRoute.path) ?? false;
       final isDashboardRoute =
           state.fullPath?.contains(dashboardRoute.path) ?? false;
 
+      ///
+      final shouldRedirectToDashboard =
+          isAuthenticated && hasProfile && !isDashboardRoute;
+      final shouldContinueToDashboard =
+          isAuthenticated && hasProfile && isDashboardRoute;
+
+      final shouldRedirectToAuth = !isAuthenticated && !isAuthRoute;
+      final shouldContinueToAuth = !isAuthenticated && isAuthRoute;
+
+      final shouldRedirectToProfileCreation = isAuthenticated && !hasProfile;
+
+      final shouldRedirectToOnboarding = isAuthenticated
+          ? false
+          : !(prefs.getBool(Environment.isIntroCheckedKey) ?? false);
+
       // print("____________________");
       // print("isAuthenticated ${isAuthenticated}");
-      // print("isIntroChecked ${isIntroChecked}");
+      // print("shouldRedirectToOnboarding ${shouldRedirectToOnboarding}");
       // print("isAuthRoute ${isAuthRoute}");
       // print("hasProfile ${hasProfile}");
       // print("isDashboardRoute ${isDashboardRoute}");
       // print("state.fullPath ${state.fullPath}");
       // print("____________________");
-      // DASHBOARD
-      if (isAuthenticated && hasProfile && !isDashboardRoute) {
-        return dashboardRoute.path;
-      } else if (isAuthenticated && !hasProfile && isDashboardRoute) {
-        return '${authRoute.path}/${profileCreationRoute.path}';
-      } else if (isAuthenticated && hasProfile && isDashboardRoute) {
-        return null;
-      }
 
-      // END DASHBOARD
-
-      // INTRO
-      if (!isIntroChecked) {
+      if (shouldRedirectToOnboarding) {
         return onBoardingRoute.path;
       }
-      // END INTRO
-
-      // AUTHENTICATION
-      if (!isAuthenticated && isAuthRoute) {
-        return null;
-      } else if (!isAuthenticated && !isAuthRoute) {
-        return '${authRoute.path}/${signinRoute.path}';
-      } else if (isAuthenticated && !hasProfile) {
-        return '${authRoute.path}/${profileCreationRoute.path}';
+      if (shouldRedirectToAuth) {
+        return authRoute.path;
       }
-      // END AUTHENTICATION
+      if (shouldContinueToAuth) {
+        return null;
+      }
+      if (shouldRedirectToProfileCreation) {
+        return profileCreationRoute.path;
+      }
+      if (shouldRedirectToDashboard) {
+        return dashboardRoute.path;
+      }
+      if (shouldContinueToDashboard) {
+        return null;
+      }
 
-      return '${authRoute.path}/${signinRoute.path}';
+      return null;
     },
     routes: [
       onBoardingRoute,
       authRoute,
+      profileCreationRoute,
       ...dashboardRoutes,
       GoRoute(
         path: '/*',

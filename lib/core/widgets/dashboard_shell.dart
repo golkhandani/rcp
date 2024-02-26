@@ -10,7 +10,6 @@ import 'package:rcp/core/theme/apptheme_elevated_button.dart';
 import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/theme/theme_extentions.dart';
-import 'package:rcp/core/widgets/card_container.dart';
 import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
@@ -126,16 +125,8 @@ class _DashboardShellState extends State<DashboardShell> {
       return _buildNarrowContainer();
     } else if (widget.useMobileFrameOnWideScreen) {
       return BasicBackgroundContainer(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: CardContainer(
-              padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.circular(12),
-              width: 420,
-              child: _buildNarrowContainer(),
-            ),
-          ),
+        child: MobileFrame(
+          child: _buildNarrowContainer(),
         ),
       );
     } else {

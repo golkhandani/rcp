@@ -80,7 +80,8 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                   vertical: 4,
                                 ),
                                 isLabelVisible: _editing,
-                                backgroundColor: context.colorTheme.primary,
+                                backgroundColor:
+                                    context.colorTheme.onNavBackground,
                                 largeSize: 32,
                                 alignment: Alignment.bottomRight,
                                 offset: const Offset(0, -16),
@@ -91,7 +92,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                     child: Icon(
                                       Icons.edit,
                                       size: 16,
-                                      color: context.colorTheme.onPrimary,
+                                      color: context.colorTheme.navBackground,
                                     ),
                                   ),
                                 ]),
@@ -138,7 +139,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                               _username,
                               maxLines: 1,
                               style: context
-                                  .typoraphyTheme.titleMedium.primary.textStyle,
+                                  .typoraphyTheme.onNavBackground.textStyle,
                             ),
                           ),
                         ),
@@ -147,6 +148,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                           child: BasicTextInput(
                             fieldName: 'username_field',
                             controller: _usernameController,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         crossFadeState: !_editingUsername
@@ -161,6 +163,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                   right: 0,
                   top: 0,
                   child: BasicLinkButton(
+                    foreground: context.colorTheme.onNavBackground,
                     labelText: _editing ? 'Done' : 'Edit',
                     onPressed: () {
                       if (_username != _usernameController.text) {

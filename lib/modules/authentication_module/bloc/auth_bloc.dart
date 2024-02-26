@@ -188,9 +188,13 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }) async {
     try {
       emit(state.copyWith(isLoading: true));
-      await supabase.userUsernameIsAvailable(
-        body: UserUsernameIsAvailableInput(username: username),
-      );
+      try {
+        await supabase.userUsernameIsAvailable(
+          body: UserUsernameIsAvailableInput(username: username),
+        );
+      } catch (e) {
+        throw const AuthException('Username is already taken!');
+      }
       await supabase.userProfileUpdate(
         body: UserProfileUpdateInput(
           username: username,

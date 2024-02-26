@@ -92,9 +92,14 @@ class SliverProfileSummaryHeader extends StatelessWidget {
           expandedHeight: 92,
           flexibleSpace: CustomizableSpaceBar(
             builder: (context, scrollingRate) {
+              final bg =
+                  context.colorTheme.navBackground.withOpacity(scrollingRate);
+
+              final fg = bg.opacity < 0.5
+                  ? context.colorTheme.onBackground
+                  : context.colorTheme.onNavBackground;
               return AnimatedContainer(
-                color:
-                    context.colorTheme.navBackground.withOpacity(scrollingRate),
+                color: bg,
                 padding: EdgeInsets.only(
                     top: context.topSafePadding + 16, bottom: 16),
                 duration: const Duration(milliseconds: 200),
@@ -135,7 +140,8 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                                     'Welcome,',
                                     maxLines: 2,
                                     style: context.typoraphyTheme.subtitleLarge
-                                        .onNavBackground.textStyle,
+                                        .copyWithColor(color: fg)
+                                        .textStyle,
                                   ),
                                 ),
                               ),
@@ -146,7 +152,8 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                                   state.user?.profile.username ?? '',
                                   maxLines: 2,
                                   style: context.typoraphyTheme.titleMedium
-                                      .onNavBackground.textStyle,
+                                      .copyWithColor(color: fg)
+                                      .textStyle,
                                 ),
                               ),
                             ),
@@ -156,7 +163,12 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                       IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () => context.goNamed(inboxRoute.name),
-                        icon: const Icon(Icons.notifications_outlined),
+                        icon: Icon(
+                          Icons.notifications_outlined,
+                          color: fg,
+                        ),
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
                       ),
                       const Gap(16),
                     ]),

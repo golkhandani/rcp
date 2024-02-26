@@ -36,58 +36,62 @@ class _ConfirmOtpCodeScreenState extends State<ConfirmOtpCodeScreen> {
     return ScaffoldShell(
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(16).copyWith(top: 64),
-            child: FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightForFinite(
-                    width: 420,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Gap(48),
-                      const AppLogo(labelText: 'Update Password'),
-                      const Gap(24),
-                      BasicTextInput(
-                        fieldName: 'otp_code_field',
-                        labelText: 'Code',
-                        controller: _otpController,
-                        keyboardType: TextInputType.number,
+        child: BasicBackgroundContainer(
+          child: MobileFrame(
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Padding(
+                padding: const EdgeInsets.all(16).copyWith(top: 64),
+                child: FormBuilder(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints.tightForFinite(
+                        width: 420,
                       ),
-                      const Gap(32),
-                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                        builder: (context, state) {
-                          return BasicElevatedButton(
-                            width: MediaQuery.sizeOf(context).width,
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              authCubit.loginWithOtp(
-                                otp: _otpController.text,
-                                onSuccess: () => context.neglectNamed(
-                                  updatePasswordRoute.name,
-                                ),
-                                onFailure: () {},
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(48),
+                          const AppLogo(labelText: 'Update Password'),
+                          const Gap(24),
+                          BasicTextInput(
+                            fieldName: 'otp_code_field',
+                            labelText: 'Code',
+                            controller: _otpController,
+                            keyboardType: TextInputType.number,
+                          ),
+                          const Gap(32),
+                          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                            builder: (context, state) {
+                              return BasicElevatedButton(
+                                width: MediaQuery.sizeOf(context).width,
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  authCubit.loginWithOtp(
+                                    otp: _otpController.text,
+                                    onSuccess: () => context.neglectNamed(
+                                      updatePasswordRoute.name,
+                                    ),
+                                    onFailure: () {},
+                                  );
+                                },
+                                labelText: 'Submit',
                               );
                             },
-                            labelText: 'Submit',
-                          );
-                        },
+                          ),
+                          const Gap(16),
+                          BasicLinkButton(
+                            onPressed: () {
+                              context.neglectNamed(signinRoute.name);
+                            },
+                            labelText: 'Back to Login',
+                          ),
+                        ],
                       ),
-                      const Gap(16),
-                      BasicLinkButton(
-                        onPressed: () {
-                          context.neglectNamed(signinRoute.name);
-                        },
-                        labelText: 'Back to Login',
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

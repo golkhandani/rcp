@@ -181,6 +181,20 @@ class CustomThemeProvider extends InheritedWidget {
   ThemeData get data => _flex.copyWith(
         inputDecorationTheme: _flex.inputDecorationTheme.copyWith(
           contentPadding: const EdgeInsets.all(15),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide(
+              color: pallete.primary,
+              width: 2.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide(
+              color: pallete.primaryContainer,
+              width: 2.0,
+            ),
+          ),
         ),
       );
   Brightness get brightness => pallete.brightness;

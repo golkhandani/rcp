@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/widgets/dashboard_shell.dart';
 import 'package:rcp/core/widgets/scaffold_shell.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 import 'package:rcp/modules/home_module/home_module.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/modules/profile_module/profile_module.dart';
@@ -93,39 +95,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
         BlocProvider.value(value: _authenticationCubit),
         BlocProvider.value(value: _profileBloc),
       ],
-      child: BlocConsumer<ProfileBloc, ProfileBlocState>(
-        bloc: _profileBloc,
-        listenWhen: (previous, current) =>
-            previous.user?.id == null && current.user?.id != null,
-        listener: (context, state) {
-          locator.logger.info("TENANT UPDATED! >> $state");
-        },
-        builder: (context, state) {
-          if (state.isLoading) {
-            return ScaffoldShell(
-              bodyColor: context.colorTheme.navBackground,
-              child: Center(
-                child: CircularProgressIndicator.adaptive(
-                  backgroundColor: context.colorTheme.onNavUnselected,
-                ),
-              ),
-            );
-          }
-          return DashboardShell(
-            items: dahboardItems,
-            currentIndex: currentIndex,
-            onTap: onItemTapped,
-            navigationActiveColor: context.colorTheme.onNavSelected,
-            navigationInactiveColor: context.colorTheme.onNavUnselected,
-            navigationBackgroundColor: context.colorTheme.navBackground,
-            contentBackgroundColor: Colors.white,
-            safeAreaColor: color,
-            height: 56,
-            useFloatingNavBar: true,
-            handleTopSafePadding: false,
-            floatingActionButton: null,
-            useMobileFrameOnWideScreen: true,
-            child: widget.child,
+      child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
+        bloc: _authenticationCubit,
+        listener: (context, auth) {},
+        builder: (context, auth) {
+          return BlocConsumer<ProfileBloc, ProfileBlocState>(
+            bloc: _profileBloc,
+            listenWhen: (previous, current) =>
+                previous.user?.id == null && current.user?.id != null,
+            listener: (context, profile) {
+              locator.logger.info("PROFILE UPDATED! >> $profile");
+            },
+            builder: (context, profile) {
+              if (profile.isLoading || auth.isLoading) {
+                return ScaffoldShell(
+                  child: BasicBackgroundContainer(
+                    child: MobileFrame(
+                      color: context.colorTheme.background,
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: context.colorTheme.onNavUnselected,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return DashboardShell(
+                items: dahboardItems,
+                currentIndex: currentIndex,
+                onTap: onItemTapped,
+                navigationActiveColor: context.colorTheme.onNavSelected,
+                navigationInactiveColor: context.colorTheme.onNavUnselected,
+                navigationBackgroundColor: context.colorTheme.navBackground,
+                contentBackgroundColor: Colors.white,
+                safeAreaColor: color,
+                height: 56,
+                useFloatingNavBar: true,
+                handleTopSafePadding: false,
+                floatingActionButton: null,
+                useMobileFrameOnWideScreen: true,
+                child: widget.child,
+              );
+            },
           );
         },
       ),

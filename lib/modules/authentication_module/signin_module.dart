@@ -81,116 +81,118 @@ class _SigninScreenState extends State<SigninScreen> {
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
         child: BasicBackgroundContainer(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightForFinite(
-                    width: 420,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Gap(48),
-                      const AppLogo(labelText: 'Welcome Back!'),
-                      const Gap(24),
-                      BasicTextInput(
-                        fieldName: 'email_field',
-                        labelText: 'Email',
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.email(),
-                        ]),
-                      ),
-                      const Gap(8),
-                      BasicTextInput(
-                        fieldName: 'password_field',
-                        labelText: 'Password',
-                        controller: _passwordController,
-                        keyboardType: TextInputType.text,
-                        obscureText: _obscurePassword,
-                        validator: ValidationBuilder()
-                            .minLength(8)
-                            .maxLength(16)
-                            .build(),
-                        suffix: IconButton(
-                          splashColor: Colors.transparent,
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
+          child: MobileFrame(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.tightForFinite(
+                      width: 420,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Gap(48),
+                        const AppLogo(labelText: 'Welcome Back!'),
+                        const Gap(24),
+                        BasicTextInput(
+                          fieldName: 'email_field',
+                          labelText: 'Email',
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.email(),
+                          ]),
                         ),
-                      ),
-                      const Gap(16),
-                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                        builder: (context, state) {
-                          return Hero(
-                            tag: ResetPasswordScreen.heroTag,
-                            child: BasicElevatedButton(
-                              isLoading: state.isLoading,
-                              labelText: 'Signin',
-                              width: MediaQuery.sizeOf(context).width,
-                              onPressed: () {
-                                _signin();
-                              },
+                        const Gap(8),
+                        BasicTextInput(
+                          fieldName: 'password_field',
+                          labelText: 'Password',
+                          controller: _passwordController,
+                          keyboardType: TextInputType.text,
+                          obscureText: _obscurePassword,
+                          validator: ValidationBuilder()
+                              .minLength(8)
+                              .maxLength(16)
+                              .build(),
+                          suffix: IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
-                          );
-                        },
-                      ),
-                      const Gap(16),
-                      BasicLinkButton(
-                        foreground: context.colorTheme.primary,
-                        labelText: 'Forgot Password?',
-                        onPressed: () {
-                          context.neglectNamed(resetPasswordRoute.name);
-                        },
-                      ),
-                      const Gap(16),
-                      SupaSocialsAuth(
-                          showSuccessSnackBar: false,
-                          socialProviders: const [
-                            OAuthProvider.google,
-                            OAuthProvider.apple,
-                          ],
-                          onSuccess: (session) {
-                            if (_signedinWithEmail) {
-                              return;
-                            }
-                            context.neglectNamed(dashboardRoute.name);
-                          }),
-                      const Gap(16),
-                      const BasicTextDivider(
-                        labelText: "Don't have an account?",
-                      ),
-                      const Gap(24),
-                      Hero(
-                        tag: SignupScreen.heroTag,
-                        child: BasicElevatedButton(
-                          labelText: 'Signup',
-                          width: MediaQuery.sizeOf(context).width,
-                          padding: EdgeInsets.zero,
-                          background: context.colorTheme.secondary,
-                          foreground: context.colorTheme.onSecondary,
-                          onPressed: () {
-                            _goToSignup();
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                        ),
+                        const Gap(16),
+                        BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                          builder: (context, state) {
+                            return Hero(
+                              tag: ResetPasswordScreen.heroTag,
+                              child: BasicElevatedButton(
+                                isLoading: state.isLoading,
+                                labelText: 'Signin',
+                                width: MediaQuery.sizeOf(context).width,
+                                onPressed: () {
+                                  _signin();
+                                },
+                              ),
+                            );
                           },
                         ),
-                      ),
-                      const Gap(16),
-                    ],
+                        const Gap(16),
+                        BasicLinkButton(
+                          foreground: context.colorTheme.primary,
+                          labelText: 'Forgot Password?',
+                          onPressed: () {
+                            context.neglectNamed(resetPasswordRoute.name);
+                          },
+                        ),
+                        const Gap(16),
+                        SupaSocialsAuth(
+                            showSuccessSnackBar: false,
+                            socialProviders: const [
+                              OAuthProvider.google,
+                              OAuthProvider.apple,
+                            ],
+                            onSuccess: (session) {
+                              if (_signedinWithEmail) {
+                                return;
+                              }
+                              context.neglectNamed(dashboardRoute.name);
+                            }),
+                        const Gap(16),
+                        const BasicTextDivider(
+                          labelText: "Don't have an account?",
+                        ),
+                        const Gap(24),
+                        Hero(
+                          tag: SignupScreen.heroTag,
+                          child: BasicElevatedButton(
+                            labelText: 'Signup',
+                            width: MediaQuery.sizeOf(context).width,
+                            padding: EdgeInsets.zero,
+                            background: context.colorTheme.secondary,
+                            foreground: context.colorTheme.onSecondary,
+                            onPressed: () {
+                              _goToSignup();
+                            },
+                          ),
+                        ),
+                        const Gap(16),
+                      ],
+                    ),
                   ),
                 ),
               ),

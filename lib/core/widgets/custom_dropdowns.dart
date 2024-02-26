@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:rcp/core/theme/decorations.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/packages/components/raw_custom_dropdown.dart';
 
@@ -40,9 +39,7 @@ class SyncDropdownMenu<T> extends StatelessWidget {
                 fontSize: context.typoraphyTheme.bodyLarge.textStyle.fontSize,
               )
               .textStyle,
-      inputDecorationTheme: AppThemeInputDecorationTheme(
-        appTheme: context.customTheme,
-      ),
+      inputDecorationTheme: context.customTheme.data.inputDecorationTheme,
       menuStyle: MenuStyle(
         maximumSize: const MaterialStatePropertyAll(
           Size(double.infinity, 240),
@@ -105,9 +102,7 @@ class AsyncDropdownMenu<T> extends StatelessWidget {
               )
               .textStyle,
       trailingIcon: null,
-      inputDecorationTheme: AppThemeInputDecorationTheme(
-        appTheme: context.customTheme,
-      ),
+      inputDecorationTheme: context.customTheme.data.inputDecorationTheme,
       menuStyle: MenuStyle(
         maximumSize: const MaterialStatePropertyAll(
           Size(double.infinity, 240),

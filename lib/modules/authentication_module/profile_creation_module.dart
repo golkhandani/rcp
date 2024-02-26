@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
+import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/theme/basic_widgets.dart';
 import 'package:rcp/core/theme/flex_theme_provider.dart';
 import 'package:rcp/core/widgets/scaffold_shell.dart';
@@ -13,6 +14,12 @@ import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
 import 'package:rcp/utils/extensions/context_go_extension.dart';
+
+final profileCreationRoute = GoRouteNamed(
+  path: '/profile_creation',
+  name: 'profile_creation',
+  builder: (context, state) => const ProfileCreationScreen(),
+);
 
 class ProfileCreationScreen extends StatefulWidget {
   const ProfileCreationScreen({super.key});

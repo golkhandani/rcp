@@ -50,8 +50,9 @@ class AuthServie {
       if (user == null || session == null) {
         throw Exception('Invalid login');
       }
-
       await _supabase.auth.refreshSession();
+
+      await hasProfile(force: true);
 
       return (user: user, session: session);
     } on AuthException catch (e) {
@@ -132,10 +133,6 @@ class AuthServie {
     required String password,
   }) async {
     try {
-      // TODO: check if username is not taken
-      // procced if username is available
-      // throw error if user name is taken
-
       final AuthResponse res = await _supabase.auth.signUp(
         email: email,
         password: password,
