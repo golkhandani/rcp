@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:rcp/core/functions/user_profile/index.dart';
-import 'package:rcp/core/types/uuid_extention.dart';
+import 'package:rcp/core/models/uuid_extention.dart';
 
 part 'user_data.freezed.dart';
 part 'user_data.g.dart';

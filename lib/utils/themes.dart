@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 
 const trendyTheme = CustomThemePallete(
   brightness: Brightness.light,
@@ -37,7 +37,7 @@ const trendyTheme = CustomThemePallete(
 
   /// EXTRA
 
-  cardBackground: Color(0xFFFAFAFA), // Off-white
+  cardBackground: Color.fromARGB(255, 235, 235, 235), // Off-white
   onCardBackground: Colors.black,
 
   chipBackground: Color(0xFF9E9E9E), // Gray

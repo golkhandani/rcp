@@ -6,14 +6,15 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
+import 'package:rcp/core/extensions/context_go_extension.dart';
 import 'package:rcp/core/go_route_named.dart';
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/widgets/layouts/scaffold_shell.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
-import 'package:rcp/utils/extensions/context_go_extension.dart';
+import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 
 final profileCreationRoute = GoRouteNamed(
   path: '/profile_creation',
@@ -42,7 +43,8 @@ class LowerCaseTextFormatter extends TextInputFormatter {
 }
 
 class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
-  late final AuthenticationCubit authCubit = context.read();
+  late final AuthenticationCubit _authCubit = context.read();
+  late final ProfileBloc _profileBloc = locator.get();
   final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _usernameController = TextEditingController();
@@ -56,8 +58,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
   @override
   void dispose() {
     super.dispose();
-    _fullnameController.dispose();
     _usernameController.dispose();
+    _fullnameController.dispose();
   }
 
   void _createProfile() async {
@@ -66,7 +68,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
       return;
     }
 
-    authCubit.createProfile(
+    _profileBloc.createProfile(
       username: _usernameController.text.trim().toLowerCase(),
       fullname: _fullnameController.text.trim(),
       onSuccess: () => context.neglectNamed(dashboardRoute.name),
@@ -75,7 +77,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
   }
 
   void _goToSignin() {
-    authCubit.logout();
+    _authCubit.logout();
   }
 
   @override
@@ -136,7 +138,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                             .build(),
                       ),
                       const Gap(32),
-                      BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                      BlocBuilder<ProfileBloc, ProfileBlocState>(
+                        bloc: _profileBloc,
                         builder: (context, state) {
                           return BasicElevatedButton(
                             background: context.colorTheme.secondary,

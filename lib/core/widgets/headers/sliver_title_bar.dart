@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:sliver_tools/sliver_tools.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/back_button.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/packages/components/back_button.dart';
 
 class SliverTitleBar extends StatelessWidget {
   final String title;

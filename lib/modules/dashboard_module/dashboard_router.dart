@@ -101,13 +101,13 @@ final dashboardShellRoutes = StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          name: profileRoute.name,
-          path: profileRoute.path,
+          name: ProfileScreen.route.name,
+          path: ProfileScreen.route.path,
           pageBuilder: (context, state) => dashboardPageBuilder(
             state,
-            profileRoute.builder(context, state),
+            ProfileScreen.route.builder(context, state),
           ),
-          routes: profileRoute.routes,
+          routes: ProfileScreen.route.routes,
         ),
       ],
     ),

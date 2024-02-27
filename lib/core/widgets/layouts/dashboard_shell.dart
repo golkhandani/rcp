@@ -6,11 +6,11 @@ import 'package:collection/collection.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:gap/gap.dart';
 
-import 'package:rcp/core/theme/apptheme_elevated_button.dart';
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/theme/theme_extentions.dart';
-import 'package:rcp/utils/extensions/context_ui_extension.dart';
+import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/widgets/theme/apptheme_elevated_button.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/theme_extentions.dart';
 
 final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
 

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/notification_banner.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/packages/components/notification_banner.dart';
 
 class NotificationBannerService {
   final GlobalKey<NavigatorState> navigatorKey;

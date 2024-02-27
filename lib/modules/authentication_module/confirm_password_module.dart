@@ -5,14 +5,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/scaffold_shell.dart';
-import 'package:rcp/modules/authentication_module/auth_router.dart';
+import 'package:rcp/core/extensions/context_go_extension.dart';
+import 'package:rcp/core/widgets/layouts/scaffold_shell.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/modules/authentication_module/signin_module.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
-import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class ConfirmPasswordScreen extends StatefulWidget {
   const ConfirmPasswordScreen({super.key});
@@ -130,7 +130,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         const Gap(16),
                         BasicLinkButton(
                           onPressed: () {
-                            context.neglectNamed(signinRoute.name);
+                            context.neglectNamed(SigninScreen.route.name);
                           },
                           labelText: 'Back to Login',
                         ),

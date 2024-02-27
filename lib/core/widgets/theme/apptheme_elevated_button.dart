@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 
 class AppThemeElevatedButton extends StatelessWidget {
   final bool isLoading;

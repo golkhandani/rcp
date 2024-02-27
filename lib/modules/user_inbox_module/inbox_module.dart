@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 
 import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/models/notification/user_notification_model.dart';
-import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
-import 'package:rcp/core/widgets/sliver_title_bar.dart';
+import 'package:rcp/core/widgets/headers/sliver_title_bar.dart';
+import 'package:rcp/core/widgets/layouts/dashboard_screen_shell.dart';
 
 final inboxRoute = GoRouteNamed(
   path: '/dashboard/inbox',

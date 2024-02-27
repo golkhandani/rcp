@@ -12,9 +12,8 @@ Deno.serve(async (req) => {
 		return new Response('ok', { headers: corsHeaders });
 	}
 
-	console.log('TEST 1');
-
-	const { admin } = getClients(req);
+	const { admin, supabase } = getClients(req);
+	const { data: { user } } = await supabase.auth.getUser();
 
 	const body = await req.json();
 
@@ -22,7 +21,7 @@ Deno.serve(async (req) => {
 		.eq(
 			'username',
 			body.username,
-		)
+		).neq('user_id', user?.id)
 		.single<UserProfile>();
 
 	if (userProfile) {

@@ -6,20 +6,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/ioc.dart';
-import 'package:rcp/core/services/auth_service.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/services/profile_manager_service.dart';
+import 'package:rcp/core/services/session_manager_service.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/environment.dart';
 import 'package:rcp/firebase_options.dart';
 import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
-import 'package:rcp/modules/app_onboarding_module/on_boarding_router.dart';
+import 'package:rcp/modules/app_onboarding_module/on_boarding_screen.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
-import 'package:rcp/modules/authentication_module/profile_creation_module.dart';
+import 'package:rcp/modules/authentication_module/signin_module.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
+import 'package:rcp/modules/profile_module/profile_creation_module.dart';
 import 'package:rcp/utils/themes.dart';
 
 void main() async {
@@ -43,48 +44,50 @@ void main() async {
   // has to be registerd in IoC
   await setupLocator();
   // END APP INIT
-  locator.logger.info("APP INIT DONE!");
 
   // START CHECKS
-  final prefs = locator.get<SharedPreferences>();
+
+  // 1. Check session
+  final SessionManagerService sessionManagerService = locator.get();
+  var hasValidSession = sessionManagerService.hasValidSession;
+  if (hasValidSession) {
+    await sessionManagerService.restoreSession();
+  }
+
+  final hasValidUser = sessionManagerService.hasValidUser;
+  if (!hasValidUser) {
+    await sessionManagerService.clear();
+    hasValidSession = false;
+  }
+
+  locator.logger.info("Check session -> done!");
 
   // Check if user is logged in
-  final authService = locator.get<AuthServie>();
-  final bool isLoggedIn = authService.isLoggedIn;
-  // if user is logged in restore the session
-  if (isLoggedIn) {
-    authService.restoreSession();
-  }
 
-  final user = await authService.getCurrentUser();
-  if (user == null) {
-    await authService.logout();
-  }
-  locator.logger.info("AUTH INIT DONE!, isLoggedIn: $isLoggedIn");
+  // 2. Check intro
 
-  // check if user selected a group
-  // if yes -> go to dashboard page
-  // if no  -> go to group picker page
-  final bool isGroupSelected =
-      prefs.getString(Environment.selectedGroupKey) != null;
-  locator.logger.info("TENANCY INIT DONE!, isGroupSelected: $isGroupSelected");
-
-  // check if user has seen the intro page
-  final bool isIntroChecked =
-      prefs.getBool(Environment.isIntroCheckedKey) ?? isLoggedIn;
+  final hasSeenIntro = sessionManagerService.hasSeenIntro;
 
   // END CHECKS
 
   // START ROUTER INIT
-  final String initialPath =
-      isLoggedIn ? dashboardRoute.path : signinRoute.path;
+  final String initialPath = !hasSeenIntro
+      ? OnBoardingScreen.route.path
+      : hasValidSession
+          ? dashboardRoute.path
+          : SigninScreen.route.path;
 
   final router = GoRouter(
     navigatorKey: locator.get(),
-    initialLocation: !isIntroChecked ? onBoardingRoute.path : initialPath,
+    initialLocation: initialPath,
     redirect: (context, state) async {
-      final isAuthenticated = authService.isLoggedIn;
-      final hasProfile = await authService.hasProfile();
+      // get services
+      final SessionManagerService sessionManagerService = locator.get();
+      final ProfileManagerService profileManagerService = locator.get();
+
+      //
+      final isAuthenticated = sessionManagerService.hasValidSession;
+      final hasProfile = await profileManagerService.hasValidProfile();
 
       ///
 
@@ -103,9 +106,7 @@ void main() async {
 
       final shouldRedirectToProfileCreation = isAuthenticated && !hasProfile;
 
-      final shouldRedirectToOnboarding = isAuthenticated
-          ? false
-          : !(prefs.getBool(Environment.isIntroCheckedKey) ?? false);
+      final shouldRedirectToOnboarding = !sessionManagerService.hasSeenIntro;
 
       // print("____________________");
       // print("isAuthenticated ${isAuthenticated}");
@@ -117,7 +118,7 @@ void main() async {
       // print("____________________");
 
       if (shouldRedirectToOnboarding) {
-        return onBoardingRoute.path;
+        return OnBoardingScreen.route.path;
       }
       if (shouldRedirectToAuth) {
         return authRoute.path;
@@ -138,7 +139,7 @@ void main() async {
       return null;
     },
     routes: [
-      onBoardingRoute,
+      OnBoardingScreen.route,
       authRoute,
       profileCreationRoute,
       ...dashboardRoutes,

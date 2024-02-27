@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/theme/theme_extentions.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/theme_extentions.dart';
 
 class CardContainer extends StatelessWidget {
   const CardContainer({

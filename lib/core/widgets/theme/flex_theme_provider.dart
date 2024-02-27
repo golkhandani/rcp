@@ -179,6 +179,9 @@ class CustomThemeProvider extends InheritedWidget {
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       );
   ThemeData get data => _flex.copyWith(
+        progressIndicatorTheme: _flex.progressIndicatorTheme.copyWith(
+          color: pallete.primary,
+        ),
         inputDecorationTheme: _flex.inputDecorationTheme.copyWith(
           contentPadding: const EdgeInsets.all(15),
           enabledBorder: OutlineInputBorder(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 
 class DashboardScreenShell extends StatelessWidget {
   final Widget child;

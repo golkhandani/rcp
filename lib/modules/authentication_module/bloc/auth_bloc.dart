@@ -3,21 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/user_profile/index.dart';
-import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/services/auth_service.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/core/services/profile_manager_service.dart';
+import 'package:rcp/core/services/session_manager_service.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final AuthServie authServie;
   final NotificationBannerService banner;
   final SupabaseClient supabase;
+  final SessionManagerService sessionManagerService;
+  final ProfileManagerService profileManagerService;
   AuthenticationCubit({
     required this.authServie,
     required this.banner,
     required this.supabase,
+    required this.sessionManagerService,
+    required this.profileManagerService,
   }) : super(AuthenticationState.init());
 
   signinWithEmail({
@@ -30,6 +34,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       final res =
           await authServie.loginWithEmail(email: email, password: password);
+
+      await profileManagerService.hasValidProfile(forceCheck: true);
       emit(state.copyWith(
         isLoading: false,
         userId: res.user.id,
@@ -58,6 +64,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         password: password,
       );
 
+      await profileManagerService.hasValidProfile(forceCheck: true);
       emit(state.copyWith(isLoading: false, userId: user.id));
       banner.showSuccessBanner('Please check your email inbox!');
       onSuccess();
@@ -155,7 +162,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   logout() async {
     try {
       emit(state.copyWith(isLoading: true, email: null));
-      await authServie.logout();
+      await sessionManagerService.logout();
     } catch (e) {
       locator.logger.error(e);
       banner.showErrorBanner(
@@ -169,46 +176,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   delete() async {
     try {
       emit(state.copyWith(isLoading: true, email: null));
-      await authServie.delete();
+      await sessionManagerService.delete();
     } catch (e) {
       locator.logger.error(e);
       banner.showErrorBanner(
         e is AuthException ? e.message : 'Something went wrong!',
       );
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
-  }
-
-  createProfile({
-    required String username,
-    required String fullname,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) async {
-    try {
-      emit(state.copyWith(isLoading: true));
-      try {
-        await supabase.userUsernameIsAvailable(
-          body: UserUsernameIsAvailableInput(username: username),
-        );
-      } catch (e) {
-        throw const AuthException('Username is already taken!');
-      }
-      await supabase.userProfileUpdate(
-        body: UserProfileUpdateInput(
-          username: username,
-          fullName: fullname,
-        ),
-      );
-      await authServie.hasProfile(force: true);
-      onSuccess();
-    } catch (e) {
-      locator.logger.error(e);
-      banner.showErrorBanner(
-        e is AuthException ? e.message : 'Something went wrong!',
-      );
-      onFailure();
     } finally {
       emit(state.copyWith(isLoading: false));
     }

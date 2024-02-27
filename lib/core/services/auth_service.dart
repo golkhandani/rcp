@@ -6,31 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/user_delete/index.dart';
-import 'package:rcp/core/functions/user_profile/index.dart';
 import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/models/user_session.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
-import 'package:rcp/core/types/user_session.dart';
 import 'package:rcp/environment.dart';
-import 'package:rcp/modules/authentication_module/auth_router.dart';
 
 class AuthServie {
   final SupabaseClient _supabase;
-  AuthServie({required SupabaseClient supabase}) : _supabase = supabase {
-    _supabase.auth.onAuthStateChange.listen((event) async {
-      await hasProfile(force: true);
-      switch (event.event) {
-        case AuthChangeEvent.signedOut:
-          _timer?.cancel();
-          _timer = null;
-          break;
-        default:
-          if (event.session != null) {
-            await setupRefreshTokenTimer();
-          }
-      }
-    });
-  }
+  AuthServie({required SupabaseClient supabase}) : _supabase = supabase;
 
   bool get isLoggedIn => _supabase.auth.currentSession != null;
 
@@ -51,8 +34,6 @@ class AuthServie {
         throw Exception('Invalid login');
       }
       await _supabase.auth.refreshSession();
-
-      await hasProfile(force: true);
 
       return (user: user, session: session);
     } on AuthException catch (e) {
@@ -160,7 +141,6 @@ class AuthServie {
       final User? user = _supabase.auth.currentUser;
       return user;
     } catch (e) {
-      locator.logger.error(e);
       return null;
     }
   }
@@ -190,19 +170,6 @@ class AuthServie {
     locator.get<NotificationBannerService>().showErrorBanner(message);
   }
 
-  Timer? _timer;
-  Future<void> setupRefreshTokenTimer() async {
-    _timer ??= Timer.periodic(const Duration(seconds: 1800), (_) async {
-      try {
-        locator.logger.warn("Timer.periodic: Refresh user session");
-        await restoreSession();
-      } catch (e) {
-        locator.logger.error("Timer.periodic: Error: $e");
-        await logout();
-      }
-    });
-  }
-
   Future<void> logout() async {
     try {
       final prefs = locator.get<SharedPreferences>();
@@ -212,46 +179,12 @@ class AuthServie {
       final nav = locator.get<GlobalKey<NavigatorState>>();
       if (nav.currentContext != null) {
         Router.neglect(nav.currentContext!, () {
-          nav.currentContext!.goNamed(signinRoute.name);
+          nav.currentContext!.go('/');
         });
       }
     } catch (e) {
       locator.logger.error("logout: $e");
       rethrow;
-    }
-  }
-
-  Future<void> delete() async {
-    try {
-      await _supabase.userDelete();
-      logout();
-    } catch (e) {
-      locator.logger.error("logout: $e");
-      rethrow;
-    }
-  }
-
-  bool? _hasProfile;
-  Future<bool> hasProfile({bool force = false}) async {
-    if (_hasProfile == null || force) {
-      return await _checkUserHasProfile();
-    }
-    return _hasProfile ?? false;
-  }
-
-  Future<bool> _checkUserHasProfile() async {
-    try {
-      if (!isLoggedIn) {
-        throw const AuthException("Not LoggedIn");
-      }
-      final userProfile = await _supabase.userProfileGet();
-      locator.logger.info(userProfile);
-      _hasProfile = true;
-      return _hasProfile!;
-    } catch (e) {
-      locator.logger.error(e is AuthException ? e.message : e);
-      _hasProfile = false;
-      return _hasProfile!;
     }
   }
 }

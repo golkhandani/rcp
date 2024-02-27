@@ -3,26 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:customizable_space_bar/customizable_space_bar.dart';
 import 'package:gap/gap.dart';
 
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/gen/assets.gen.dart';
-import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class SliverProfileHeader extends StatefulWidget {
   final String? username;
   final String? avatarUrl;
   final bool isLoadingAvatar;
-  final bool isLoadingUsername;
+  final bool isUpdating;
   final VoidCallback onEditAvatarClicked;
-  final void Function(String) onEditUsernameCompleted;
+  final void Function() onEditClicked;
+  final void Function() onDoneClicked;
+  final bool isEditing;
   const SliverProfileHeader({
     super.key,
     this.avatarUrl,
     this.isLoadingAvatar = false,
-    this.isLoadingUsername = false,
+    this.isUpdating = false,
     this.username,
     required this.onEditAvatarClicked,
-    required this.onEditUsernameCompleted,
+    required this.onEditClicked,
+    required this.onDoneClicked,
+    this.isEditing = false,
   });
 
   @override
@@ -30,20 +34,6 @@ class SliverProfileHeader extends StatefulWidget {
 }
 
 class _SliverProfileHeaderState extends State<SliverProfileHeader> {
-  late String _username = widget.username ?? '-';
-  late TextEditingController _usernameController =
-      TextEditingController(text: _username);
-
-  bool _editing = false;
-  bool get _editingUsername => _editing || widget.isLoadingUsername;
-
-  @override
-  void didUpdateWidget(covariant SliverProfileHeader oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _username = widget.username ?? '-';
-    _usernameController = TextEditingController(text: _username);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -67,11 +57,13 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                     children: [
                       Expanded(
                         child: MouseRegion(
-                          cursor: _editing
+                          cursor: widget.isEditing
                               ? SystemMouseCursors.click
                               : SystemMouseCursors.basic,
                           child: GestureDetector(
-                            onTap: _editing ? widget.onEditAvatarClicked : null,
+                            onTap: widget.isEditing
+                                ? widget.onEditAvatarClicked
+                                : null,
                             child: FittedBox(
                               fit: BoxFit.cover,
                               child: Badge(
@@ -79,7 +71,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                   horizontal: 8,
                                   vertical: 4,
                                 ),
-                                isLabelVisible: _editing,
+                                isLabelVisible: widget.isEditing,
                                 backgroundColor:
                                     context.colorTheme.onNavBackground,
                                 largeSize: 32,
@@ -87,7 +79,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                 offset: const Offset(0, -16),
                                 label: Row(children: [
                                   AnimatedOpacity(
-                                    opacity: _editing ? 1 : 0,
+                                    opacity: widget.isEditing ? 1 : 0,
                                     duration: const Duration(milliseconds: 400),
                                     child: Icon(
                                       Icons.edit,
@@ -131,31 +123,6 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                         ),
                       ),
                       const Gap(8),
-                      AnimatedCrossFade(
-                        firstChild: SizedBox(
-                          height: 50,
-                          child: Center(
-                            child: Text(
-                              _username,
-                              maxLines: 1,
-                              style: context
-                                  .typoraphyTheme.onNavBackground.textStyle,
-                            ),
-                          ),
-                        ),
-                        secondChild: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: BasicTextInput(
-                            fieldName: 'username_field',
-                            controller: _usernameController,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        crossFadeState: !_editingUsername
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                        duration: const Duration(milliseconds: 200),
-                      ),
                     ],
                   ),
                 ),
@@ -164,16 +131,16 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                   top: 0,
                   child: BasicLinkButton(
                     foreground: context.colorTheme.onNavBackground,
-                    labelText: _editing ? 'Done' : 'Edit',
-                    onPressed: () {
-                      if (_username != _usernameController.text) {
-                        widget
-                            .onEditUsernameCompleted(_usernameController.text);
-                      }
-                      setState(() {
-                        _editing = !_editing;
-                      });
-                    },
+                    labelText: widget.isUpdating
+                        ? '...'
+                        : widget.isEditing
+                            ? 'Done'
+                            : 'Edit',
+                    onPressed: widget.isUpdating
+                        ? () {}
+                        : widget.isEditing
+                            ? widget.onDoneClicked
+                            : widget.onEditClicked,
                   ),
                 )
               ],

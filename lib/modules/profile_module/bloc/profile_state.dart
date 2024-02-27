@@ -10,6 +10,7 @@ import 'package:rcp/core/functions/user_username_is_available/index.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/core/services/profile_manager_service.dart';
 
 part 'profile_state.freezed.dart';
 part 'profile_state.g.dart';
@@ -17,14 +18,16 @@ part 'profile_state.g.dart';
 @freezed
 class ProfileBlocState with _$ProfileBlocState {
   const factory ProfileBlocState({
+    required bool isEditing,
+    required bool isUpdating,
     required bool isLoading,
     required bool isLoadingAvatar,
-    required bool isLoadingUsername,
     UserInfo? user,
   }) = _ProfileBlocState;
 
   factory ProfileBlocState.init() => const ProfileBlocState(
-        isLoadingUsername: false,
+        isEditing: false,
+        isUpdating: false,
         isLoadingAvatar: false,
         isLoading: false,
       );
@@ -33,17 +36,66 @@ class ProfileBlocState with _$ProfileBlocState {
 }
 
 class ProfileBloc extends Cubit<ProfileBlocState> {
+  final StackLogger _logger = locator.console('ProfileBloc');
   final SupabaseClient supabase;
+  final ProfileManagerService profileManagerService;
   final NotificationBannerService banner;
 
   ProfileBloc({
     required this.supabase,
     required this.banner,
+    required this.profileManagerService,
   }) : super(ProfileBlocState.init());
 
-  getUserInfo() async {
-    emit(state.copyWith(isLoading: true));
+  enableEditing() {
+    emit(state.copyWith(isEditing: true));
+  }
+
+  createProfile({
+    required String username,
+    required String fullname,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
     try {
+      emit(state.copyWith(isLoading: true));
+      var isAvailable = false;
+      try {
+        final res = await supabase.userUsernameIsAvailable(
+          body: UserUsernameIsAvailableInput(username: username),
+        );
+        isAvailable = res.isAvailable;
+      } catch (e) {
+        _logger.error(e);
+        throw const AuthException('Something Went Wrong!');
+      }
+
+      if (!isAvailable) {
+        _logger.warn('Username is already taken!');
+        throw const AuthException('Username is already taken!');
+      }
+      await supabase.userProfileUpdate(
+        body: UserProfileUpdateInput(
+          username: username,
+          fullName: fullname,
+        ),
+      );
+      await profileManagerService.hasValidProfile(forceCheck: true);
+      onSuccess();
+    } catch (e) {
+      _logger.error(e);
+      banner.showErrorBanner(
+        e is AuthException ? e.message : 'Something went wrong!',
+      );
+      onFailure();
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  getUserInfo() async {
+    try {
+      emit(state.copyWith(isLoading: true));
       final user = supabase.auth.currentUser;
       if (user == null) return;
 
@@ -65,11 +117,31 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
     }
   }
 
-  updateProfileUsername({
+  updateProfileDetails({
     required String username,
+    required String fullname,
   }) async {
+    UserProfile? currentProfile = state.user?.profile;
     try {
-      emit(state.copyWith(isLoadingUsername: true));
+      if (currentProfile?.fullName == fullname &&
+          currentProfile?.username == username) {
+        emit(state.copyWith(isEditing: false));
+        return;
+      }
+      if (state.user == null) {
+        return;
+      }
+      currentProfile = state.user!.profile;
+      emit(
+        state.copyWith(
+          isUpdating: true,
+          user: state.user!.copyWith(
+            profile: currentProfile.copyWith(
+              username: username,
+            ),
+          ),
+        ),
+      );
       final user = state.user;
       if (user == null) return;
 
@@ -82,32 +154,38 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
         throw const AuthException('Username is already taken!');
       }
 
-      final updatedUserProfile = await supabase.userProfileUpdate(
+      currentProfile = await supabase.userProfileUpdate(
         body: UserProfileUpdateInput(
           username: username,
+          fullName: fullname,
         ),
       );
-
-      final userData = state.user?.copyWith(
-        profile: updatedUserProfile,
-      );
-
-      emit(state.copyWith(user: userData));
-    } on Exception catch (error) {
+      emit(state.copyWith(isEditing: false));
+    } on Exception catch (e) {
       var code = 0;
-      if (error is AuthException) {
-        banner.showErrorBanner(error.message);
+      if (e is AuthException) {
+        banner.showErrorBanner(e.message);
         rethrow;
       }
 
-      if (error is StorageException) {
-        code = int.tryParse(error.statusCode ?? '-1') ?? 0;
+      if (e is StorageException) {
+        code = int.tryParse(e.statusCode ?? '-1') ?? 0;
       }
-      locator.logger.error(error);
+      _logger.error(e);
       banner.showErrorBanner("Something went wrong! ($code)");
       rethrow;
     } finally {
-      emit(state.copyWith(isLoadingUsername: false));
+      if (currentProfile == null) {
+        emit(state.copyWith(isUpdating: false));
+      } else {
+        final userData = state.user?.copyWith(
+          profile: currentProfile,
+        );
+        emit(state.copyWith(
+          isUpdating: false,
+          user: userData,
+        ));
+      }
     }
   }
 
@@ -139,16 +217,16 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       );
 
       emit(state.copyWith(user: userData));
-    } on Exception catch (error) {
+    } on Exception catch (e) {
       var code = 0;
-      if (error is AuthException) {
-        code = int.tryParse(error.statusCode ?? '-1') ?? 0;
+      if (e is AuthException) {
+        code = int.tryParse(e.statusCode ?? '-1') ?? 0;
       }
 
-      if (error is StorageException) {
-        code = int.tryParse(error.statusCode ?? '-1') ?? 0;
+      if (e is StorageException) {
+        code = int.tryParse(e.statusCode ?? '-1') ?? 0;
       }
-      locator.logger.error(error);
+      _logger.error(e);
       banner.showErrorBanner("Something went wrong! ($code)");
     } finally {
       emit(state.copyWith(isLoadingAvatar: false));

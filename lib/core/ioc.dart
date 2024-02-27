@@ -8,18 +8,22 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/services/auth_service.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/core/services/profile_manager_service.dart';
+import 'package:rcp/core/services/session_manager_service.dart';
 import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
+import 'package:rcp/modules/home_module/bloc/home_bloc.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 
 GetIt locator = GetIt.instance;
 
 class StackLogger {
   final SimpleLogger _logger;
+  final String debugName;
 
-  StackLogger() : _logger = SimpleLogger() {
-    _logger.formatter =
-        (info) => '${_logger.levelPrefixes[info.level]} ====> ${info.message}';
+  StackLogger(this.debugName) : _logger = SimpleLogger() {
+    _logger.formatter = (info) =>
+        '${List.generate(100, (_) => '_').join()} \n${_logger.levelPrefixes[info.level]} ${info.message}';
   }
 
   StackTrace get stack => StackTrace.current;
@@ -34,7 +38,7 @@ class StackLogger {
   }
 
   String _getLog(Object? object, StackTrace? stack) {
-    return '\n==> Type: ${object.runtimeType} \n==> Message: ${_getMessage(object)} \n==> Stack: $stack \n${List.generate(100, (_) => '_').join()}';
+    return '| $debugName \n==> Type: ${object.runtimeType} \n==> Message: ${_getMessage(object)} \n==> Stack: $stack \n${List.generate(100, (_) => '_').join()}';
   }
 
   info(Object? object) {
@@ -51,12 +55,16 @@ class StackLogger {
 }
 
 extension LoggerLocator on GetIt {
-  StackLogger get logger => GetIt.instance.get<StackLogger>();
+  StackLogger console(String debugName) => locator.get<StackLogger>(
+        param1: debugName,
+      );
+
+  StackLogger get logger => console("GENERAL LOGGER!");
 }
 
 Future<void> setupLogger() async {
-  final logger = StackLogger();
-  locator.registerSingleton(logger);
+  locator.registerFactoryParam<StackLogger, String, void>(
+      (s, _) => StackLogger(s));
 }
 
 Future<void> setupStorage() async {
@@ -72,12 +80,28 @@ Future<void> setupStorage() async {
 
   // PREF
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  locator.registerLazySingleton(() => prefs);
+  locator.registerSingleton(prefs);
 }
 
 Future<void> setupSupabaseRepo() async {
   final supabase = Supabase.instance.client;
-  locator.registerLazySingleton(() => supabase);
+  locator.registerSingleton<SupabaseClient>(supabase);
+
+  locator.registerLazySingleton<SessionManagerService>(
+    () => SessionManagerService(
+      supabase: locator.get(),
+      prefs: locator.get(),
+      navigatorState: locator.get(),
+      bannerService: locator.get(),
+    ),
+  );
+
+  locator.registerLazySingleton<ProfileManagerService>(
+    () => ProfileManagerService(
+      supabase: locator.get(),
+    ),
+  );
+
   locator.registerLazySingleton(
     () => AuthServie(
       supabase: locator.get(),
@@ -93,6 +117,7 @@ Future<void> setupNavigator() async {
 }
 
 Future<void> setupBloc() async {
+  // Register Global-Level Blocs
   locator.registerFactory(
     () => AppTenancyBloc(
       prefs: locator.get(),
@@ -106,10 +131,21 @@ Future<void> setupBloc() async {
       authServie: locator.get(),
       banner: locator.get(),
       supabase: locator.get(),
+      sessionManagerService: locator.get(),
+      profileManagerService: locator.get(),
     ),
   );
   locator.registerFactory(
     () => ProfileBloc(
+      supabase: locator.get(),
+      profileManagerService: locator.get(),
+      banner: locator.get(),
+    ),
+  );
+
+  // Register Screen-Level Blocs
+  locator.registerFactory(
+    () => HomeBloc(
       supabase: locator.get(),
       banner: locator.get(),
     ),
@@ -117,10 +153,15 @@ Future<void> setupBloc() async {
 }
 
 Future<void> setupLocator() async {
+  // Basics
   await setupLogger();
+  await setupNavigator();
   await setupStorage();
 
+  // Logic flow
+
   await setupSupabaseRepo();
-  await setupNavigator();
   await setupBloc();
+
+  locator.logger.info("SetupLocator -> done!");
 }

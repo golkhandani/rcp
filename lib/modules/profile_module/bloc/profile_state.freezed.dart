@@ -20,9 +20,10 @@ ProfileBlocState _$ProfileBlocStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProfileBlocState {
+  bool get isEditing => throw _privateConstructorUsedError;
+  bool get isUpdating => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isLoadingAvatar => throw _privateConstructorUsedError;
-  bool get isLoadingUsername => throw _privateConstructorUsedError;
   UserInfo? get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,9 +39,10 @@ abstract class $ProfileBlocStateCopyWith<$Res> {
       _$ProfileBlocStateCopyWithImpl<$Res, ProfileBlocState>;
   @useResult
   $Res call(
-      {bool isLoading,
+      {bool isEditing,
+      bool isUpdating,
+      bool isLoading,
       bool isLoadingAvatar,
-      bool isLoadingUsername,
       UserInfo? user});
 
   $UserInfoCopyWith<$Res>? get user;
@@ -59,12 +61,21 @@ class _$ProfileBlocStateCopyWithImpl<$Res, $Val extends ProfileBlocState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isEditing = null,
+    Object? isUpdating = null,
     Object? isLoading = null,
     Object? isLoadingAvatar = null,
-    Object? isLoadingUsername = null,
     Object? user = freezed,
   }) {
     return _then(_value.copyWith(
+      isEditing: null == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isUpdating: null == isUpdating
+          ? _value.isUpdating
+          : isUpdating // ignore: cast_nullable_to_non_nullable
+              as bool,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -72,10 +83,6 @@ class _$ProfileBlocStateCopyWithImpl<$Res, $Val extends ProfileBlocState>
       isLoadingAvatar: null == isLoadingAvatar
           ? _value.isLoadingAvatar
           : isLoadingAvatar // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingUsername: null == isLoadingUsername
-          ? _value.isLoadingUsername
-          : isLoadingUsername // ignore: cast_nullable_to_non_nullable
               as bool,
       user: freezed == user
           ? _value.user
@@ -106,9 +113,10 @@ abstract class _$$ProfileBlocStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isLoading,
+      {bool isEditing,
+      bool isUpdating,
+      bool isLoading,
       bool isLoadingAvatar,
-      bool isLoadingUsername,
       UserInfo? user});
 
   @override
@@ -126,12 +134,21 @@ class __$$ProfileBlocStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? isEditing = null,
+    Object? isUpdating = null,
     Object? isLoading = null,
     Object? isLoadingAvatar = null,
-    Object? isLoadingUsername = null,
     Object? user = freezed,
   }) {
     return _then(_$ProfileBlocStateImpl(
+      isEditing: null == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isUpdating: null == isUpdating
+          ? _value.isUpdating
+          : isUpdating // ignore: cast_nullable_to_non_nullable
+              as bool,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -139,10 +156,6 @@ class __$$ProfileBlocStateImplCopyWithImpl<$Res>
       isLoadingAvatar: null == isLoadingAvatar
           ? _value.isLoadingAvatar
           : isLoadingAvatar // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingUsername: null == isLoadingUsername
-          ? _value.isLoadingUsername
-          : isLoadingUsername // ignore: cast_nullable_to_non_nullable
               as bool,
       user: freezed == user
           ? _value.user
@@ -158,26 +171,29 @@ class _$ProfileBlocStateImpl
     with DiagnosticableTreeMixin
     implements _ProfileBlocState {
   const _$ProfileBlocStateImpl(
-      {required this.isLoading,
+      {required this.isEditing,
+      required this.isUpdating,
+      required this.isLoading,
       required this.isLoadingAvatar,
-      required this.isLoadingUsername,
       this.user});
 
   factory _$ProfileBlocStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileBlocStateImplFromJson(json);
 
   @override
+  final bool isEditing;
+  @override
+  final bool isUpdating;
+  @override
   final bool isLoading;
   @override
   final bool isLoadingAvatar;
-  @override
-  final bool isLoadingUsername;
   @override
   final UserInfo? user;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProfileBlocState(isLoading: $isLoading, isLoadingAvatar: $isLoadingAvatar, isLoadingUsername: $isLoadingUsername, user: $user)';
+    return 'ProfileBlocState(isEditing: $isEditing, isUpdating: $isUpdating, isLoading: $isLoading, isLoadingAvatar: $isLoadingAvatar, user: $user)';
   }
 
   @override
@@ -185,9 +201,10 @@ class _$ProfileBlocStateImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ProfileBlocState'))
+      ..add(DiagnosticsProperty('isEditing', isEditing))
+      ..add(DiagnosticsProperty('isUpdating', isUpdating))
       ..add(DiagnosticsProperty('isLoading', isLoading))
       ..add(DiagnosticsProperty('isLoadingAvatar', isLoadingAvatar))
-      ..add(DiagnosticsProperty('isLoadingUsername', isLoadingUsername))
       ..add(DiagnosticsProperty('user', user));
   }
 
@@ -196,19 +213,21 @@ class _$ProfileBlocStateImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProfileBlocStateImpl &&
+            (identical(other.isEditing, isEditing) ||
+                other.isEditing == isEditing) &&
+            (identical(other.isUpdating, isUpdating) ||
+                other.isUpdating == isUpdating) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.isLoadingAvatar, isLoadingAvatar) ||
                 other.isLoadingAvatar == isLoadingAvatar) &&
-            (identical(other.isLoadingUsername, isLoadingUsername) ||
-                other.isLoadingUsername == isLoadingUsername) &&
             (identical(other.user, user) || other.user == user));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, isLoading, isLoadingAvatar, isLoadingUsername, user);
+      runtimeType, isEditing, isUpdating, isLoading, isLoadingAvatar, user);
 
   @JsonKey(ignore: true)
   @override
@@ -227,20 +246,23 @@ class _$ProfileBlocStateImpl
 
 abstract class _ProfileBlocState implements ProfileBlocState {
   const factory _ProfileBlocState(
-      {required final bool isLoading,
+      {required final bool isEditing,
+      required final bool isUpdating,
+      required final bool isLoading,
       required final bool isLoadingAvatar,
-      required final bool isLoadingUsername,
       final UserInfo? user}) = _$ProfileBlocStateImpl;
 
   factory _ProfileBlocState.fromJson(Map<String, dynamic> json) =
       _$ProfileBlocStateImpl.fromJson;
 
   @override
+  bool get isEditing;
+  @override
+  bool get isUpdating;
+  @override
   bool get isLoading;
   @override
   bool get isLoadingAvatar;
-  @override
-  bool get isLoadingUsername;
   @override
   UserInfo? get user;
   @override

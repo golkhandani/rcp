@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:rcp/core/ioc.dart';
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/dashboard_shell.dart';
-import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/core/widgets/layouts/dashboard_shell.dart';
+import 'package:rcp/core/widgets/layouts/scaffold_shell.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 import 'package:rcp/modules/home_module/home_module.dart';
@@ -55,7 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     DashboardLink(
       iconData: Icons.person,
       label: 'Profile',
-      routeName: profileRoute.name,
+      routeName: ProfileScreen.route.name,
       index: 3,
       color: context.colorTheme.navBackground,
     ),

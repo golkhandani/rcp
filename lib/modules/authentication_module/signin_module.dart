@@ -7,18 +7,27 @@ import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/scaffold_shell.dart';
+import 'package:rcp/core/extensions/context_go_extension.dart';
+import 'package:rcp/core/go_route_named.dart';
+import 'package:rcp/core/widgets/layouts/scaffold_shell.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
 import 'package:rcp/modules/authentication_module/reset_password_module.dart';
 import 'package:rcp/modules/authentication_module/signup_module.dart';
 import 'package:rcp/modules/dashboard_module/dashboard_router.dart';
-import 'package:rcp/utils/extensions/context_go_extension.dart';
 
 class SigninScreen extends StatefulWidget {
+  static final route = GoRouteNamedPage(
+    path: 'signin',
+    name: 'signin',
+    pageBuilder: (context, state) => fadeTransitionPageBuilder(
+      pageKey: state.pageKey,
+      child: const SigninScreen(),
+    ),
+  );
   const SigninScreen({super.key});
 
   @override

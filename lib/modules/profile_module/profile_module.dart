@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/models/user/user_data.dart';
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/dashboard_screen_shell.dart';
-import 'package:rcp/core/widgets/sliver_profile_header.dart';
-import 'package:rcp/core/widgets/sliver_title_bar.dart';
+import 'package:rcp/core/widgets/headers/sliver_profile_header.dart';
+import 'package:rcp/core/widgets/headers/sliver_title_bar.dart';
+import 'package:rcp/core/widgets/layouts/dashboard_screen_shell.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/packages/components/card_container.dart';
-import 'package:rcp/utils/extensions/context_ui_extension.dart';
-
-final profileRoute = GoRouteNamed(
-  path: '/dashboard/profile',
-  name: 'profile',
-  builder: (context, state) => const ProfileScreen(),
-);
 
 class ProfileScreen extends StatefulWidget {
+  static final route = GoRouteNamed(
+    path: '/dashboard/profile',
+    name: 'profile',
+    builder: (context, state) => const ProfileScreen(),
+  );
   const ProfileScreen({super.key});
 
   @override
@@ -33,6 +32,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileBloc _profileBloc = context.read();
   late final AuthenticationCubit _authenticationCubit = context.read();
 
+  late final TextEditingController _usernameController =
+      TextEditingController();
+  late final TextEditingController _fullnameController =
+      TextEditingController();
+
   void _logout() {
     _authenticationCubit.logout();
   }
@@ -42,13 +46,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _usernameController.text = _profileBloc.state.user?.username ?? '';
+    _fullnameController.text = _profileBloc.state.user?.fullName ?? '';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DashboardScreenShell(
       useSafeArea: false,
       child: CustomScrollView(
         slivers: [
-          BlocBuilder<ProfileBloc, ProfileBlocState>(
+          BlocConsumer<ProfileBloc, ProfileBlocState>(
             bloc: _profileBloc,
+            listener: (context, state) =>
+                _usernameController.text = state.user?.username ?? '',
             builder: (context, state) {
               if (state.user == null) {
                 return const SliverTitleBar(title: '-');
@@ -56,13 +69,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return MultiSliver(
                 children: [
                   SliverProfileHeader(
-                    username: state.user?.profile.username,
-                    avatarUrl: state.user?.profile.avatarUrl,
+                    username: state.user!.profile.username,
+                    avatarUrl: state.user!.profile.avatarUrl,
                     isLoadingAvatar: state.isLoadingAvatar,
-                    isLoadingUsername: state.isLoadingUsername,
+                    isUpdating: state.isUpdating,
                     onEditAvatarClicked: _profileBloc.updateProfileImage,
-                    onEditUsernameCompleted: (username) =>
-                        _profileBloc.updateProfileUsername(username: username),
+                    onEditClicked: _profileBloc.enableEditing,
+                    onDoneClicked: () {
+                      _profileBloc.updateProfileDetails(
+                        username: _usernameController.text,
+                        fullname: _fullnameController.text,
+                      );
+                    },
+                    isEditing: state.isEditing,
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.all(16),
@@ -74,29 +93,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Email: ${state.user!.email}',
-                                maxLines: 2,
-                                style: context.typoraphyTheme.subtitleLarge
-                                    .onTertiary.textStyle,
+                              SizedBox(
+                                height: 50,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Email: ${state.user!.email}',
+                                    maxLines: 2,
+                                    style: context.typoraphyTheme.subtitleLarge
+                                        .onTertiary.textStyle,
+                                  ).animate().fade().scale(),
+                                ),
                               ),
-                              Text(
-                                'Full Name: ${state.user!.fullName}',
-                                maxLines: 2,
-                                style: context.typoraphyTheme.subtitleLarge
-                                    .onTertiary.textStyle,
+                              AnimatedCrossFade(
+                                firstChild: SizedBox(
+                                  height: 50,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Username: ${state.user!.username}',
+                                      maxLines: 1,
+                                      style: context
+                                          .typoraphyTheme
+                                          .subtitleLarge
+                                          .onNavBackground
+                                          .textStyle,
+                                    ).animate().fade().scale(),
+                                  ),
+                                ),
+                                secondChild: BasicTextInput(
+                                  fieldName: 'username_field',
+                                  controller: _usernameController,
+                                ),
+                                crossFadeState: !state.isEditing
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                                duration: const Duration(milliseconds: 200),
+                              ),
+                              AnimatedCrossFade(
+                                firstChild: SizedBox(
+                                  height: 50,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Full Name: ${state.user!.fullName}',
+                                      maxLines: 1,
+                                      style: context
+                                          .typoraphyTheme
+                                          .subtitleLarge
+                                          .onNavBackground
+                                          .textStyle,
+                                    ).animate().fade().scale(),
+                                  ),
+                                ),
+                                secondChild: BasicTextInput(
+                                  fieldName: 'fullname_field',
+                                  controller: _fullnameController,
+                                ),
+                                crossFadeState: !state.isEditing
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                                duration: const Duration(milliseconds: 200),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      SliverGap(context.vHeight -
-                          106 -
-                          240 -
-                          148 -
-                          64 -
-                          context.bottomSafePadding -
-                          context.topSafePadding),
+                      const SliverGap(16),
                       SliverToBoxAdapter(
                         child: BasicElevatedButton(
                           background: context.colorTheme.warning,

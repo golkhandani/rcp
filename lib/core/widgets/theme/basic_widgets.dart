@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gap/gap.dart';
 
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/gen/assets.gen.dart';
-import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class BasicElevatedButton extends StatelessWidget {
   final bool isLoading;

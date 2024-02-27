@@ -9,51 +9,48 @@ import 'package:rcp/modules/authentication_module/reset_password_module.dart';
 import 'package:rcp/modules/authentication_module/signin_module.dart';
 import 'package:rcp/modules/authentication_module/signup_module.dart';
 
+fadeTransitionPageBuilder({
+  required ValueKey<String> pageKey,
+  required Widget child,
+}) {
+  return CustomTransitionPage<void>(
+    key: pageKey,
+    restorationId: pageKey.value,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        FadeTransition(opacity: animation, child: child),
+    child: const SigninScreen(),
+  );
+}
+
 final authRoute = GoRouteNamed(
   path: '/auth',
   name: 'auth',
-  builder: (context, state) => const Placeholder(),
-  redirect: (context, state) =>
-      state.fullPath == '/auth' ? state.namedLocation(signinRoute.name) : null,
+  builder: (context, state) => const SizedBox.expand(),
+  redirect: (context, state) => state.fullPath == '/auth'
+      ? state.namedLocation(SigninScreen.route.name)
+      : null,
   routes: [
-    signinRoute,
+    SigninScreen.route,
     resetPasswordRoute,
     updatePasswordRoute,
     signupRoute,
   ],
 );
 
-final signinRoute = GoRouteNamedPage(
-  path: 'signin',
-  name: 'signin',
-  pageBuilder: (context, state) => CustomTransitionPage<void>(
-    key: state.pageKey,
-    restorationId: state.pageKey.value,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        FadeTransition(opacity: animation, child: child),
-    child: const SigninScreen(),
-  ),
-);
-
 final signupRoute = GoRouteNamedPage(
   path: 'signup',
   name: 'signup',
-  pageBuilder: (context, state) => CustomTransitionPage<void>(
-      key: state.pageKey,
-      restorationId: state.pageKey.value,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(opacity: animation, child: child),
-      child: const SignupScreen()),
+  pageBuilder: (context, state) => fadeTransitionPageBuilder(
+    pageKey: state.pageKey,
+    child: const SignupScreen(),
+  ),
 );
 
 final resetPasswordRoute = GoRouteNamedPage(
   path: 'reset_password',
   name: 'reset_password',
-  pageBuilder: (context, state) => CustomTransitionPage<void>(
-    key: state.pageKey,
-    restorationId: state.pageKey.value,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        FadeTransition(opacity: animation, child: child),
+  pageBuilder: (context, state) => fadeTransitionPageBuilder(
+    pageKey: state.pageKey,
     child: const ResetPasswordScreen(),
   ),
   routes: [
@@ -64,11 +61,17 @@ final resetPasswordRoute = GoRouteNamedPage(
 final confrimOtpCodeRoute = GoRouteNamed(
   path: 'confrim_otp_code',
   name: 'confrim_otp_code',
-  builder: (context, state) => const ConfirmOtpCodeScreen(),
+  builder: (context, state) => fadeTransitionPageBuilder(
+    pageKey: state.pageKey,
+    child: const ConfirmOtpCodeScreen(),
+  ),
 );
 
 final updatePasswordRoute = GoRouteNamed(
   path: 'confrim_password',
   name: 'confrim_password',
-  builder: (context, state) => const ConfirmPasswordScreen(),
+  builder: (context, state) => fadeTransitionPageBuilder(
+    pageKey: state.pageKey,
+    child: const ConfirmPasswordScreen(),
+  ),
 );

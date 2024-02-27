@@ -5,14 +5,21 @@ import 'package:introduction_screen/introduction_screen.dart' as intro;
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/ioc.dart';
-import 'package:rcp/core/theme/basic_widgets.dart';
-import 'package:rcp/core/theme/flex_theme_provider.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/environment.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
-import 'package:rcp/utils/extensions/context_ui_extension.dart';
 
 class OnBoardingScreen extends StatefulWidget {
+  static final route = GoRouteNamedPage(
+    path: '/on_boarding',
+    name: 'on_boarding',
+    pageBuilder: animatedPageBuilder(const OnBoardingScreen()),
+  );
+
   const OnBoardingScreen({super.key});
 
   @override
