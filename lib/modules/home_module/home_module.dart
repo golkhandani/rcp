@@ -97,7 +97,7 @@ class ShoppingListCard extends StatelessWidget {
       color: context.colorTheme.cardBackground,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16),
+        contentPadding: const EdgeInsets.all(8),
         title: Text(
           item.name,
           style: context.typoraphyTheme.titleSmall.onCardBackground.textStyle,
