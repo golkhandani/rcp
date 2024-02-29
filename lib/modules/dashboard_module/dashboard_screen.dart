@@ -112,8 +112,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: BasicBackgroundContainer(
                     child: MobileFrame(
                       color: context.colorTheme.background,
-                      child: CircularProgressIndicator.adaptive(
-                        backgroundColor: context.colorTheme.onNavUnselected,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
                   ),

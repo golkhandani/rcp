@@ -346,6 +346,8 @@ extension ThemedText on CustomThemeTyporaphy {
       copyWithStyle(fontSize: 0.6 * textStyle.fontSize!);
   CustomThemeTyporaphy get label =>
       copyWithStyle(fontSize: 0.6 * textStyle.fontSize!);
+  CustomThemeTyporaphy get caption =>
+      copyWithStyle(fontSize: 0.58 * textStyle.fontSize!);
 }
 
 extension CustomTheme on BuildContext {

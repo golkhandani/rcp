@@ -110,8 +110,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                                 .withOpacity(0.8),
                                           ),
                                           child: const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
+                                            child: CircularProgressIndicator(),
                                           ),
                                         ),
                                       )

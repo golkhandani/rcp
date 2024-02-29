@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/packages/components/notification_banner.dart';
 
@@ -65,6 +67,29 @@ class NotificationBannerService {
       message: message,
       foregroundStyle: foregroundStyle.textStyle,
       backgroundColor: backgroundColor,
+    );
+  }
+
+  Future<T?> showBottomSheet<T>(Widget child) {
+    return showModalBottomSheet<T>(
+      useRootNavigator: true,
+      useSafeArea: true,
+      backgroundColor: context.colorTheme.cardBackground,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        minHeight: context.vHeight * 0.4,
+        maxHeight: context.vHeight * 0.8,
+        minWidth: context.isNarrowWith ? context.vWidth : 420,
+        maxWidth: context.isNarrowWith ? context.vWidth : 480,
+      ),
+      context: context,
+      builder: (context) {
+        return IntrinsicHeight(
+          child: BasicBottomModalSheetFrame(
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

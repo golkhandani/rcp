@@ -1,37 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'shopping_list_model.dart';
+part of 'invitation_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ShoppingListModelImpl _$$ShoppingListModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ShoppingListModelImpl(
+_$InvitationImpl _$$InvitationImplFromJson(Map<String, dynamic> json) =>
+    _$InvitationImpl(
       id: json['id'] as String,
+      invited: Participant.fromJson(json['invited'] as Map<String, dynamic>),
+      invitedBy:
+          Participant.fromJson(json['invitedBy'] as Map<String, dynamic>),
+      shoppingListId: json['shoppingListId'] as String,
       name: json['name'] as String,
       description: json['description'] as String?,
-      participants: (json['participants'] as List<dynamic>)
-          .map((e) => Participant.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      items: (json['items'] as List<dynamic>)
-          .map((e) => ShoppingItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       createdBy: json['createdBy'] as String,
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       updatedBy: json['updatedBy'] as String,
     );
 
-Map<String, dynamic> _$$ShoppingListModelImplToJson(
-        _$ShoppingListModelImpl instance) =>
+Map<String, dynamic> _$$InvitationImplToJson(_$InvitationImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'invited': instance.invited.toJson(),
+      'invitedBy': instance.invitedBy.toJson(),
+      'shoppingListId': instance.shoppingListId,
       'name': instance.name,
       'description': instance.description,
-      'participants': instance.participants.map((e) => e.toJson()).toList(),
-      'items': instance.items.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt.toIso8601String(),
       'createdBy': instance.createdBy,
       'updatedAt': instance.updatedAt.toIso8601String(),

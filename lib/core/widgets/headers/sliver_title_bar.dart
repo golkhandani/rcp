@@ -17,23 +17,21 @@ class SliverTitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPinnedHeader(
-      child: SizedBox(
-        height: 48,
-        child: AppBar(
-          scrolledUnderElevation: elevation ?? 4,
-          elevation: elevation ?? 4,
-          forceMaterialTransparency: false,
-          automaticallyImplyLeading: false,
-          surfaceTintColor: Colors.transparent,
-          toolbarOpacity: 1,
-          backgroundColor: context.colorTheme.navBackground,
-          leading: const MyBackButton(),
-          title: Text(
-            title,
-            style: context.typoraphyTheme.titleSmall.onNavBackground.textStyle,
-          ),
-          shadowColor: Colors.black26,
+      child: AppBar(
+        scrolledUnderElevation: elevation ?? 4,
+        elevation: elevation ?? 4,
+        forceMaterialTransparency: false,
+        automaticallyImplyLeading: false,
+        surfaceTintColor: Colors.transparent,
+        toolbarOpacity: 1,
+        toolbarHeight: 64,
+        backgroundColor: context.colorTheme.navBackground,
+        leading: const MyBackButton(),
+        title: Text(
+          title,
+          style: context.typoraphyTheme.titleSmall.onNavBackground.textStyle,
         ),
+        shadowColor: Colors.black26,
       ),
     );
   }
@@ -57,29 +55,27 @@ class TitleBar extends StatelessWidget {
     final elevate = backgroundColor == Colors.transparent && elevation == null
         ? elevation
         : 4.0;
-    return SizedBox(
-      height: 48,
-      child: AppBar(
-        scrolledUnderElevation: elevate,
-        elevation: elevate,
-        forceMaterialTransparency: false,
-        automaticallyImplyLeading: false,
-        surfaceTintColor: Colors.transparent,
-        toolbarOpacity: 1,
-        backgroundColor: backgroundColor ?? context.colorTheme.navBackground,
-        leading: MyBackButton(
-          color: foregroundColor,
-        ),
-        title: Text(
-          title,
-          style: context.typoraphyTheme.titleSmall
-              .copyWithColor(
-                color: foregroundColor ?? context.colorTheme.onNavBackground,
-              )
-              .textStyle,
-        ),
-        shadowColor: Colors.black26,
+    return AppBar(
+      scrolledUnderElevation: elevate,
+      elevation: elevate,
+      forceMaterialTransparency: false,
+      automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
+      toolbarOpacity: 1,
+      toolbarHeight: 64,
+      backgroundColor: backgroundColor ?? context.colorTheme.navBackground,
+      leading: MyBackButton(
+        color: foregroundColor,
       ),
+      title: Text(
+        title,
+        style: context.typoraphyTheme.titleSmall
+            .copyWithColor(
+              color: foregroundColor ?? context.colorTheme.onNavBackground,
+            )
+            .textStyle,
+      ),
+      shadowColor: Colors.black26,
     );
   }
 }

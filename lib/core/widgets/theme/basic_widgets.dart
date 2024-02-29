@@ -13,7 +13,8 @@ import 'package:rcp/gen/assets.gen.dart';
 class BasicElevatedButton extends StatelessWidget {
   final bool isLoading;
   final String labelText;
-  final VoidCallback onPressed;
+  final Widget? labelWidget;
+  final VoidCallback? onPressed;
   final EdgeInsets padding;
   final double height;
   final double width;
@@ -24,6 +25,7 @@ class BasicElevatedButton extends StatelessWidget {
     super.key,
     required this.labelText,
     required this.onPressed,
+    this.labelWidget,
     this.padding = const EdgeInsets.all(8),
     this.height = 48,
     this.width = double.infinity,
@@ -48,13 +50,14 @@ class BasicElevatedButton extends StatelessWidget {
             ? null
             : Size(constraints!.minWidth, constraints!.minHeight),
         splashFactory: NoSplash.splashFactory,
-        shadowColor: Colors.black45,
+        shadowColor: Colors.black87,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         surfaceTintColor: Colors.transparent,
         backgroundColor: c,
         foregroundColor: f,
+        elevation: 4,
       ),
       onPressed: isLoading ? () {} : onPressed,
       child: isLoading
@@ -65,10 +68,70 @@ class BasicElevatedButton extends StatelessWidget {
                 color: f,
               ),
             )
-          : Text(
-              labelText,
-              style: context.typoraphyTheme.subtitleMedium.textStyle,
-            ),
+          : labelWidget ??
+              Text(
+                labelText,
+                style: context.typoraphyTheme.subtitleMedium.textStyle,
+              ),
+    );
+  }
+}
+
+class CircleElevatedButton extends StatelessWidget {
+  final bool isLoading;
+  final String labelText;
+  final Widget? labelWidget;
+  final VoidCallback? onPressed;
+  final EdgeInsets padding;
+  final double radius;
+  final Color? background;
+  final Color? foreground;
+  const CircleElevatedButton({
+    super.key,
+    required this.labelText,
+    required this.onPressed,
+    this.padding = const EdgeInsets.all(8),
+    this.radius = 48,
+    this.background,
+    this.foreground,
+    this.isLoading = false,
+    this.labelWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final c = background ?? context.customTheme.pallete.primary;
+    final f = foreground ?? context.customTheme.pallete.onPrimary;
+    return UnconstrainedBox(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          fixedSize: Size(radius, radius),
+          padding: padding,
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: Colors.black87,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: c,
+          foregroundColor: f,
+          elevation: 4,
+        ),
+        onPressed: isLoading ? () {} : onPressed,
+        child: isLoading
+            ? SizedBox(
+                width: radius / 2,
+                height: radius / 2,
+                child: CircularProgressIndicator(
+                  color: f,
+                ),
+              )
+            : labelWidget ??
+                Text(
+                  labelText,
+                  style: context.typoraphyTheme.subtitleMedium.textStyle,
+                ),
+      ),
     );
   }
 }
@@ -117,6 +180,7 @@ class BasicTextInput extends StatelessWidget {
     required this.fieldName,
     this.controller,
     this.labelText,
+    this.hintText,
     this.suffix,
     this.validator,
     this.keyboardType = TextInputType.none,
@@ -124,6 +188,8 @@ class BasicTextInput extends StatelessWidget {
     this.enabled = true,
     this.inputFormatters = const [],
     this.textAlign = TextAlign.start,
+    this.maxLines = 1,
+    this.maxLength,
   }) : _decorationType = BasicTextInputDecoration.primary;
 
   const BasicTextInput.secondary({
@@ -131,6 +197,7 @@ class BasicTextInput extends StatelessWidget {
     required this.fieldName,
     this.controller,
     this.labelText,
+    this.hintText,
     this.suffix,
     this.validator,
     this.keyboardType = TextInputType.none,
@@ -138,11 +205,14 @@ class BasicTextInput extends StatelessWidget {
     this.enabled = true,
     this.inputFormatters = const [],
     this.textAlign = TextAlign.start,
+    this.maxLines = 1,
+    this.maxLength,
   }) : _decorationType = BasicTextInputDecoration.secondary;
 
   final String fieldName;
   final TextEditingController? controller;
   final String? labelText;
+  final String? hintText;
   final Widget? suffix;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
@@ -150,6 +220,8 @@ class BasicTextInput extends StatelessWidget {
   final bool enabled;
   final List<TextInputFormatter> inputFormatters;
   final TextAlign textAlign;
+  final int maxLines;
+  final int? maxLength;
 
   final BasicTextInputDecoration _decorationType;
 
@@ -188,13 +260,20 @@ class BasicTextInput extends StatelessWidget {
         FormBuilderTextField(
           enabled: enabled,
           name: fieldName,
+          maxLength: maxLength,
           inputFormatters: inputFormatters,
           textAlign: textAlign,
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: controller,
           decoration: decoration.copyWith(
+            hintText: hintText,
             suffixIcon: suffix,
+            contentPadding: EdgeInsets.symmetric(
+              vertical: maxLines > 1 ? 16 : 0,
+              horizontal: 16,
+            ),
           ),
+          maxLines: maxLines,
           keyboardType: keyboardType,
           validator: validator,
           obscureText: obscureText,
@@ -317,14 +396,10 @@ class MobileFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (context.isNarrowWith) {
-    //   return child;
-    // }
-
-    final c = (color ?? context.colorTheme.background).withOpacity(0.3);
+    final c = (color ?? context.colorTheme.background);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(context.isNarrowWith ? 0 : 16),
         child: Material(
           elevation: 0,
           color: c,
@@ -342,6 +417,31 @@ class MobileFrame extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BasicBottomModalSheetFrame extends StatelessWidget {
+  const BasicBottomModalSheetFrame({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        children: [
+          const Icon(Icons.drag_handle),
+          const Gap(16),
+          Expanded(
+            child: SingleChildScrollView(child: child),
+          ),
+        ],
       ),
     );
   }

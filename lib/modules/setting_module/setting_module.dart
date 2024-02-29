@@ -32,6 +32,11 @@ class _SettingScreenState extends State<SettingScreen> {
             title: 'Settings',
             elevation: 0,
           ),
+          SliverFillRemaining(
+            child: Center(
+              child: Text("COMMING SOON!"),
+            ),
+          )
         ],
       ),
     );

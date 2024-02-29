@@ -56,7 +56,7 @@ class AsyncDropdownMenu<T> extends StatelessWidget {
           Colors.transparent,
         ),
         backgroundColor: MaterialStatePropertyAll(
-          context.colorTheme.navBackground,
+          context.colorTheme.cardBackground,
         ),
         shape: MaterialStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),

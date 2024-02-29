@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 50,
+                                height: 48,
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
@@ -107,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               AnimatedCrossFade(
                                 firstChild: SizedBox(
-                                  height: 50,
+                                  height: 48,
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               AnimatedCrossFade(
                                 firstChild: SizedBox(
-                                  height: 50,
+                                  height: 48,
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(

@@ -30,6 +30,7 @@ abstract class UserProfileUpdateInput with _$UserProfileUpdateInput {
 
 @freezed
 abstract class UserProfile with _$UserProfile {
+  const UserProfile._();
   const factory UserProfile({
     @JsonKey(name: 'id') required String id,
     @JsonKey(name: 'user_id') required String userId,
@@ -39,6 +40,8 @@ abstract class UserProfile with _$UserProfile {
     @JsonKey(name: 'created_at') required String createdAt,
     @JsonKey(name: 'updated_at') required String updatedAt,
   }) = _UserProfile;
+
+  String get safeName => fullName ?? username;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
       _$UserProfileFromJson(json);

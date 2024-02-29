@@ -14,6 +14,7 @@ import 'package:rcp/modules/app_bloc/group_tenancy_state.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/home_module/bloc/home_bloc.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
+import 'package:rcp/modules/shopping_list_module/bloc/shopping_list_bloc.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -147,6 +148,14 @@ Future<void> setupBloc() async {
   locator.registerFactory(
     () => HomeBloc(
       supabase: locator.get(),
+      banner: locator.get(),
+    ),
+  );
+
+  locator.registerFactory(
+    () => ShoppingListBloc(
+      supabase: locator.get(),
+      profileManagerService: locator.get(),
       banner: locator.get(),
     ),
   );

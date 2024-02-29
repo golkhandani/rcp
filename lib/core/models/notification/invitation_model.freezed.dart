@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'shopping_list_model.dart';
+part of 'invitation_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,17 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ShoppingListModel _$ShoppingListModelFromJson(Map<String, dynamic> json) {
-  return _ShoppingListModel.fromJson(json);
+Invitation _$InvitationFromJson(Map<String, dynamic> json) {
+  return _Invitation.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ShoppingListModel {
+mixin _$Invitation {
   String get id => throw _privateConstructorUsedError;
+  Participant get invited => throw _privateConstructorUsedError;
+  Participant get invitedBy => throw _privateConstructorUsedError;
+  String get shoppingListId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  List<Participant> get participants => throw _privateConstructorUsedError;
-  List<ShoppingItem> get items => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   String get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -32,32 +33,36 @@ mixin _$ShoppingListModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ShoppingListModelCopyWith<ShoppingListModel> get copyWith =>
+  $InvitationCopyWith<Invitation> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ShoppingListModelCopyWith<$Res> {
-  factory $ShoppingListModelCopyWith(
-          ShoppingListModel value, $Res Function(ShoppingListModel) then) =
-      _$ShoppingListModelCopyWithImpl<$Res, ShoppingListModel>;
+abstract class $InvitationCopyWith<$Res> {
+  factory $InvitationCopyWith(
+          Invitation value, $Res Function(Invitation) then) =
+      _$InvitationCopyWithImpl<$Res, Invitation>;
   @useResult
   $Res call(
       {String id,
+      Participant invited,
+      Participant invitedBy,
+      String shoppingListId,
       String name,
       String? description,
-      List<Participant> participants,
-      List<ShoppingItem> items,
       DateTime createdAt,
       String createdBy,
       DateTime updatedAt,
       String updatedBy});
+
+  $ParticipantCopyWith<$Res> get invited;
+  $ParticipantCopyWith<$Res> get invitedBy;
 }
 
 /// @nodoc
-class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
-    implements $ShoppingListModelCopyWith<$Res> {
-  _$ShoppingListModelCopyWithImpl(this._value, this._then);
+class _$InvitationCopyWithImpl<$Res, $Val extends Invitation>
+    implements $InvitationCopyWith<$Res> {
+  _$InvitationCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -68,10 +73,11 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
   @override
   $Res call({
     Object? id = null,
+    Object? invited = null,
+    Object? invitedBy = null,
+    Object? shoppingListId = null,
     Object? name = null,
     Object? description = freezed,
-    Object? participants = null,
-    Object? items = null,
     Object? createdAt = null,
     Object? createdBy = null,
     Object? updatedAt = null,
@@ -82,6 +88,18 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      invited: null == invited
+          ? _value.invited
+          : invited // ignore: cast_nullable_to_non_nullable
+              as Participant,
+      invitedBy: null == invitedBy
+          ? _value.invitedBy
+          : invitedBy // ignore: cast_nullable_to_non_nullable
+              as Participant,
+      shoppingListId: null == shoppingListId
+          ? _value.shoppingListId
+          : shoppingListId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -90,14 +108,6 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      participants: null == participants
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as List<Participant>,
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<ShoppingItem>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -116,53 +126,88 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
               as String,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipantCopyWith<$Res> get invited {
+    return $ParticipantCopyWith<$Res>(_value.invited, (value) {
+      return _then(_value.copyWith(invited: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ParticipantCopyWith<$Res> get invitedBy {
+    return $ParticipantCopyWith<$Res>(_value.invitedBy, (value) {
+      return _then(_value.copyWith(invitedBy: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$$ShoppingListModelImplCopyWith<$Res>
-    implements $ShoppingListModelCopyWith<$Res> {
-  factory _$$ShoppingListModelImplCopyWith(_$ShoppingListModelImpl value,
-          $Res Function(_$ShoppingListModelImpl) then) =
-      __$$ShoppingListModelImplCopyWithImpl<$Res>;
+abstract class _$$InvitationImplCopyWith<$Res>
+    implements $InvitationCopyWith<$Res> {
+  factory _$$InvitationImplCopyWith(
+          _$InvitationImpl value, $Res Function(_$InvitationImpl) then) =
+      __$$InvitationImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String id,
+      Participant invited,
+      Participant invitedBy,
+      String shoppingListId,
       String name,
       String? description,
-      List<Participant> participants,
-      List<ShoppingItem> items,
       DateTime createdAt,
       String createdBy,
       DateTime updatedAt,
       String updatedBy});
+
+  @override
+  $ParticipantCopyWith<$Res> get invited;
+  @override
+  $ParticipantCopyWith<$Res> get invitedBy;
 }
 
 /// @nodoc
-class __$$ShoppingListModelImplCopyWithImpl<$Res>
-    extends _$ShoppingListModelCopyWithImpl<$Res, _$ShoppingListModelImpl>
-    implements _$$ShoppingListModelImplCopyWith<$Res> {
-  __$$ShoppingListModelImplCopyWithImpl(_$ShoppingListModelImpl _value,
-      $Res Function(_$ShoppingListModelImpl) _then)
+class __$$InvitationImplCopyWithImpl<$Res>
+    extends _$InvitationCopyWithImpl<$Res, _$InvitationImpl>
+    implements _$$InvitationImplCopyWith<$Res> {
+  __$$InvitationImplCopyWithImpl(
+      _$InvitationImpl _value, $Res Function(_$InvitationImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
+    Object? invited = null,
+    Object? invitedBy = null,
+    Object? shoppingListId = null,
     Object? name = null,
     Object? description = freezed,
-    Object? participants = null,
-    Object? items = null,
     Object? createdAt = null,
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
   }) {
-    return _then(_$ShoppingListModelImpl(
+    return _then(_$InvitationImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      invited: null == invited
+          ? _value.invited
+          : invited // ignore: cast_nullable_to_non_nullable
+              as Participant,
+      invitedBy: null == invitedBy
+          ? _value.invitedBy
+          : invitedBy // ignore: cast_nullable_to_non_nullable
+              as Participant,
+      shoppingListId: null == shoppingListId
+          ? _value.shoppingListId
+          : shoppingListId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -172,14 +217,6 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      participants: null == participants
-          ? _value._participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as List<Participant>,
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<ShoppingItem>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -203,45 +240,34 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$ShoppingListModelImpl implements _ShoppingListModel {
-  _$ShoppingListModelImpl(
+class _$InvitationImpl implements _Invitation {
+  _$InvitationImpl(
       {required this.id,
+      required this.invited,
+      required this.invitedBy,
+      required this.shoppingListId,
       required this.name,
-      this.description,
-      required final List<Participant> participants,
-      required final List<ShoppingItem> items,
+      required this.description,
       required this.createdAt,
       required this.createdBy,
       required this.updatedAt,
-      required this.updatedBy})
-      : _participants = participants,
-        _items = items;
+      required this.updatedBy});
 
-  factory _$ShoppingListModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ShoppingListModelImplFromJson(json);
+  factory _$InvitationImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InvitationImplFromJson(json);
 
   @override
   final String id;
   @override
+  final Participant invited;
+  @override
+  final Participant invitedBy;
+  @override
+  final String shoppingListId;
+  @override
   final String name;
   @override
   final String? description;
-  final List<Participant> _participants;
-  @override
-  List<Participant> get participants {
-    if (_participants is EqualUnmodifiableListView) return _participants;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_participants);
-  }
-
-  final List<ShoppingItem> _items;
-  @override
-  List<ShoppingItem> get items {
-    if (_items is EqualUnmodifiableListView) return _items;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_items);
-  }
-
   @override
   final DateTime createdAt;
   @override
@@ -253,21 +279,23 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
 
   @override
   String toString() {
-    return 'ShoppingListModel(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+    return 'Invitation(id: $id, invited: $invited, invitedBy: $invitedBy, shoppingListId: $shoppingListId, name: $name, description: $description, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ShoppingListModelImpl &&
+            other is _$InvitationImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.invited, invited) || other.invited == invited) &&
+            (identical(other.invitedBy, invitedBy) ||
+                other.invitedBy == invitedBy) &&
+            (identical(other.shoppingListId, shoppingListId) ||
+                other.shoppingListId == shoppingListId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            const DeepCollectionEquality()
-                .equals(other._participants, _participants) &&
-            const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.createdBy, createdBy) ||
@@ -283,10 +311,11 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      invited,
+      invitedBy,
+      shoppingListId,
       name,
       description,
-      const DeepCollectionEquality().hash(_participants),
-      const DeepCollectionEquality().hash(_items),
       createdAt,
       createdBy,
       updatedAt,
@@ -295,43 +324,45 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ShoppingListModelImplCopyWith<_$ShoppingListModelImpl> get copyWith =>
-      __$$ShoppingListModelImplCopyWithImpl<_$ShoppingListModelImpl>(
-          this, _$identity);
+  _$$InvitationImplCopyWith<_$InvitationImpl> get copyWith =>
+      __$$InvitationImplCopyWithImpl<_$InvitationImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShoppingListModelImplToJson(
+    return _$$InvitationImplToJson(
       this,
     );
   }
 }
 
-abstract class _ShoppingListModel implements ShoppingListModel {
-  factory _ShoppingListModel(
+abstract class _Invitation implements Invitation {
+  factory _Invitation(
       {required final String id,
+      required final Participant invited,
+      required final Participant invitedBy,
+      required final String shoppingListId,
       required final String name,
-      final String? description,
-      required final List<Participant> participants,
-      required final List<ShoppingItem> items,
+      required final String? description,
       required final DateTime createdAt,
       required final String createdBy,
       required final DateTime updatedAt,
-      required final String updatedBy}) = _$ShoppingListModelImpl;
+      required final String updatedBy}) = _$InvitationImpl;
 
-  factory _ShoppingListModel.fromJson(Map<String, dynamic> json) =
-      _$ShoppingListModelImpl.fromJson;
+  factory _Invitation.fromJson(Map<String, dynamic> json) =
+      _$InvitationImpl.fromJson;
 
   @override
   String get id;
   @override
+  Participant get invited;
+  @override
+  Participant get invitedBy;
+  @override
+  String get shoppingListId;
+  @override
   String get name;
   @override
   String? get description;
-  @override
-  List<Participant> get participants;
-  @override
-  List<ShoppingItem> get items;
   @override
   DateTime get createdAt;
   @override
@@ -342,6 +373,6 @@ abstract class _ShoppingListModel implements ShoppingListModel {
   String get updatedBy;
   @override
   @JsonKey(ignore: true)
-  _$$ShoppingListModelImplCopyWith<_$ShoppingListModelImpl> get copyWith =>
+  _$$InvitationImplCopyWith<_$InvitationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -14,17 +14,14 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-HomeBlocState _$HomeBlocStateFromJson(Map<String, dynamic> json) {
-  return _HomeBlocState.fromJson(json);
-}
-
 /// @nodoc
 mixin _$HomeBlocState {
   bool get isLoading => throw _privateConstructorUsedError;
+  bool get isAdding => throw _privateConstructorUsedError;
+  Map<String, bool> get isDeletingItem => throw _privateConstructorUsedError;
   List<ShoppingListModel> get shoppingLists =>
       throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $HomeBlocStateCopyWith<HomeBlocState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -36,7 +33,11 @@ abstract class $HomeBlocStateCopyWith<$Res> {
           HomeBlocState value, $Res Function(HomeBlocState) then) =
       _$HomeBlocStateCopyWithImpl<$Res, HomeBlocState>;
   @useResult
-  $Res call({bool isLoading, List<ShoppingListModel> shoppingLists});
+  $Res call(
+      {bool isLoading,
+      bool isAdding,
+      Map<String, bool> isDeletingItem,
+      List<ShoppingListModel> shoppingLists});
 }
 
 /// @nodoc
@@ -53,6 +54,8 @@ class _$HomeBlocStateCopyWithImpl<$Res, $Val extends HomeBlocState>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? isAdding = null,
+    Object? isDeletingItem = null,
     Object? shoppingLists = null,
   }) {
     return _then(_value.copyWith(
@@ -60,6 +63,14 @@ class _$HomeBlocStateCopyWithImpl<$Res, $Val extends HomeBlocState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isAdding: null == isAdding
+          ? _value.isAdding
+          : isAdding // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isDeletingItem: null == isDeletingItem
+          ? _value.isDeletingItem
+          : isDeletingItem // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>,
       shoppingLists: null == shoppingLists
           ? _value.shoppingLists
           : shoppingLists // ignore: cast_nullable_to_non_nullable
@@ -76,7 +87,11 @@ abstract class _$$HomeBlocStateImplCopyWith<$Res>
       __$$HomeBlocStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, List<ShoppingListModel> shoppingLists});
+  $Res call(
+      {bool isLoading,
+      bool isAdding,
+      Map<String, bool> isDeletingItem,
+      List<ShoppingListModel> shoppingLists});
 }
 
 /// @nodoc
@@ -91,6 +106,8 @@ class __$$HomeBlocStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? isAdding = null,
+    Object? isDeletingItem = null,
     Object? shoppingLists = null,
   }) {
     return _then(_$HomeBlocStateImpl(
@@ -98,6 +115,14 @@ class __$$HomeBlocStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      isAdding: null == isAdding
+          ? _value.isAdding
+          : isAdding // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isDeletingItem: null == isDeletingItem
+          ? _value._isDeletingItem
+          : isDeletingItem // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>,
       shoppingLists: null == shoppingLists
           ? _value._shoppingLists
           : shoppingLists // ignore: cast_nullable_to_non_nullable
@@ -107,20 +132,30 @@ class __$$HomeBlocStateImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$HomeBlocStateImpl
     with DiagnosticableTreeMixin
     implements _HomeBlocState {
   const _$HomeBlocStateImpl(
       {required this.isLoading,
+      required this.isAdding,
+      required final Map<String, bool> isDeletingItem,
       required final List<ShoppingListModel> shoppingLists})
-      : _shoppingLists = shoppingLists;
-
-  factory _$HomeBlocStateImpl.fromJson(Map<String, dynamic> json) =>
-      _$$HomeBlocStateImplFromJson(json);
+      : _isDeletingItem = isDeletingItem,
+        _shoppingLists = shoppingLists;
 
   @override
   final bool isLoading;
+  @override
+  final bool isAdding;
+  final Map<String, bool> _isDeletingItem;
+  @override
+  Map<String, bool> get isDeletingItem {
+    if (_isDeletingItem is EqualUnmodifiableMapView) return _isDeletingItem;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_isDeletingItem);
+  }
+
   final List<ShoppingListModel> _shoppingLists;
   @override
   List<ShoppingListModel> get shoppingLists {
@@ -131,7 +166,7 @@ class _$HomeBlocStateImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'HomeBlocState(isLoading: $isLoading, shoppingLists: $shoppingLists)';
+    return 'HomeBlocState(isLoading: $isLoading, isAdding: $isAdding, isDeletingItem: $isDeletingItem, shoppingLists: $shoppingLists)';
   }
 
   @override
@@ -140,6 +175,8 @@ class _$HomeBlocStateImpl
     properties
       ..add(DiagnosticsProperty('type', 'HomeBlocState'))
       ..add(DiagnosticsProperty('isLoading', isLoading))
+      ..add(DiagnosticsProperty('isAdding', isAdding))
+      ..add(DiagnosticsProperty('isDeletingItem', isDeletingItem))
       ..add(DiagnosticsProperty('shoppingLists', shoppingLists));
   }
 
@@ -150,13 +187,20 @@ class _$HomeBlocStateImpl
             other is _$HomeBlocStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.isAdding, isAdding) ||
+                other.isAdding == isAdding) &&
+            const DeepCollectionEquality()
+                .equals(other._isDeletingItem, _isDeletingItem) &&
             const DeepCollectionEquality()
                 .equals(other._shoppingLists, _shoppingLists));
   }
 
-  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
+  int get hashCode => Object.hash(
+      runtimeType,
+      isLoading,
+      isAdding,
+      const DeepCollectionEquality().hash(_isDeletingItem),
       const DeepCollectionEquality().hash(_shoppingLists));
 
   @JsonKey(ignore: true)
@@ -164,26 +208,22 @@ class _$HomeBlocStateImpl
   @pragma('vm:prefer-inline')
   _$$HomeBlocStateImplCopyWith<_$HomeBlocStateImpl> get copyWith =>
       __$$HomeBlocStateImplCopyWithImpl<_$HomeBlocStateImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$HomeBlocStateImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _HomeBlocState implements HomeBlocState {
   const factory _HomeBlocState(
           {required final bool isLoading,
+          required final bool isAdding,
+          required final Map<String, bool> isDeletingItem,
           required final List<ShoppingListModel> shoppingLists}) =
       _$HomeBlocStateImpl;
 
-  factory _HomeBlocState.fromJson(Map<String, dynamic> json) =
-      _$HomeBlocStateImpl.fromJson;
-
   @override
   bool get isLoading;
+  @override
+  bool get isAdding;
+  @override
+  Map<String, bool> get isDeletingItem;
   @override
   List<ShoppingListModel> get shoppingLists;
   @override

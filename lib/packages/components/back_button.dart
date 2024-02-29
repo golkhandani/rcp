@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
+import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+
 class MyBackButton extends StatelessWidget {
   const MyBackButton({
     super.key,
@@ -28,6 +30,7 @@ class MyBackButton extends StatelessWidget {
       focusColor: Colors.transparent,
       hoverColor: Colors.transparent,
       splashColor: Colors.transparent,
+      color: color ?? context.colorTheme.onNavBackground,
       icon: const BackButtonIcon(),
       tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       onPressed: () {

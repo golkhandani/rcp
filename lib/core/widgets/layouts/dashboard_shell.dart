@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 
 import 'package:rcp/core/extensions/context_ui_extension.dart';
@@ -334,13 +335,15 @@ class _DashboardShellState extends State<DashboardShell> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: widget.items.mapIndexed((i, e) {
                 final isSelected = i == widget.currentIndex;
+
                 final color = isSelected
                     ? widget.navigationActiveColor
                     : widget.navigationInactiveColor;
                 final fontStyle = isSelected
-                    ? context.typoraphyTheme.subtitleMedium.textStyle
+                    ? context.typoraphyTheme.titleSmall.textStyle
                     : context.typoraphyTheme.subtitleMedium.textStyle;
                 return GestureDetector(
+                  key: Key((isSelected.hashCode + i).toString()),
                   onTap: () => widget.onTap?.call(i),
                   behavior: HitTestBehavior.opaque,
                   child: Column(
@@ -354,13 +357,18 @@ class _DashboardShellState extends State<DashboardShell> {
                           size: (widget.height - 16) / 2,
                         ),
                       ),
-                      Text(e.label ?? '',
-                          style: fontStyle.copyWith(
-                            color: color,
-                            height: 1,
-                          )),
+                      Text(
+                        e.label ?? '',
+                        style: fontStyle.copyWith(
+                          color: color,
+                          height: 1,
+                        ),
+                      ),
                     ],
-                  ),
+                  )
+                      .animate(value: !isSelected ? 1 : 0)
+                      .saturate()
+                      .scale(begin: const Offset(.9, .9)),
                 );
               }).toList(),
             ),

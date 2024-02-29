@@ -77,6 +77,7 @@ void main() async {
           ? dashboardRoute.path
           : SigninScreen.route.path;
 
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   final router = GoRouter(
     navigatorKey: locator.get(),
     initialLocation: initialPath,
