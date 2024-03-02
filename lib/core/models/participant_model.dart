@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:rcp/core/functions/user_profile/index.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 
 part 'participant_model.freezed.dart';
 part 'participant_model.g.dart';
@@ -15,12 +15,12 @@ class Participant with _$Participant {
     required String id,
     required String userId,
     required String email,
-    required UserProfile profile,
+    required UserProfile2 profile,
     required ParticipantStatus status,
     required DateTime createdAt,
-    required String createdBy,
+    required UserProfile2 createdBy,
     required DateTime updatedAt,
-    required String updatedBy,
+    required UserProfile2 updatedBy,
   }) = _Participant;
 
   factory Participant.fromJson(Map<String, dynamic> json) =>
@@ -28,7 +28,9 @@ class Participant with _$Participant {
 }
 
 enum ParticipantStatus {
+  @JsonValue("invited")
   invited,
+  @JsonValue("joined")
   joined,
 }
 
@@ -41,18 +43,9 @@ List<Participant> generateFakeParticipantData(int count) {
     String id = faker.guid.guid();
     String userId = faker.guid.guid();
     String email = faker.internet.email();
-    UserProfile profile = UserProfile(
-      id: faker.guid.guid(),
-      userId: userId,
-      username: faker.internet.userName(),
-      createdAt: faker.date.dateTime().toString(),
-      updatedAt: faker.date.dateTime().toString(),
-    );
 
     DateTime createdAt = faker.date.dateTime();
-    String createdBy = faker.person.name();
     DateTime updatedAt = faker.date.dateTime();
-    String updatedBy = faker.person.name();
     ParticipantStatus status = random.nextBool()
         ? ParticipantStatus.joined
         : ParticipantStatus.invited;
@@ -61,11 +54,11 @@ List<Participant> generateFakeParticipantData(int count) {
       id: id,
       userId: userId,
       email: email,
-      profile: profile,
+      profile: generateFakeUserProfileData(),
       createdAt: createdAt,
-      createdBy: createdBy,
+      createdBy: generateFakeUserProfileData(),
       updatedAt: updatedAt,
-      updatedBy: updatedBy,
+      updatedBy: generateFakeUserProfileData(),
       status: status,
     ));
   }

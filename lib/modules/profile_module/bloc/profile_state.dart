@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/user_profile/index.dart';
-import 'package:rcp/core/functions/user_username_is_available/index.dart';
+import 'package:rcp/core/functions/models/user_profile/index.dart';
+import 'package:rcp/core/functions/models/user_username_is_available/index.dart';
+import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
@@ -61,7 +62,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       emit(state.copyWith(isLoading: true));
       var isAvailable = false;
       try {
-        final res = await supabase.userUsernameIsAvailable(
+        final res = await supabase.usersFunctions.userUsernameIsAvailable(
           body: UserUsernameIsAvailableInput(username: username),
         );
         isAvailable = res.isAvailable;
@@ -74,7 +75,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
         _logger.warn('Username is already taken!');
         throw const AuthException('Username is already taken!');
       }
-      await supabase.userProfileUpdate(
+      await supabase.usersFunctions.userProfileUpdate(
         body: UserProfileUpdateInput(
           username: username,
           fullName: fullname,
@@ -99,7 +100,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       final user = supabase.auth.currentUser;
       if (user == null) return;
 
-      final userProfile = await supabase.userProfileGet();
+      final userProfile = await supabase.usersFunctions.userProfileGet();
 
       final userData = UserInfo(
         id: user.id,
@@ -145,7 +146,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       final user = state.user;
       if (user == null) return;
 
-      final checked = await supabase.userUsernameIsAvailable(
+      final checked = await supabase.usersFunctions.userUsernameIsAvailable(
         body: UserUsernameIsAvailableInput(
           username: username,
         ),
@@ -154,7 +155,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
         throw const AuthException('Username is already taken!');
       }
 
-      currentProfile = await supabase.userProfileUpdate(
+      currentProfile = await supabase.usersFunctions.userProfileUpdate(
         body: UserProfileUpdateInput(
           username: username,
           fullName: fullname,
@@ -210,7 +211,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
       PlatformFile file = result.files.first;
 
       final updatedUserProfile =
-          await supabase.userProfileUpdateAvatar(file: file);
+          await supabase.usersFunctions.userProfileUpdateAvatar(file: file);
 
       final userData = state.user?.copyWith(
         profile: updatedUserProfile,

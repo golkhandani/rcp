@@ -1,4 +1,11 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import {
+	createClient,
+	FunctionsError,
+} from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { UserProfile } from './models/user_profile_model.ts';
+import { UserProfileRow } from './anything.ts';
+// @deno-types="npm:@types/express@4"
+import { Request } from 'npm:express@4.18.2';
 
 export const supabaseAdminClient = () => {
 	const supabaseClient = createClient(
@@ -25,7 +32,7 @@ export const jsonResponse = (data: object, status = 200) => {
 };
 
 export const getClients = (req: Request) => {
-	const authHeader = req.headers.get('Authorization')!;
+	const authHeader = req.headers['authorization']! as string;
 	const admin = supabaseAdminClient();
 	const supabase = supabaseUserClient(authHeader);
 	return {
@@ -35,7 +42,31 @@ export const getClients = (req: Request) => {
 	};
 };
 
-export const getGroupId = (req: Request) => {
-	const groupIdHeader = req.headers.get('x-group-id')!;
-	return groupIdHeader;
+export const getFunctionName = (req: Request, prefix: string) => {
+	const fnWithPrefix = req.headers['x-function-name']! as string;
+	const fn = fnWithPrefix.split(`${prefix}--`)[1];
+	return fn;
+};
+
+export const userProfileDb = 'user_profile';
+export const getUserProfile = async (req: Request) => {
+	const { admin, supabase } = getClients(req);
+	const { data: { user } } = await supabase.auth.getUser();
+	const { data: userProfileRow } = await admin.from('user_profile').select()
+		.eq('user_id', user?.id)
+		.single<UserProfileRow>();
+
+	if (!userProfileRow) {
+		throw new FunctionsError('UserProfile not found!');
+	}
+	const userProfile: UserProfile = {
+		id: userProfileRow.id,
+		userId: userProfileRow.user_id,
+		username: userProfileRow.username,
+		fullName: userProfileRow.full_name,
+		avatarUrl: userProfileRow.avatar_url,
+		createdAt: new Date(userProfileRow.created_at),
+		updatedAt: new Date(userProfileRow.updated_at),
+	};
+	return userProfile;
 };

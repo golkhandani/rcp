@@ -16,7 +16,7 @@ class ShoppingListCard extends StatefulWidget {
     required this.onTap,
   });
 
-  final ShoppingListModel item;
+  final ShoppingList item;
   final bool isDeleting;
   final VoidCallback onDeleted;
   final VoidCallback onTap;
@@ -160,7 +160,7 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                     ),
                   const SizedBox(height: 8.0),
                   Text(
-                    'Last updated at ${DateFormat.yMMMd().format(widget.item.updatedAt)} by ${widget.item.updatedBy}',
+                    'Last updated at ${DateFormat.yMMMd().format(widget.item.updatedAt)} by ${widget.item.updatedBy.safeName}',
                     style: context.typoraphyTheme.subtitleSmall.onCardBackground
                         .textStyle,
                   ),

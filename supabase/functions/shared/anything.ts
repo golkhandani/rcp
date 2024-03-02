@@ -1,4 +1,4 @@
-import { Database } from '../supabase_types.ts';
+import { Database } from '../types.ts';
 
 export const corsHeaders = {
 	'Access-Control-Allow-Origin': '*',
@@ -7,7 +7,8 @@ export const corsHeaders = {
 };
 export const userProfileDb = 'user_profile';
 
-export type UserProfile = Database['public']['Tables']['user_profile']['Row'];
+export type UserProfileRow =
+	Database['public']['Tables']['user_profile']['Row'];
 
 export class StorageServie {
 	static avatarsBucketId = 'avatars';

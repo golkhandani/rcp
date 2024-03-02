@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:rcp/core/extensions/context_ui_extension.dart';
@@ -49,7 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final NotificationBannerService bannerService = locator.get();
     final child = ShoppingListAddOrEdit(
       shoppingListBloc: shoppingListBloc,
-      shoppingListAdded: (spl) => _homeBloc.addShoppingList(shoppingList: spl),
+      shoppingListAdded: (spl) =>
+          _homeBloc.addShoppingList(shoppingList: spl).then(
+                (value) => context.pop(),
+              ),
       shoppingListUpdated: (spl) =>
           _homeBloc.updateShoppingList(shoppingList: spl),
       shoppingList: null,
@@ -61,13 +65,28 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _homeBloc.loadShoppingLists();
+    _scrollController.addListener(_endOfScrollHandler);
   }
+
+  _endOfScrollHandler() {
+    final maxTriggerExtend = _scrollController.position.maxScrollExtent - 88;
+    final offset = _scrollController.offset;
+
+    if (offset > maxTriggerExtend &&
+        !_homeBloc.state.isLoading &&
+        !_homeBloc.state.isPaginationDone) {
+      _homeBloc.loadShoppingLists();
+    }
+  }
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return DashboardScreenShell(
       useSafeArea: false,
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           const SliverProfileSummaryHeader(),
           SliverToBoxAdapter(
@@ -119,42 +138,47 @@ class _HomeScreenState extends State<HomeScreen> {
             bloc: _homeBloc,
             listener: (context, state) {},
             builder: (context, state) {
-              if (state.isLoading) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-
-              return SliverPadding(
-                padding: const EdgeInsets.all(16).copyWith(
-                  bottom: 88 + context.bottomSafePadding,
-                  top: 0,
-                ),
-                sliver: SliverList.builder(
-                    itemCount: state.shoppingLists.length,
-                    itemBuilder: (context, index) {
-                      final item = state.shoppingLists[index];
-                      final extra = item.toJson();
-                      return ShoppingListCard(
-                        item: item,
-                        onTap: () {
-                          // Handle onTap action here
-                          context.goNamed(
-                            shoppingListRoute.name,
-                            pathParameters: {
-                              ShoppingListScreen.pathId: item.id,
+              return MultiSliver(
+                children: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(16).copyWith(
+                      bottom: 88 + context.bottomSafePadding,
+                      top: 0,
+                    ),
+                    sliver: SliverList.builder(
+                        itemCount: state.shoppingLists.length,
+                        itemBuilder: (context, index) {
+                          final item = state.shoppingLists[index];
+                          final extra = item.toJson();
+                          return ShoppingListCard(
+                            item: item,
+                            onTap: () {
+                              // Handle onTap action here
+                              context.goNamed(
+                                shoppingListRoute.name,
+                                pathParameters: {
+                                  ShoppingListScreen.pathId: item.id,
+                                },
+                                extra: extra,
+                              );
                             },
-                            extra: extra,
-                          );
-                        },
-                        isDeleting: state.isDeletingItem[item.id] ?? false,
-                        onDeleted: () {
-                          _homeBloc.removeShoppingList(shoppingList: item);
-                        },
-                      ).sequentialAnimate(index % 10).fade().scale();
-                    }),
+                            isDeleting: state.isDeletingItem[item.id] ?? false,
+                            onDeleted: () {
+                              _homeBloc.removeShoppingList(shoppingList: item);
+                            },
+                          ).sequentialAnimate(index % 10).fade().scale();
+                        }),
+                  ),
+                  if (state.isLoading)
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 400,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                ],
               );
             },
           ),

@@ -8,26 +8,83 @@ part 'shopping_list_model.freezed.dart';
 part 'shopping_list_model.g.dart';
 
 @freezed
-class ShoppingListModel with _$ShoppingListModel {
+abstract class UserProfile2 with _$UserProfile2 {
   @JsonSerializable(explicitToJson: true)
-  factory ShoppingListModel({
+  const UserProfile2._();
+  @JsonSerializable(explicitToJson: true)
+  const factory UserProfile2({
+    required String id,
+    required String userId,
+    required String username,
+    String? fullName,
+    String? avatarUrl,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+  }) = _UserProfile2;
+
+  String get safeName => fullName ?? username;
+
+  factory UserProfile2.fromJson(Map<String, dynamic> json) =>
+      _$UserProfile2FromJson(json);
+}
+
+UserProfile2 generateFakeUserProfileData() {
+  Faker faker = Faker();
+  String id = faker.guid.guid();
+  String userId = faker.guid.guid();
+  String name = faker.internet.userName();
+  String? fullName = faker.person.name();
+
+  String avatarUrl = faker.image.image();
+  DateTime createdAt = faker.date.dateTime();
+
+  DateTime updatedAt = faker.date.dateTime();
+
+  UserProfile2 fakeData = UserProfile2(
+    id: id,
+    userId: userId,
+    username: name,
+    fullName: fullName,
+    avatarUrl: avatarUrl,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
+
+  return fakeData;
+}
+
+@freezed
+class ShoppingListResponse with _$ShoppingListResponse {
+  @JsonSerializable(explicitToJson: true)
+  factory ShoppingListResponse({
+    required List<ShoppingList> shoppingLists,
+  }) = _ShoppingListResponse;
+
+  factory ShoppingListResponse.fromJson(Map<String, dynamic> json) =>
+      _$ShoppingListResponseFromJson(json);
+}
+
+@freezed
+class ShoppingList with _$ShoppingList {
+  @JsonSerializable(explicitToJson: true)
+  factory ShoppingList({
     required String id,
     required String name,
     String? description,
     required List<Participant> participants,
     required List<ShoppingItem> items,
     required DateTime createdAt,
-    required String createdBy,
+    required UserProfile2 createdBy,
     required DateTime updatedAt,
-    required String updatedBy,
-  }) = _ShoppingListModel;
+    required UserProfile2 updatedBy,
+  }) = _ShoppingList;
 
-  factory ShoppingListModel.fromJson(Map<String, dynamic> json) =>
-      _$ShoppingListModelFromJson(json);
+  factory ShoppingList.fromJson(Map<String, dynamic> json) =>
+      _$ShoppingListFromJson(json);
 }
 
-List<ShoppingListModel> generateFakeShoppingListData(int count) {
-  List<ShoppingListModel> fakeData = [];
+List<ShoppingList> generateFakeShoppingListData(int count) {
+  List<ShoppingList> fakeData = [];
   Faker faker = Faker();
 
   for (int i = 0; i < count; i++) {
@@ -37,11 +94,11 @@ List<ShoppingListModel> generateFakeShoppingListData(int count) {
     List<Participant> participants = generateFakeParticipantData(5);
     List<ShoppingItem> items = generateFakeShoppingItemData(5);
     DateTime createdAt = faker.date.dateTime();
-    String createdBy = faker.person.name();
+    UserProfile2 createdBy = generateFakeUserProfileData();
     DateTime updatedAt = faker.date.dateTime();
-    String updatedBy = faker.person.name();
+    UserProfile2 updatedBy = generateFakeUserProfileData();
 
-    fakeData.add(ShoppingListModel(
+    fakeData.add(ShoppingList(
       id: id,
       name: name,
       description: description,

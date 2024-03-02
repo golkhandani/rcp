@@ -14,33 +14,452 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ShoppingListModel _$ShoppingListModelFromJson(Map<String, dynamic> json) {
-  return _ShoppingListModel.fromJson(json);
+UserProfile2 _$UserProfile2FromJson(Map<String, dynamic> json) {
+  return _UserProfile2.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ShoppingListModel {
+mixin _$UserProfile2 {
+  String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
+  String? get fullName => throw _privateConstructorUsedError;
+  String? get avatarUrl => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $UserProfile2CopyWith<UserProfile2> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UserProfile2CopyWith<$Res> {
+  factory $UserProfile2CopyWith(
+          UserProfile2 value, $Res Function(UserProfile2) then) =
+      _$UserProfile2CopyWithImpl<$Res, UserProfile2>;
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      String username,
+      String? fullName,
+      String? avatarUrl,
+      DateTime createdAt,
+      DateTime updatedAt});
+}
+
+/// @nodoc
+class _$UserProfile2CopyWithImpl<$Res, $Val extends UserProfile2>
+    implements $UserProfile2CopyWith<$Res> {
+  _$UserProfile2CopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? username = null,
+    Object? fullName = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UserProfile2ImplCopyWith<$Res>
+    implements $UserProfile2CopyWith<$Res> {
+  factory _$$UserProfile2ImplCopyWith(
+          _$UserProfile2Impl value, $Res Function(_$UserProfile2Impl) then) =
+      __$$UserProfile2ImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      String username,
+      String? fullName,
+      String? avatarUrl,
+      DateTime createdAt,
+      DateTime updatedAt});
+}
+
+/// @nodoc
+class __$$UserProfile2ImplCopyWithImpl<$Res>
+    extends _$UserProfile2CopyWithImpl<$Res, _$UserProfile2Impl>
+    implements _$$UserProfile2ImplCopyWith<$Res> {
+  __$$UserProfile2ImplCopyWithImpl(
+      _$UserProfile2Impl _value, $Res Function(_$UserProfile2Impl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? username = null,
+    Object? fullName = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+  }) {
+    return _then(_$UserProfile2Impl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$UserProfile2Impl extends _UserProfile2 {
+  const _$UserProfile2Impl(
+      {required this.id,
+      required this.userId,
+      required this.username,
+      this.fullName,
+      this.avatarUrl,
+      required this.createdAt,
+      required this.updatedAt})
+      : super._();
+
+  factory _$UserProfile2Impl.fromJson(Map<String, dynamic> json) =>
+      _$$UserProfile2ImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String userId;
+  @override
+  final String username;
+  @override
+  final String? fullName;
+  @override
+  final String? avatarUrl;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+
+  @override
+  String toString() {
+    return 'UserProfile2(id: $id, userId: $userId, username: $username, fullName: $fullName, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UserProfile2Impl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.fullName, fullName) ||
+                other.fullName == fullName) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                other.avatarUrl == avatarUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, userId, username, fullName,
+      avatarUrl, createdAt, updatedAt);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UserProfile2ImplCopyWith<_$UserProfile2Impl> get copyWith =>
+      __$$UserProfile2ImplCopyWithImpl<_$UserProfile2Impl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UserProfile2ImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UserProfile2 extends UserProfile2 {
+  const factory _UserProfile2(
+      {required final String id,
+      required final String userId,
+      required final String username,
+      final String? fullName,
+      final String? avatarUrl,
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$UserProfile2Impl;
+  const _UserProfile2._() : super._();
+
+  factory _UserProfile2.fromJson(Map<String, dynamic> json) =
+      _$UserProfile2Impl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get userId;
+  @override
+  String get username;
+  @override
+  String? get fullName;
+  @override
+  String? get avatarUrl;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  @JsonKey(ignore: true)
+  _$$UserProfile2ImplCopyWith<_$UserProfile2Impl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ShoppingListResponse _$ShoppingListResponseFromJson(Map<String, dynamic> json) {
+  return _ShoppingListResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ShoppingListResponse {
+  List<ShoppingList> get shoppingLists => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ShoppingListResponseCopyWith<ShoppingListResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ShoppingListResponseCopyWith<$Res> {
+  factory $ShoppingListResponseCopyWith(ShoppingListResponse value,
+          $Res Function(ShoppingListResponse) then) =
+      _$ShoppingListResponseCopyWithImpl<$Res, ShoppingListResponse>;
+  @useResult
+  $Res call({List<ShoppingList> shoppingLists});
+}
+
+/// @nodoc
+class _$ShoppingListResponseCopyWithImpl<$Res,
+        $Val extends ShoppingListResponse>
+    implements $ShoppingListResponseCopyWith<$Res> {
+  _$ShoppingListResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? shoppingLists = null,
+  }) {
+    return _then(_value.copyWith(
+      shoppingLists: null == shoppingLists
+          ? _value.shoppingLists
+          : shoppingLists // ignore: cast_nullable_to_non_nullable
+              as List<ShoppingList>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ShoppingListResponseImplCopyWith<$Res>
+    implements $ShoppingListResponseCopyWith<$Res> {
+  factory _$$ShoppingListResponseImplCopyWith(_$ShoppingListResponseImpl value,
+          $Res Function(_$ShoppingListResponseImpl) then) =
+      __$$ShoppingListResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<ShoppingList> shoppingLists});
+}
+
+/// @nodoc
+class __$$ShoppingListResponseImplCopyWithImpl<$Res>
+    extends _$ShoppingListResponseCopyWithImpl<$Res, _$ShoppingListResponseImpl>
+    implements _$$ShoppingListResponseImplCopyWith<$Res> {
+  __$$ShoppingListResponseImplCopyWithImpl(_$ShoppingListResponseImpl _value,
+      $Res Function(_$ShoppingListResponseImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? shoppingLists = null,
+  }) {
+    return _then(_$ShoppingListResponseImpl(
+      shoppingLists: null == shoppingLists
+          ? _value._shoppingLists
+          : shoppingLists // ignore: cast_nullable_to_non_nullable
+              as List<ShoppingList>,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$ShoppingListResponseImpl implements _ShoppingListResponse {
+  _$ShoppingListResponseImpl({required final List<ShoppingList> shoppingLists})
+      : _shoppingLists = shoppingLists;
+
+  factory _$ShoppingListResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ShoppingListResponseImplFromJson(json);
+
+  final List<ShoppingList> _shoppingLists;
+  @override
+  List<ShoppingList> get shoppingLists {
+    if (_shoppingLists is EqualUnmodifiableListView) return _shoppingLists;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_shoppingLists);
+  }
+
+  @override
+  String toString() {
+    return 'ShoppingListResponse(shoppingLists: $shoppingLists)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ShoppingListResponseImpl &&
+            const DeepCollectionEquality()
+                .equals(other._shoppingLists, _shoppingLists));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_shoppingLists));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ShoppingListResponseImplCopyWith<_$ShoppingListResponseImpl>
+      get copyWith =>
+          __$$ShoppingListResponseImplCopyWithImpl<_$ShoppingListResponseImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ShoppingListResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ShoppingListResponse implements ShoppingListResponse {
+  factory _ShoppingListResponse(
+          {required final List<ShoppingList> shoppingLists}) =
+      _$ShoppingListResponseImpl;
+
+  factory _ShoppingListResponse.fromJson(Map<String, dynamic> json) =
+      _$ShoppingListResponseImpl.fromJson;
+
+  @override
+  List<ShoppingList> get shoppingLists;
+  @override
+  @JsonKey(ignore: true)
+  _$$ShoppingListResponseImplCopyWith<_$ShoppingListResponseImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+ShoppingList _$ShoppingListFromJson(Map<String, dynamic> json) {
+  return _ShoppingList.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ShoppingList {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   List<Participant> get participants => throw _privateConstructorUsedError;
   List<ShoppingItem> get items => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  String get createdBy => throw _privateConstructorUsedError;
+  UserProfile2 get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
-  String get updatedBy => throw _privateConstructorUsedError;
+  UserProfile2 get updatedBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ShoppingListModelCopyWith<ShoppingListModel> get copyWith =>
+  $ShoppingListCopyWith<ShoppingList> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ShoppingListModelCopyWith<$Res> {
-  factory $ShoppingListModelCopyWith(
-          ShoppingListModel value, $Res Function(ShoppingListModel) then) =
-      _$ShoppingListModelCopyWithImpl<$Res, ShoppingListModel>;
+abstract class $ShoppingListCopyWith<$Res> {
+  factory $ShoppingListCopyWith(
+          ShoppingList value, $Res Function(ShoppingList) then) =
+      _$ShoppingListCopyWithImpl<$Res, ShoppingList>;
   @useResult
   $Res call(
       {String id,
@@ -49,15 +468,18 @@ abstract class $ShoppingListModelCopyWith<$Res> {
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
-      String createdBy,
+      UserProfile2 createdBy,
       DateTime updatedAt,
-      String updatedBy});
+      UserProfile2 updatedBy});
+
+  $UserProfile2CopyWith<$Res> get createdBy;
+  $UserProfile2CopyWith<$Res> get updatedBy;
 }
 
 /// @nodoc
-class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
-    implements $ShoppingListModelCopyWith<$Res> {
-  _$ShoppingListModelCopyWithImpl(this._value, this._then);
+class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
+    implements $ShoppingListCopyWith<$Res> {
+  _$ShoppingListCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -105,7 +527,7 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -113,17 +535,33 @@ class _$ShoppingListModelCopyWithImpl<$Res, $Val extends ShoppingListModel>
       updatedBy: null == updatedBy
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get createdBy {
+    return $UserProfile2CopyWith<$Res>(_value.createdBy, (value) {
+      return _then(_value.copyWith(createdBy: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get updatedBy {
+    return $UserProfile2CopyWith<$Res>(_value.updatedBy, (value) {
+      return _then(_value.copyWith(updatedBy: value) as $Val);
+    });
   }
 }
 
 /// @nodoc
-abstract class _$$ShoppingListModelImplCopyWith<$Res>
-    implements $ShoppingListModelCopyWith<$Res> {
-  factory _$$ShoppingListModelImplCopyWith(_$ShoppingListModelImpl value,
-          $Res Function(_$ShoppingListModelImpl) then) =
-      __$$ShoppingListModelImplCopyWithImpl<$Res>;
+abstract class _$$ShoppingListImplCopyWith<$Res>
+    implements $ShoppingListCopyWith<$Res> {
+  factory _$$ShoppingListImplCopyWith(
+          _$ShoppingListImpl value, $Res Function(_$ShoppingListImpl) then) =
+      __$$ShoppingListImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -133,17 +571,22 @@ abstract class _$$ShoppingListModelImplCopyWith<$Res>
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
-      String createdBy,
+      UserProfile2 createdBy,
       DateTime updatedAt,
-      String updatedBy});
+      UserProfile2 updatedBy});
+
+  @override
+  $UserProfile2CopyWith<$Res> get createdBy;
+  @override
+  $UserProfile2CopyWith<$Res> get updatedBy;
 }
 
 /// @nodoc
-class __$$ShoppingListModelImplCopyWithImpl<$Res>
-    extends _$ShoppingListModelCopyWithImpl<$Res, _$ShoppingListModelImpl>
-    implements _$$ShoppingListModelImplCopyWith<$Res> {
-  __$$ShoppingListModelImplCopyWithImpl(_$ShoppingListModelImpl _value,
-      $Res Function(_$ShoppingListModelImpl) _then)
+class __$$ShoppingListImplCopyWithImpl<$Res>
+    extends _$ShoppingListCopyWithImpl<$Res, _$ShoppingListImpl>
+    implements _$$ShoppingListImplCopyWith<$Res> {
+  __$$ShoppingListImplCopyWithImpl(
+      _$ShoppingListImpl _value, $Res Function(_$ShoppingListImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -159,7 +602,7 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? updatedBy = null,
   }) {
-    return _then(_$ShoppingListModelImpl(
+    return _then(_$ShoppingListImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -187,7 +630,7 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -195,7 +638,7 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
       updatedBy: null == updatedBy
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ));
   }
 }
@@ -203,8 +646,8 @@ class __$$ShoppingListModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$ShoppingListModelImpl implements _ShoppingListModel {
-  _$ShoppingListModelImpl(
+class _$ShoppingListImpl implements _ShoppingList {
+  _$ShoppingListImpl(
       {required this.id,
       required this.name,
       this.description,
@@ -217,8 +660,8 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
       : _participants = participants,
         _items = items;
 
-  factory _$ShoppingListModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ShoppingListModelImplFromJson(json);
+  factory _$ShoppingListImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ShoppingListImplFromJson(json);
 
   @override
   final String id;
@@ -245,22 +688,22 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
   @override
   final DateTime createdAt;
   @override
-  final String createdBy;
+  final UserProfile2 createdBy;
   @override
   final DateTime updatedAt;
   @override
-  final String updatedBy;
+  final UserProfile2 updatedBy;
 
   @override
   String toString() {
-    return 'ShoppingListModel(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ShoppingListModelImpl &&
+            other is _$ShoppingListImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
@@ -295,32 +738,31 @@ class _$ShoppingListModelImpl implements _ShoppingListModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ShoppingListModelImplCopyWith<_$ShoppingListModelImpl> get copyWith =>
-      __$$ShoppingListModelImplCopyWithImpl<_$ShoppingListModelImpl>(
-          this, _$identity);
+  _$$ShoppingListImplCopyWith<_$ShoppingListImpl> get copyWith =>
+      __$$ShoppingListImplCopyWithImpl<_$ShoppingListImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShoppingListModelImplToJson(
+    return _$$ShoppingListImplToJson(
       this,
     );
   }
 }
 
-abstract class _ShoppingListModel implements ShoppingListModel {
-  factory _ShoppingListModel(
+abstract class _ShoppingList implements ShoppingList {
+  factory _ShoppingList(
       {required final String id,
       required final String name,
       final String? description,
       required final List<Participant> participants,
       required final List<ShoppingItem> items,
       required final DateTime createdAt,
-      required final String createdBy,
+      required final UserProfile2 createdBy,
       required final DateTime updatedAt,
-      required final String updatedBy}) = _$ShoppingListModelImpl;
+      required final UserProfile2 updatedBy}) = _$ShoppingListImpl;
 
-  factory _ShoppingListModel.fromJson(Map<String, dynamic> json) =
-      _$ShoppingListModelImpl.fromJson;
+  factory _ShoppingList.fromJson(Map<String, dynamic> json) =
+      _$ShoppingListImpl.fromJson;
 
   @override
   String get id;
@@ -335,13 +777,13 @@ abstract class _ShoppingListModel implements ShoppingListModel {
   @override
   DateTime get createdAt;
   @override
-  String get createdBy;
+  UserProfile2 get createdBy;
   @override
   DateTime get updatedAt;
   @override
-  String get updatedBy;
+  UserProfile2 get updatedBy;
   @override
   @JsonKey(ignore: true)
-  _$$ShoppingListModelImplCopyWith<_$ShoppingListModelImpl> get copyWith =>
+  _$$ShoppingListImplCopyWith<_$ShoppingListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

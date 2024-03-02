@@ -114,7 +114,7 @@ class _ShoppingItemCardState extends State<ShoppingItemCard> {
                     widget.item.purchasedBy != null) ...[
                   const SizedBox(height: 16.0),
                   Text(
-                    'Last purchased at ${DateFormat.yMMMd().format(widget.item.purchasedAt!)} by ${widget.item.purchasedBy!}',
+                    'Last purchased at ${DateFormat.yMMMd().format(widget.item.purchasedAt!)} by ${widget.item.purchasedBy!.safeName}',
                     style: context
                         .typoraphyTheme.bodyMedium.onCardBackground.textStyle,
                   )

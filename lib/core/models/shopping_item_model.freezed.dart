@@ -21,12 +21,13 @@ ShoppingItem _$ShoppingItemFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ShoppingItem {
   String get id => throw _privateConstructorUsedError;
+  String get shoppingListId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get quantity => throw _privateConstructorUsedError;
-  String? get purchasedBy => throw _privateConstructorUsedError;
+  UserProfile2? get purchasedBy => throw _privateConstructorUsedError;
   DateTime? get purchasedAt => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  String get createdBy => throw _privateConstructorUsedError;
+  UserProfile2 get createdBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,12 +43,16 @@ abstract class $ShoppingItemCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String shoppingListId,
       String name,
       String? quantity,
-      String? purchasedBy,
+      UserProfile2? purchasedBy,
       DateTime? purchasedAt,
       DateTime createdAt,
-      String createdBy});
+      UserProfile2 createdBy});
+
+  $UserProfile2CopyWith<$Res>? get purchasedBy;
+  $UserProfile2CopyWith<$Res> get createdBy;
 }
 
 /// @nodoc
@@ -64,6 +69,7 @@ class _$ShoppingItemCopyWithImpl<$Res, $Val extends ShoppingItem>
   @override
   $Res call({
     Object? id = null,
+    Object? shoppingListId = null,
     Object? name = null,
     Object? quantity = freezed,
     Object? purchasedBy = freezed,
@@ -76,6 +82,10 @@ class _$ShoppingItemCopyWithImpl<$Res, $Val extends ShoppingItem>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      shoppingListId: null == shoppingListId
+          ? _value.shoppingListId
+          : shoppingListId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -87,7 +97,7 @@ class _$ShoppingItemCopyWithImpl<$Res, $Val extends ShoppingItem>
       purchasedBy: freezed == purchasedBy
           ? _value.purchasedBy
           : purchasedBy // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as UserProfile2?,
       purchasedAt: freezed == purchasedAt
           ? _value.purchasedAt
           : purchasedAt // ignore: cast_nullable_to_non_nullable
@@ -99,8 +109,28 @@ class _$ShoppingItemCopyWithImpl<$Res, $Val extends ShoppingItem>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res>? get purchasedBy {
+    if (_value.purchasedBy == null) {
+      return null;
+    }
+
+    return $UserProfile2CopyWith<$Res>(_value.purchasedBy!, (value) {
+      return _then(_value.copyWith(purchasedBy: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get createdBy {
+    return $UserProfile2CopyWith<$Res>(_value.createdBy, (value) {
+      return _then(_value.copyWith(createdBy: value) as $Val);
+    });
   }
 }
 
@@ -114,12 +144,18 @@ abstract class _$$ShoppingItemImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      String shoppingListId,
       String name,
       String? quantity,
-      String? purchasedBy,
+      UserProfile2? purchasedBy,
       DateTime? purchasedAt,
       DateTime createdAt,
-      String createdBy});
+      UserProfile2 createdBy});
+
+  @override
+  $UserProfile2CopyWith<$Res>? get purchasedBy;
+  @override
+  $UserProfile2CopyWith<$Res> get createdBy;
 }
 
 /// @nodoc
@@ -134,6 +170,7 @@ class __$$ShoppingItemImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? shoppingListId = null,
     Object? name = null,
     Object? quantity = freezed,
     Object? purchasedBy = freezed,
@@ -146,6 +183,10 @@ class __$$ShoppingItemImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      shoppingListId: null == shoppingListId
+          ? _value.shoppingListId
+          : shoppingListId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -157,7 +198,7 @@ class __$$ShoppingItemImplCopyWithImpl<$Res>
       purchasedBy: freezed == purchasedBy
           ? _value.purchasedBy
           : purchasedBy // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as UserProfile2?,
       purchasedAt: freezed == purchasedAt
           ? _value.purchasedAt
           : purchasedAt // ignore: cast_nullable_to_non_nullable
@@ -169,16 +210,18 @@ class __$$ShoppingItemImplCopyWithImpl<$Res>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$ShoppingItemImpl extends _ShoppingItem {
   _$ShoppingItemImpl(
       {required this.id,
+      required this.shoppingListId,
       required this.name,
       this.quantity,
       this.purchasedBy,
@@ -193,21 +236,23 @@ class _$ShoppingItemImpl extends _ShoppingItem {
   @override
   final String id;
   @override
+  final String shoppingListId;
+  @override
   final String name;
   @override
   final String? quantity;
   @override
-  final String? purchasedBy;
+  final UserProfile2? purchasedBy;
   @override
   final DateTime? purchasedAt;
   @override
   final DateTime createdAt;
   @override
-  final String createdBy;
+  final UserProfile2 createdBy;
 
   @override
   String toString() {
-    return 'ShoppingItem(id: $id, name: $name, quantity: $quantity, purchasedBy: $purchasedBy, purchasedAt: $purchasedAt, createdAt: $createdAt, createdBy: $createdBy)';
+    return 'ShoppingItem(id: $id, shoppingListId: $shoppingListId, name: $name, quantity: $quantity, purchasedBy: $purchasedBy, purchasedAt: $purchasedAt, createdAt: $createdAt, createdBy: $createdBy)';
   }
 
   @override
@@ -216,6 +261,8 @@ class _$ShoppingItemImpl extends _ShoppingItem {
         (other.runtimeType == runtimeType &&
             other is _$ShoppingItemImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.shoppingListId, shoppingListId) ||
+                other.shoppingListId == shoppingListId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
@@ -231,8 +278,8 @@ class _$ShoppingItemImpl extends _ShoppingItem {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, quantity, purchasedBy,
-      purchasedAt, createdAt, createdBy);
+  int get hashCode => Object.hash(runtimeType, id, shoppingListId, name,
+      quantity, purchasedBy, purchasedAt, createdAt, createdBy);
 
   @JsonKey(ignore: true)
   @override
@@ -251,12 +298,13 @@ class _$ShoppingItemImpl extends _ShoppingItem {
 abstract class _ShoppingItem extends ShoppingItem {
   factory _ShoppingItem(
       {required final String id,
+      required final String shoppingListId,
       required final String name,
       final String? quantity,
-      final String? purchasedBy,
+      final UserProfile2? purchasedBy,
       final DateTime? purchasedAt,
       required final DateTime createdAt,
-      required final String createdBy}) = _$ShoppingItemImpl;
+      required final UserProfile2 createdBy}) = _$ShoppingItemImpl;
   _ShoppingItem._() : super._();
 
   factory _ShoppingItem.fromJson(Map<String, dynamic> json) =
@@ -265,17 +313,19 @@ abstract class _ShoppingItem extends ShoppingItem {
   @override
   String get id;
   @override
+  String get shoppingListId;
+  @override
   String get name;
   @override
   String? get quantity;
   @override
-  String? get purchasedBy;
+  UserProfile2? get purchasedBy;
   @override
   DateTime? get purchasedAt;
   @override
   DateTime get createdAt;
   @override
-  String get createdBy;
+  UserProfile2 get createdBy;
   @override
   @JsonKey(ignore: true)
   _$$ShoppingItemImplCopyWith<_$ShoppingItemImpl> get copyWith =>

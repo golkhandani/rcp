@@ -1,25 +1,114 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:collection/collection.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/ioc.dart';
-import 'package:rcp/environment.dart';
-
 extension FunctionsTenancyClient on FunctionsClient {
-  Future<FunctionResponse> tenancyInvoke(
+  Future<FunctionResponse> get(
     String fn, {
+    Map<String, String>? headers,
     Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
   }) async {
-    final prefs = locator.get<SharedPreferences>();
-    final groupId = prefs.getString(Environment.selectedGroupKey) ?? '';
-    final headers = <String, String>{
-      ...Supabase.instance.client.headers,
-      'x-group-id': groupId,
-    };
+    String path = fn;
+
+    if (query != null) {
+      path = '$path?${query.keys.map(
+            (k) => query[k] == null ? null : '$k=${query[k]}',
+          ).whereNotNull().join('&')}';
+    }
 
     return await Supabase.instance.client.functions.invoke(
-      fn,
+      path,
       body: body,
       headers: headers,
+      method: HttpMethod.get,
+    );
+  }
+
+  Future<FunctionResponse> post(
+    String fn, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) async {
+    String path = fn;
+
+    if (query != null) {
+      path = '$path?${query.keys.map(
+            (k) => query[k] == null ? null : '$k=${query[k]}',
+          ).whereNotNull().join('&')}';
+    }
+
+    return await Supabase.instance.client.functions.invoke(
+      path,
+      body: body,
+      headers: headers,
+      method: HttpMethod.post,
+    );
+  }
+
+  Future<FunctionResponse> put(
+    String fn, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) async {
+    String path = fn;
+
+    if (query != null) {
+      path = '$path?${query.keys.map(
+            (k) => query[k] == null ? null : '$k=${query[k]}',
+          ).whereNotNull().join('&')}';
+    }
+
+    return await Supabase.instance.client.functions.invoke(
+      path,
+      body: body,
+      headers: headers,
+      method: HttpMethod.put,
+    );
+  }
+
+  Future<FunctionResponse> patch(
+    String fn, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) async {
+    String path = fn;
+
+    if (query != null) {
+      path = '$path?${query.keys.map(
+            (k) => query[k] == null ? null : '$k=${query[k]}',
+          ).whereNotNull().join('&')}';
+    }
+
+    return await Supabase.instance.client.functions.invoke(
+      path,
+      body: body,
+      headers: headers,
+      method: HttpMethod.patch,
+    );
+  }
+
+  Future<FunctionResponse> delete(
+    String fn, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
+  }) async {
+    String path = fn;
+
+    if (query != null) {
+      path = '$path?${query.keys.map(
+            (k) => query[k] == null ? null : '$k=${query[k]}',
+          ).whereNotNull().join('&')}';
+    }
+
+    return await Supabase.instance.client.functions.invoke(
+      path,
+      body: body,
+      headers: headers,
+      method: HttpMethod.delete,
     );
   }
 }

@@ -23,12 +23,12 @@ mixin _$Participant {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  UserProfile get profile => throw _privateConstructorUsedError;
+  UserProfile2 get profile => throw _privateConstructorUsedError;
   ParticipantStatus get status => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  String get createdBy => throw _privateConstructorUsedError;
+  UserProfile2 get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
-  String get updatedBy => throw _privateConstructorUsedError;
+  UserProfile2 get updatedBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,14 +46,16 @@ abstract class $ParticipantCopyWith<$Res> {
       {String id,
       String userId,
       String email,
-      UserProfile profile,
+      UserProfile2 profile,
       ParticipantStatus status,
       DateTime createdAt,
-      String createdBy,
+      UserProfile2 createdBy,
       DateTime updatedAt,
-      String updatedBy});
+      UserProfile2 updatedBy});
 
-  $UserProfileCopyWith<$Res> get profile;
+  $UserProfile2CopyWith<$Res> get profile;
+  $UserProfile2CopyWith<$Res> get createdBy;
+  $UserProfile2CopyWith<$Res> get updatedBy;
 }
 
 /// @nodoc
@@ -95,7 +97,7 @@ class _$ParticipantCopyWithImpl<$Res, $Val extends Participant>
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
+              as UserProfile2,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -107,7 +109,7 @@ class _$ParticipantCopyWithImpl<$Res, $Val extends Participant>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -115,15 +117,31 @@ class _$ParticipantCopyWithImpl<$Res, $Val extends Participant>
       updatedBy: null == updatedBy
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserProfileCopyWith<$Res> get profile {
-    return $UserProfileCopyWith<$Res>(_value.profile, (value) {
+  $UserProfile2CopyWith<$Res> get profile {
+    return $UserProfile2CopyWith<$Res>(_value.profile, (value) {
       return _then(_value.copyWith(profile: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get createdBy {
+    return $UserProfile2CopyWith<$Res>(_value.createdBy, (value) {
+      return _then(_value.copyWith(createdBy: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get updatedBy {
+    return $UserProfile2CopyWith<$Res>(_value.updatedBy, (value) {
+      return _then(_value.copyWith(updatedBy: value) as $Val);
     });
   }
 }
@@ -140,15 +158,19 @@ abstract class _$$ParticipantImplCopyWith<$Res>
       {String id,
       String userId,
       String email,
-      UserProfile profile,
+      UserProfile2 profile,
       ParticipantStatus status,
       DateTime createdAt,
-      String createdBy,
+      UserProfile2 createdBy,
       DateTime updatedAt,
-      String updatedBy});
+      UserProfile2 updatedBy});
 
   @override
-  $UserProfileCopyWith<$Res> get profile;
+  $UserProfile2CopyWith<$Res> get profile;
+  @override
+  $UserProfile2CopyWith<$Res> get createdBy;
+  @override
+  $UserProfile2CopyWith<$Res> get updatedBy;
 }
 
 /// @nodoc
@@ -188,7 +210,7 @@ class __$$ParticipantImplCopyWithImpl<$Res>
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
+              as UserProfile2,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -200,7 +222,7 @@ class __$$ParticipantImplCopyWithImpl<$Res>
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -208,7 +230,7 @@ class __$$ParticipantImplCopyWithImpl<$Res>
       updatedBy: null == updatedBy
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as UserProfile2,
     ));
   }
 }
@@ -238,17 +260,17 @@ class _$ParticipantImpl implements _Participant {
   @override
   final String email;
   @override
-  final UserProfile profile;
+  final UserProfile2 profile;
   @override
   final ParticipantStatus status;
   @override
   final DateTime createdAt;
   @override
-  final String createdBy;
+  final UserProfile2 createdBy;
   @override
   final DateTime updatedAt;
   @override
-  final String updatedBy;
+  final UserProfile2 updatedBy;
 
   @override
   String toString() {
@@ -299,12 +321,12 @@ abstract class _Participant implements Participant {
       {required final String id,
       required final String userId,
       required final String email,
-      required final UserProfile profile,
+      required final UserProfile2 profile,
       required final ParticipantStatus status,
       required final DateTime createdAt,
-      required final String createdBy,
+      required final UserProfile2 createdBy,
       required final DateTime updatedAt,
-      required final String updatedBy}) = _$ParticipantImpl;
+      required final UserProfile2 updatedBy}) = _$ParticipantImpl;
 
   factory _Participant.fromJson(Map<String, dynamic> json) =
       _$ParticipantImpl.fromJson;
@@ -316,17 +338,17 @@ abstract class _Participant implements Participant {
   @override
   String get email;
   @override
-  UserProfile get profile;
+  UserProfile2 get profile;
   @override
   ParticipantStatus get status;
   @override
   DateTime get createdAt;
   @override
-  String get createdBy;
+  UserProfile2 get createdBy;
   @override
   DateTime get updatedAt;
   @override
-  String get updatedBy;
+  UserProfile2 get updatedBy;
   @override
   @JsonKey(ignore: true)
   _$$ParticipantImplCopyWith<_$ParticipantImpl> get copyWith =>

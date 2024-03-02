@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/user_delete/index.dart';
+import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/environment.dart';
@@ -121,7 +121,7 @@ class SessionManagerService {
 
   Future<void> delete() async {
     try {
-      await _supabase.userDelete();
+      await _supabase.usersFunctions.userDelete();
       logout();
     } catch (e) {
       locator.logger.error("logout: $e");

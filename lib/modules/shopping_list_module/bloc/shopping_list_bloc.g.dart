@@ -15,14 +15,15 @@ _$ShoppingListBlocStateImpl _$$ShoppingListBlocStateImplFromJson(
       isDeletingItem: Map<String, bool>.from(json['isDeletingItem'] as Map),
       shoppingList: json['shoppingList'] == null
           ? null
-          : ShoppingListModel.fromJson(
-              json['shoppingList'] as Map<String, dynamic>),
-      participants: (json['participants'] as List<dynamic>?)
-          ?.map((e) => Participant.fromJson(e as Map<String, dynamic>))
+          : ShoppingList.fromJson(json['shoppingList'] as Map<String, dynamic>),
+      participants: (json['participants'] as List<dynamic>)
+          .map((e) => Participant.fromJson(e as Map<String, dynamic>))
           .toList(),
-      shoppingItems: (json['shoppingItems'] as List<dynamic>?)
-          ?.map((e) => ShoppingItem.fromJson(e as Map<String, dynamic>))
+      shoppingItems: (json['shoppingItems'] as List<dynamic>)
+          .map((e) => ShoppingItem.fromJson(e as Map<String, dynamic>))
           .toList(),
+      listQueryState: ListQueryState.fromJson(
+          json['listQueryState'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ShoppingListBlocStateImplToJson(
@@ -35,4 +36,5 @@ Map<String, dynamic> _$$ShoppingListBlocStateImplToJson(
       'shoppingList': instance.shoppingList,
       'participants': instance.participants,
       'shoppingItems': instance.shoppingItems,
+      'listQueryState': instance.listQueryState,
     };

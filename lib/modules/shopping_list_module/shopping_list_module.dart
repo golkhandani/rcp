@@ -35,7 +35,7 @@ final shoppingListRoute = GoRouteNamed(
     final shoppingListId = state.pathParameters['shopping_list_id']!;
     final shoppingList = state.extra == null
         ? null
-        : ShoppingListModel.fromJson(
+        : ShoppingList.fromJson(
             state.extra as dynamic,
           );
     return ShoppingListScreen(
@@ -54,7 +54,7 @@ class ShoppingListScreen extends StatefulWidget {
   });
 
   final String shoppingListId;
-  final ShoppingListModel? shoppingList;
+  final ShoppingList? shoppingList;
 
   @override
   State<ShoppingListScreen> createState() => _ShoppingListScreenState();
@@ -83,7 +83,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
 
   showListEditorBottomSheet(
     BuildContext context,
-    ShoppingListModel shoppingList,
+    ShoppingList shoppingList,
   ) {
     final NotificationBannerService bannerService = locator.get();
     final child = ShoppingListAddOrEdit(
@@ -99,6 +99,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
 
     _shoppingListBloc
       ..loadShoppingList(
+        shoppingListId: widget.shoppingListId,
         shoppingList: widget.shoppingList,
       )
       ..loadShoppingItems(
@@ -213,12 +214,12 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                     sliver: MultiSliver(
                       children: [
                         SliverList.builder(
-                            itemCount: state.shoppingItems?.length ?? 0,
+                            itemCount: state.shoppingItems.length,
                             itemBuilder: (
                               context,
                               index,
                             ) {
-                              final item = state.shoppingItems![index];
+                              final item = state.shoppingItems[index];
 
                               return Padding(
                                 key: Key(item.id),

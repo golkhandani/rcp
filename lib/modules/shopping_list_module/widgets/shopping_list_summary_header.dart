@@ -19,7 +19,7 @@ class ShoppingListSummaryHeader extends StatefulWidget {
     required this.onAddItemClicked,
   });
 
-  final ShoppingListModel item;
+  final ShoppingList item;
   final VoidCallback onEditClicked;
   final VoidCallback? onAddItemClicked;
 
@@ -190,7 +190,7 @@ class _ShoppingListSummaryHeaderState extends State<ShoppingListSummaryHeader> {
                     maxHeight: height,
                     currentHeight: currentHeight,
                     child: Text(
-                      'Last updated at ${DateFormat.yMMMd().format(widget.item.updatedAt)} by ${widget.item.updatedBy}',
+                      'Last updated at ${DateFormat.yMMMd().format(widget.item.updatedAt)} by ${widget.item.updatedBy.safeName}',
                       style: context
                           .typoraphyTheme.hint.onCardBackground.textStyle,
                     ),

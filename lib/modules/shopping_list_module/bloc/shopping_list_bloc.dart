@@ -1,17 +1,18 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:collection/collection.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:rcp/core/functions/shopping_item/handler.dart';
+import 'package:rcp/core/functions/shopping_list/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/participant_model.dart';
 import 'package:rcp/core/models/shopping_item_model.dart';
 import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/core/services/profile_manager_service.dart';
+import 'package:rcp/modules/app_bloc/list_query_state.dart';
 
 part 'shopping_list_bloc.freezed.dart';
 part 'shopping_list_bloc.g.dart';
@@ -23,9 +24,10 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
     required bool isLoadingItems,
     required bool isAddingItem,
     required Map<String, bool> isDeletingItem,
-    required ShoppingListModel? shoppingList,
-    required List<Participant>? participants,
-    required List<ShoppingItem>? shoppingItems,
+    required ShoppingList? shoppingList,
+    required List<Participant> participants,
+    required List<ShoppingItem> shoppingItems,
+    required ListQueryState listQueryState,
   }) = _ShoppingListBlocState;
 
   factory ShoppingListBlocState.init() => const ShoppingListBlocState(
@@ -34,8 +36,9 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
         isDeletingItem: {},
         isAddingItem: false,
         shoppingList: null,
-        participants: null,
-        shoppingItems: null,
+        participants: [],
+        shoppingItems: [],
+        listQueryState: ListQueryState(pageSize: 50),
       );
   factory ShoppingListBlocState.fromJson(Map<String, Object?> json) =>
       _$ShoppingListBlocStateFromJson(json);
@@ -55,7 +58,8 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
 
   // SHOPPING LIST
   Future<void> loadShoppingList({
-    required ShoppingListModel? shoppingList,
+    required String shoppingListId,
+    required ShoppingList? shoppingList,
   }) async {
     try {
       emit(state.copyWith(isLoading: true));
@@ -67,11 +71,13 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         return;
       }
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final list = generateFakeShoppingListData(1);
+      final fetchedData =
+          await supabase.shoppingListFuntions.getShoppingListById(
+        shoppingListId,
+      );
       emit(state.copyWith(
         isLoading: false,
-        shoppingList: list[0],
+        shoppingList: fetchedData,
       ));
     } catch (e) {
       _logger.error(e);
@@ -87,20 +93,13 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final created = ShoppingListModel(
+      final created =
+          await supabase.shoppingListFuntions.addOrUpdateShoppingListById(
+        id: null,
         name: name,
         description: description,
-        // TODO: convert it to function input
-        // will be completed by BE
-        id: Faker().guid.guid(),
-        participants: [],
-        items: [],
-        createdAt: Faker().date.dateTime(),
-        createdBy: Faker().guid.toString(),
-        updatedAt: Faker().date.dateTime(),
-        updatedBy: Faker().guid.toString(),
       );
+
       emit(state.copyWith(
         isLoading: false,
         shoppingList: created,
@@ -126,8 +125,9 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         return;
       }
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final updated = sl.copyWith(
+      final updated =
+          await supabase.shoppingListFuntions.addOrUpdateShoppingListById(
+        id: sl.id,
         name: name,
         description: description,
       );
@@ -153,14 +153,16 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         emit(state.copyWith(isLoadingItems: false));
         return;
       }
+      final query = state.listQueryState.copyWith(
+        page: state.shoppingItems.isEmpty ? 1 : state.listQueryState.page + 1,
+      );
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final list = generateFakeShoppingItemData(10);
+      final list = await supabase.shoppingItemsFuntions
+          .getShoppingItemsByShoppingList(shoppingListId, query);
       emit(state.copyWith(
+        listQueryState: query,
         isLoadingItems: false,
-        shoppingItems: list.sorted(
-          (a, b) => b.isPurchased ? 0 : 1,
-        ),
+        shoppingItems: list,
       ));
     } catch (e) {
       _logger.error(e);
@@ -176,38 +178,31 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
   }) async {
     try {
       emit(state.copyWith(isAddingItem: true));
+      if (state.shoppingList == null) {
+        return;
+      }
       if (name.isEmpty) {
         return;
       }
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      ShoppingItem? item;
-      bool shouldAdd = true;
-      final updateList = List<ShoppingItem>.from(state.shoppingItems ?? []);
+      final updateList = List<ShoppingItem>.from(state.shoppingItems);
       final index = updateList.indexWhere((e) => e.id == id);
 
-      if (index != -1) {
-        item = updateList[index].copyWith(
-          name: name,
-          quantity: quantity,
-        );
-        updateList.replaceRange(index, index + 1, [item]);
-        shouldAdd = false;
-      }
-
-      item ??= ShoppingItem(
-        id: Faker().guid.guid(),
+      final item = await supabase.shoppingItemsFuntions.addOrUpdateShoppingItem(
+        state.shoppingList!.id,
+        id: id,
         name: name,
-        createdAt: DateTime.now(),
-        createdBy: Faker().person.name(),
+        quantity: quantity,
       );
 
-      final updatedList = [
-        if (shouldAdd) item,
-        ...updateList,
-      ];
+      if (index != -1) {
+        updateList.replaceRange(index, index + 1, [item]);
+      } else {
+        updateList.insert(0, item);
+      }
+
       emit(state.copyWith(
-        shoppingItems: updatedList,
+        shoppingItems: updateList,
       ));
       banner.showSuccessBanner('Item add to the list!');
     } catch (e) {
@@ -226,8 +221,10 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
           shoppingItem.id: true,
         },
       ));
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final updatedItems = List<ShoppingItem>.from(state.shoppingItems ?? [])
+      await supabase.shoppingItemsFuntions.deleteShoppingItemById(
+        shoppingItem.id,
+      );
+      final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
         ..remove(shoppingItem);
 
       emit(state.copyWith(
@@ -255,23 +252,30 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     required ShoppingItem shoppingItem,
   }) async {
     try {
-      final isPurchased = shoppingItem.isPurchased;
-      final updatedItem = shoppingItem.copyWith(
-        purchasedAt: isPurchased ? null : DateTime.now(),
-        purchasedBy:
-            isPurchased ? null : profileManagerService.profile.fullName,
+      final currentIsPurchased = shoppingItem.isPurchased;
+
+      final updatedItem =
+          await supabase.shoppingItemsFuntions.togglePurchasedShoppingItem(
+        state.shoppingList!.id,
+        id: shoppingItem.id,
+        isPurchased: currentIsPurchased,
       );
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final currentItems = state.shoppingItems ?? [];
-      final updatedItems = List<ShoppingItem>.from(currentItems)
+
+      final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
         ..remove(shoppingItem)
-        ..insert(isPurchased ? 0 : currentItems.length - 1, updatedItem);
+        ..insert(
+          currentIsPurchased ? 0 : state.shoppingItems.length - 1,
+          shoppingItem.copyWith(
+            purchasedAt: updatedItem.purchasedAt,
+            purchasedBy: updatedItem.purchasedBy,
+          ),
+        );
 
       emit(state.copyWith(
         shoppingItems: updatedItems,
       ));
       banner.showSuccessBanner(
-        isPurchased
+        currentIsPurchased
             ? 'Item moved to the top of the list'
             : 'Item moved to the bottom of the list',
       );
@@ -317,7 +321,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         },
       ));
       await Future.delayed(const Duration(milliseconds: 1000));
-      final updatedItems = List<Participant>.from(state.participants ?? [])
+      final updatedItems = List<Participant>.from(state.participants)
         ..remove(participant);
 
       emit(state.copyWith(
@@ -350,7 +354,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         isAddingItem: false,
         participants: [
           participant.copyWith(status: ParticipantStatus.invited),
-          ...?state.participants
+          ...state.participants
         ],
       ));
       banner.showSuccessBanner('Participant add to the list');

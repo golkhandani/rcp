@@ -1,7 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'package:rcp/core/ioc.dart';
 
 part 'index.freezed.dart';
 part 'index.g.dart';
@@ -29,19 +26,4 @@ abstract class UserUsernameIsAvailableOutout
 
   factory UserUsernameIsAvailableOutout.fromJson(Map<String, dynamic> json) =>
       _$UserUsernameIsAvailableOutoutFromJson(json);
-}
-
-extension CheckUsernameAvailabilty on SupabaseClient {
-  Future<UserUsernameIsAvailableOutout> userUsernameIsAvailable({
-    required UserUsernameIsAvailableInput body,
-  }) async {
-    try {
-      final res = await functions.invoke(user_username_is_available,
-          body: body.toJson());
-      return UserUsernameIsAvailableOutout.fromJson(res.data);
-    } catch (e) {
-      locator.logger.error(e);
-      return const UserUsernameIsAvailableOutout(isAvailable: false);
-    }
-  }
 }

@@ -4,23 +4,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:rcp/core/functions/shopping_list/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/modules/app_bloc/list_query_state.dart';
 
 part 'home_bloc.freezed.dart';
 
 @freezed
 class HomeBlocState with _$HomeBlocState {
   const factory HomeBlocState({
+    required bool isPaginationDone,
     required bool isLoading,
     required bool isAdding,
+    required ListQueryState listQueryState,
     required Map<String, bool> isDeletingItem,
-    required List<ShoppingListModel> shoppingLists,
+    required List<ShoppingList> shoppingLists,
   }) = _HomeBlocState;
 
   factory HomeBlocState.init() => const HomeBlocState(
-      isLoading: false, isAdding: false, shoppingLists: [], isDeletingItem: {});
+        isPaginationDone: false,
+        isLoading: false,
+        isAdding: false,
+        listQueryState: ListQueryState(),
+        shoppingLists: [],
+        isDeletingItem: {},
+      );
 }
 
 class HomeBloc extends Cubit<HomeBlocState> {
@@ -33,13 +43,27 @@ class HomeBloc extends Cubit<HomeBlocState> {
     required this.banner,
   }) : super(HomeBlocState.init());
 
-  loadShoppingLists() async {
+  Future<void> loadShoppingLists() async {
     try {
+      if (state.isPaginationDone) {
+        return;
+      }
       emit(state.copyWith(isLoading: true));
       await Future.delayed(const Duration(milliseconds: 1000));
-      final list = generateFakeShoppingListData(20);
+      final query = state.listQueryState.copyWith(
+        page: state.shoppingLists.isEmpty ? 1 : state.listQueryState.page + 1,
+      );
+
+      final list = await supabase.shoppingListFuntions.getShoppingListsByUser(
+        query,
+      );
+
       emit(state.copyWith(
-        shoppingLists: list,
+        listQueryState: query,
+        shoppingLists: [
+          ...state.shoppingLists,
+          ...list,
+        ],
         isLoading: false,
       ));
     } catch (e) {
@@ -47,12 +71,11 @@ class HomeBloc extends Cubit<HomeBlocState> {
     }
   }
 
-  addShoppingList({
-    required ShoppingListModel shoppingList,
+  // Just updating ui -> main logic in shopping_list_bloc
+  Future<void> addShoppingList({
+    required ShoppingList shoppingList,
   }) async {
     try {
-      emit(state.copyWith(isAdding: true));
-      await Future.delayed(const Duration(milliseconds: 1000));
       emit(state.copyWith(
         shoppingLists: [
           shoppingList,
@@ -68,19 +91,17 @@ class HomeBloc extends Cubit<HomeBlocState> {
     }
   }
 
-  updateShoppingList({
-    required ShoppingListModel shoppingList,
+  // Just updating ui -> main logic in shopping_list_bloc
+  Future<void> updateShoppingList({
+    required ShoppingList shoppingList,
   }) async {
     try {
       emit(state.copyWith(isAdding: true));
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final updatedList = List<ShoppingListModel>.from(state.shoppingLists);
+      final updatedList = List<ShoppingList>.from(state.shoppingLists);
       final index = updatedList.indexWhere(
         (e) => e.id == shoppingList.id,
       );
-
       updatedList.replaceRange(index, index + 1, [shoppingList]);
-
       emit(state.copyWith(
         shoppingLists: updatedList,
         isAdding: false,
@@ -92,8 +113,8 @@ class HomeBloc extends Cubit<HomeBlocState> {
     }
   }
 
-  removeShoppingList({
-    required ShoppingListModel shoppingList,
+  Future<void> removeShoppingList({
+    required ShoppingList shoppingList,
   }) async {
     try {
       emit(state.copyWith(
@@ -102,8 +123,10 @@ class HomeBloc extends Cubit<HomeBlocState> {
           shoppingList.id: true,
         },
       ));
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final updatedItems = List<ShoppingListModel>.from(state.shoppingLists)
+      await supabase.shoppingListFuntions.deleteShoppingListById(
+        shoppingList.id,
+      );
+      final updatedItems = List<ShoppingList>.from(state.shoppingLists)
         ..remove(shoppingList);
       emit(state.copyWith(
         isDeletingItem: {

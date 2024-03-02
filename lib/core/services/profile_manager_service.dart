@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/user_profile/index.dart';
+import 'package:rcp/core/functions/models/user_profile/index.dart';
+import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
 
 class ProfileManagerService {
@@ -36,7 +37,7 @@ class ProfileManagerService {
 
   Future<UserProfile?> _getUserProfile() async {
     try {
-      final userProfile = await _supabase.userProfileGet();
+      final userProfile = await _supabase.usersFunctions.userProfileGet();
       _profile = userProfile;
       return _profile;
     } catch (e) {

@@ -21,9 +21,9 @@ class ShoppingListAddOrEdit extends StatefulWidget {
   });
 
   final ShoppingListBloc shoppingListBloc;
-  final ShoppingListModel? shoppingList;
-  final void Function(ShoppingListModel)? shoppingListAdded;
-  final void Function(ShoppingListModel)? shoppingListUpdated;
+  final ShoppingList? shoppingList;
+  final void Function(ShoppingList)? shoppingListAdded;
+  final void Function(ShoppingList)? shoppingListUpdated;
 
   @override
   State<ShoppingListAddOrEdit> createState() => _ShoppingListAddOrEditState();
@@ -53,12 +53,10 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
       },
       builder: (context, state) {
         final inviteds = state.participants
-                ?.where((e) => e.status == ParticipantStatus.invited) ??
-            [];
+            .where((e) => e.status == ParticipantStatus.invited);
 
         final memebers = state.participants
-                ?.where((e) => e.status == ParticipantStatus.joined) ??
-            [];
+            .where((e) => e.status == ParticipantStatus.joined);
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -94,7 +92,7 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
                           description: _descriptionController.text,
                         ),
               ),
-              if (state.shoppingList != null) ...[
+              if (widget.shoppingList != null) ...[
                 const Gap(16),
                 Text(
                   'Add a new participant!',

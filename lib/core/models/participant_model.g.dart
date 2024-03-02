@@ -11,12 +11,14 @@ _$ParticipantImpl _$$ParticipantImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       userId: json['userId'] as String,
       email: json['email'] as String,
-      profile: UserProfile.fromJson(json['profile'] as Map<String, dynamic>),
+      profile: UserProfile2.fromJson(json['profile'] as Map<String, dynamic>),
       status: $enumDecode(_$ParticipantStatusEnumMap, json['status']),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      createdBy: json['createdBy'] as String,
+      createdBy:
+          UserProfile2.fromJson(json['createdBy'] as Map<String, dynamic>),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
-      updatedBy: json['updatedBy'] as String,
+      updatedBy:
+          UserProfile2.fromJson(json['updatedBy'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ParticipantImplToJson(_$ParticipantImpl instance) =>
@@ -27,9 +29,9 @@ Map<String, dynamic> _$$ParticipantImplToJson(_$ParticipantImpl instance) =>
       'profile': instance.profile.toJson(),
       'status': _$ParticipantStatusEnumMap[instance.status]!,
       'createdAt': instance.createdAt.toIso8601String(),
-      'createdBy': instance.createdBy,
+      'createdBy': instance.createdBy.toJson(),
       'updatedAt': instance.updatedAt.toIso8601String(),
-      'updatedBy': instance.updatedBy,
+      'updatedBy': instance.updatedBy.toJson(),
     };
 
 const _$ParticipantStatusEnumMap = {
