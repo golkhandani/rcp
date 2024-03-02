@@ -7,7 +7,8 @@
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:express@4.18.2": "npm:express@4.18.2",
       "npm:faker": "npm:faker@6.6.6",
-      "npm:faker@5.5.3": "npm:faker@5.5.3"
+      "npm:faker@5.5.3": "npm:faker@5.5.3",
+      "npm:postgres-date": "npm:postgres-date@2.1.0"
     },
     "npm": {
       "@faker-js/faker@8.4.1": {
@@ -374,6 +375,10 @@
       },
       "path-to-regexp@0.1.7": {
         "integrity": "sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==",
+        "dependencies": {}
+      },
+      "postgres-date@2.1.0": {
+        "integrity": "sha512-K7Juri8gtgXVcDfZttFKVmhglp7epKb1K4pgrkLxehjqkrgPhfG6OO8LHLkfaqkbpjNRnra018XwAr1yQFWGcA==",
         "dependencies": {}
       },
       "proxy-addr@2.0.7": {

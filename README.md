@@ -80,6 +80,10 @@ Create a bucked called `avatars` and make sure user can read and write on it;
    supabase db migration up --local
    ```
 
+   npx supabase gen types typescript --project-id "hhahtffbqirozvtxskgd" --schema public > supabase/functions/types.ts
+
+
+
 3. **Run Supabase Functions**:
    To be able to watch edge function changes and logs
 
@@ -216,5 +220,5 @@ Suggested structure:
    Once you've tested the function locally and it's ready for deployment, use the following command to deploy it:
 
    ```
-   supabase functions deploy --project-ref ndhorlcmrjrjakflkgfc
+   supabase functions deploy --project-ref hhahtffbqirozvtxskgd
    ```

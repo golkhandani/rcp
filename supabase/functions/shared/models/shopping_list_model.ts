@@ -9,17 +9,42 @@ import {
 } from './shopping_item_model.ts';
 import { UserProfile } from './user_profile_model.ts';
 import { generateFakeUserProfileData } from './user_profile_model.ts';
+import { Database } from '../../types.ts';
 
-interface ShoppingList {
-	id: string;
-	name: string;
+export type ShoppingListRow =
+	Database['public']['Tables']['shopping_lists']['Row'];
+
+abstract class ShoppingList {
+	id!: string;
+	name!: string;
 	description?: string | null;
-	participants: Participant[];
-	items: ShoppingItem[];
-	createdAt: Date;
-	createdBy: UserProfile;
-	updatedAt: Date;
-	updatedBy: UserProfile;
+	participants!: Participant[];
+	items!: ShoppingItem[];
+	createdAt!: Date;
+	createdBy!: UserProfile;
+	updatedAt!: Date;
+	updatedBy!: UserProfile;
+	constructor(input: ShoppingList) {
+		Object.assign(this, input);
+		return this;
+	}
+
+	// fromDB(
+	// 	row: ShoppingListRow,
+	// 	participants: Participant[],
+	// 	items: ShoppingItem[],
+	// ): ShoppingList {
+	// 	return {
+	// 		id: row.id,
+	// 		name: row.name,
+	// 		description: row.description,
+	// 		participants: participants,
+	// 		items: items,
+	// 		createdAt: new Date(row.created_at),
+	// 		createdBy:
+	// 		updatedAt: new Date(row.created_at),
+	// 	};
+	// }
 }
 
 function generateFakeShoppingListData(count: number): ShoppingList[] {
