@@ -17,7 +17,8 @@ interface Participant {
 	updatedBy: UserProfile;
 }
 
-export type ParticpantRow = Database['public']['Tables']['participants']['Row'];
+export type ParticipantRow =
+	Database['public']['Tables']['participants']['Row'];
 
 export enum ParticipantStatus {
 	joined = 'joined',
