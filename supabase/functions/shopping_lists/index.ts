@@ -1,8 +1,6 @@
 import { ExpressApp } from './../shared/anything.ts';
 import { BasicException } from './../shared/exceptions/client_info_exception.ts';
-// @deno-types="npm:@types/express@4"
-import express, { Express } from 'npm:express@4.18.2';
-import cors from 'npm:cors@2.8.5';
+
 import {
 	addShoppingListById,
 	updateShoppingListById,
@@ -105,6 +103,7 @@ expressApp((app: ExpressApp) => {
 		}
 	});
 
+	// TODO(@golkhandani): add new participant to the list
 	app.post(`/${prefix}/:id/participants`, async (req, res) => {
 		try {
 			const result = await getShoppingListParticipantsById(req);
