@@ -1,11 +1,14 @@
 import {
 	createClient,
 	FunctionsError,
+	SupabaseClient,
+	User,
 } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { UserProfile } from './models/user_profile_model.ts';
 import { UserProfileRow } from './anything.ts';
 // @deno-types="npm:@types/express@4"
 import { Request } from 'npm:express@4.18.2';
+import { ClientException } from './exceptions/client_info_exception.ts';
 
 export const supabaseAdminClient = () => {
 	const supabaseClient = createClient(
@@ -40,6 +43,22 @@ export const getClients = (req: Request) => {
 		admin,
 		supabase,
 	};
+};
+
+export const getClientInfo = async (
+	req: Request,
+): Promise<{ supabase: SupabaseClient; user: User; profile: UserProfile }> => {
+	try {
+		const { supabase } = getClients(req);
+
+		const [user, userProfile] = await Promise.all([
+			supabase.auth.getUser(),
+			getUserProfile(req),
+		]);
+		return { supabase, user: user.data.user as User, profile: userProfile };
+	} catch (error) {
+		throw new ClientException('Could not get client info!', 500);
+	}
 };
 
 export const getFunctionName = (req: Request, prefix: string) => {

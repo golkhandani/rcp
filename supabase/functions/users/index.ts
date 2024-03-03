@@ -13,6 +13,16 @@ app.use(express.json());
 const port = 3000;
 const prefix = 'users';
 
+app.get(`/${prefix}/signin`, async (req, res) => {
+	const { supabase } = getClients(req);
+	const userSession = await supabase.auth.signInWithPassword({
+		email: 'golkhandani@gmail.com',
+		password: 'Test123!',
+	});
+
+	res.send(userSession.data.session);
+});
+
 app.get(`/${prefix}/me`, async (req, res) => {
 	const { supabase, authHeader } = getClients(req);
 	const { data: { user } } = await supabase.auth.getUser();
@@ -33,32 +43,50 @@ app.put(`/${prefix}/me`, async (req, res) => {
 	const body = req.body;
 	const { data: { user } } = await supabase.auth.getUser();
 
-	const { data: userProfile } = await supabase.from(userProfileDb).select()
-		.eq(
-			'user_id',
-			user?.id,
-		)
-		.single<UserProfileRow>();
+	try {
+		const { data: userProfile, error: getError } = await supabase.from(
+			userProfileDb,
+		).select()
+			.eq(
+				'user_id',
+				user?.id,
+			)
+			.single<UserProfileRow>();
 
-	const data = {
-		...userProfile,
-		'username': body.username,
-		'avatar_url': body.avatar_url,
-		'full_name': body.full_name,
-	};
+		if (userProfile == null) {
+			console.log('ERROR profile null');
+		}
+		console.log(body);
 
-	const { data: upserted, error } = await supabase.from(userProfileDb).upsert(
-		data,
-		{
-			onConflict: 'id',
-		},
-	).select('*')
-		.single<UserProfile>();
+		const data = {
+			...userProfile,
+			'username': body.username,
+			'avatar_url': body.avatar_url,
+			'full_name': body.full_name,
+		};
 
-	if (!upserted) {
-		throw new FunctionsError(error.message);
+		console.log(data);
+
+		const { data: upserted, error } = await supabase.from(userProfileDb)
+			.upsert(
+				data,
+				{
+					onConflict: 'id',
+				},
+			).select('*')
+			.single<UserProfile>();
+
+		if (!upserted) {
+			throw new FunctionsError(error.message);
+		}
+		res.status(200).send(upserted);
+	} catch (error) {
+		res.status(500).send({
+			type: error.name,
+			message: error.message,
+			body,
+		});
 	}
-	res.send(upserted);
 });
 
 app.get(`/${prefix}/username_is_available`, async (req, res) => {

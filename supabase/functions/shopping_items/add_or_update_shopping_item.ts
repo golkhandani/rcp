@@ -1,57 +1,122 @@
-// @deno-types="npm:@types/express@4"
-import { Request } from 'npm:express@4.18.2';
-import { getClients, getUserProfile } from '../shared/admin_client.ts';
-import { generateFakeShoppingItemData } from '../shared/models/shopping_item_model.ts';
+import { BasicException } from './../shared/exceptions/client_info_exception.ts';
+import {
+	ShoppingItemRow,
+	shoppingItemSelect,
+	shoppingItemTable,
+} from './../shared/models/shopping_item_model.ts';
+import { ExpressRequest } from './../shared/anything.ts';
 
-export async function addOrUpdateShoppingItem(req: Request) {
-	const { admin, supabase } = getClients(req);
-	const userProfile = await getUserProfile(req);
+import { getClientInfo } from '../shared/admin_client.ts';
+import { FunctionException } from '../shared/exceptions/client_info_exception.ts';
 
-	const body = req.body;
-	const id = body.id;
-	const name = body.name;
-	const quantity = body.quantity;
+export async function addOrUpdateShoppingItem(req: ExpressRequest) {
+	try {
+		const { supabase, user, profile } = await getClientInfo(req);
 
-	const shoppingItems = generateFakeShoppingItemData(1);
+		// params
+		const shoppingListId = req.params.id;
+		const shoppingItemId = req.params.shoppingItemId;
 
-	const shoppingItem = shoppingItems[0];
-	if (id) {
-		shoppingItem.id = id;
-		shoppingItem.updatedBy = userProfile;
-	} else {
-		shoppingItem.createdBy = userProfile;
-		shoppingItem.updatedBy = userProfile;
-		shoppingItem.purchasedAt = null;
-		shoppingItem.purchasedBy = null;
+		// body
+		const body = req.body;
+		const id = shoppingItemId;
+		const name = body.name;
+		const quantity = body.quantity;
+		const date = (new Date()).toISOString();
+
+		const { data: existsShoppingItem, error: existsError } = await supabase
+			.from(shoppingItemTable).select('*').eq('id', id).single<
+			ShoppingItemRow
+		>();
+
+		let shoppingItemInput: Omit<ShoppingItemRow, 'id'>;
+
+		// handle update data
+		if (
+			existsShoppingItem &&
+			existsShoppingItem.shopping_list_id == shoppingListId
+		) {
+			shoppingItemInput = {
+				...existsShoppingItem,
+				name: name,
+				quantity: quantity,
+				//
+				updated_at: date,
+				updated_by: user.id,
+			};
+		} // handle insert data
+		else {
+			shoppingItemInput = {
+				shopping_list_id: shoppingListId,
+				name: name,
+				quantity: quantity,
+				//
+				updated_at: date,
+				updated_by: user.id,
+				created_at: date,
+				created_by: user.id,
+				purchased_at: null,
+				purchased_by: null,
+			};
+		}
+
+		const { data: insertedShoppingItem, error } = await supabase.from(
+			shoppingItemTable,
+		)
+			.upsert(
+				shoppingItemInput,
+			)
+			.select(shoppingItemSelect).single();
+
+		return insertedShoppingItem;
+	} catch (error) {
+		throw new FunctionException(error.message, error.status);
 	}
-
-	shoppingItem.name = name;
-	if (quantity) {
-		shoppingItem.quantity = quantity;
-	}
-
-	return shoppingItem;
 }
 
-export async function togglePurchasedShoppingItem(req: Request) {
-	const { admin, supabase } = getClients(req);
-	const userProfile = await getUserProfile(req);
+export async function togglePurchasedShoppingItem(req: ExpressRequest) {
+	try {
+		const { supabase, user, profile } = await getClientInfo(req);
+		// params
+		const shoppingListId = req.params.id;
+		const shoppingItemId = req.params.shoppingItemId;
 
-	const body = req.body;
-	const id = body.id;
-	const isPurchased = body.isPurchased;
+		// body
+		const body = req.body;
+		const id = shoppingItemId;
+		const isPurchased = body.isPurchased ?? false;
+		const date = (new Date()).toISOString();
 
-	const shoppingItems = generateFakeShoppingItemData(1);
+		const { data: existsShoppingItem, error: existsError } = await supabase
+			.from(shoppingItemTable).select('*').eq('id', id).single<
+			ShoppingItemRow
+		>();
 
-	const shoppingItem = shoppingItems[0];
-	shoppingItem.id = id;
-	if (isPurchased) {
-		shoppingItem.purchasedAt = null;
-		shoppingItem.purchasedBy = null;
-	} else {
-		shoppingItem.purchasedAt = new Date();
-		shoppingItem.purchasedBy = userProfile;
+		if (
+			!existsShoppingItem ||
+			existsShoppingItem?.shopping_list_id != shoppingListId
+		) {
+			throw new BasicException('No item found!', 404);
+		}
+
+		const shoppingItemInput: Partial<ShoppingItemRow> = {
+			purchased_by: isPurchased ? user.id : null,
+			purchased_at: isPurchased ? date : null,
+			//
+			updated_at: date,
+			updated_by: user.id,
+		};
+
+		const { data: updatedShoppingItem, error } = await supabase.from(
+			shoppingItemTable,
+		)
+			.update(
+				shoppingItemInput,
+			).eq('id', shoppingItemId)
+			.select(shoppingItemSelect).single();
+
+		return updatedShoppingItem;
+	} catch (error) {
+		throw new FunctionException(error.message, error.status);
 	}
-
-	return shoppingItem;
 }

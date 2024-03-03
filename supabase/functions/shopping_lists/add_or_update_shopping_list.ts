@@ -1,89 +1,47 @@
-// @deno-types="npm:@types/express@4"
-import { Request } from 'npm:express@4.18.2';
-import pgDateParser from 'npm:postgres-date';
-import { getClients, getUserProfile } from '../shared/admin_client.ts';
+import { ExpressRequest } from '../shared/anything.ts';
+
+import { getClientInfo } from '../shared/admin_client.ts';
 import {
-	generateFakeShoppingListData,
 	ShoppingListRow,
+	shoppingListSelect,
+	shoppingListTable,
 } from '../shared/models/shopping_list_model.ts';
 import { FunctionsError } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { Database } from '../types.ts';
 import { ShoppingList } from '../shared/models/shopping_list_model.ts';
-import { Participant } from '../shared/models/participant_model.ts';
-export type ParticpantRow = Database['public']['Tables']['participants']['Row'];
-
-export enum ParticipantStatus {
-	joined = 'joined',
-	invited = 'invited',
-}
+import {
+	participantSelect,
+	ParticipantStatus,
+	ParticpantRow,
+} from '../shared/models/participant_model.ts';
+import { FunctionException } from '../shared/exceptions/client_info_exception.ts';
 
 export async function addShoppingListById(
-	req: Request,
+	req: ExpressRequest,
 ): Promise<ShoppingList> {
-	const { admin, supabase } = getClients(req);
-	const { data: { user } } = await supabase.auth.getUser();
-
-	const userProfile = await getUserProfile(req);
-
-	const body = req.body;
-	const name = body.name;
-	const description = body.description;
-	const date = (new Date()).toISOString();
-
 	try {
+		const { supabase, user, profile } = await getClientInfo(req);
+		const body = req.body;
+		const name = body.name;
+		const description = body.description;
+		const date = (new Date()).toISOString();
 		const shoppingListInput: Omit<ShoppingListRow, 'id'> = {
 			name: name,
 			description: description,
-			owner_id: userProfile.userId,
+			owner_id: user.id,
 			//
 			updated_at: date,
-			updated_by: userProfile.userId,
+			updated_by: user.id,
 			created_at: date,
-			created_by: userProfile.userId,
+			created_by: user.id,
 		};
 
 		const { data: insertedShoppingList, error } = await supabase.from(
-			'shopping_lists',
+			shoppingListTable,
 		)
 			.insert(
 				shoppingListInput,
 			).select(
-				`
-				id: id,
-				name: name,
-				description: description,
-				ownerId: owner_id (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				updatedAt: updated_at,
-				updatedBy: updated_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				createdAt: created_at,
-				createdBy: created_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				participants: participants(*)
-				
-				`,
+				shoppingListSelect,
 			).single();
 
 		if (insertedShoppingList == null || error) {
@@ -94,18 +52,18 @@ export async function addShoppingListById(
 		}
 
 		const participant: Omit<ParticpantRow, 'id'> = {
-			user_id: userProfile.userId,
-			user_profile_id: userProfile.id,
+			user_id: user.id,
+			user_profile_id: profile.id,
 			shopping_list_id: insertedShoppingList.id,
 			user_email: user!.email!,
 			status: ParticipantStatus.joined,
 			invited_at: date,
-			invited_by: userProfile.userId,
+			invited_by: user.id,
 			//
 			updated_at: date,
-			updated_by: userProfile.userId,
+			updated_by: user.id,
 			created_at: date,
-			created_by: userProfile.userId,
+			created_by: user.id,
 		};
 
 		const { data: insertedParticipant, error: participantError } =
@@ -115,52 +73,7 @@ export async function addShoppingListById(
 				.insert(
 					participant,
 				).select(
-					`
-				id: id,
-				userId: user_id,
-				email: user_email,
-				profile: user_profile_id (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				shoppingListId: shopping_list_id,
-				status: status,
-				invitedAt: invited_at,
-				invitedBy: invited_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				createdAt: created_at,
-				createdBy: created_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				updatedAt: updated_at,
-				updatedBy: updated_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				)
-				`,
+					participantSelect,
 				).single<ParticpantRow>();
 
 		console.log(
@@ -188,28 +101,24 @@ export async function addShoppingListById(
 		console.log(result);
 		return result as unknown as ShoppingList;
 	} catch (error) {
-		console.error(error);
-		throw new FunctionsError(error);
+		throw new FunctionException(error.message, error.status);
 	}
 }
 
 export async function updateShoppingListById(
-	req: Request,
+	req: ExpressRequest,
 ): Promise<ShoppingList> {
-	const { admin, supabase } = getClients(req);
-	const { data: { user } } = await supabase.auth.getUser();
-
-	const userProfile = await getUserProfile(req);
-
-	const body = req.body;
-	const id = body.id;
-	const name = body.name;
-	const description = body.description;
-	const date = (new Date()).toISOString();
-
 	try {
+		const { supabase, user } = await getClientInfo(req);
+
+		const body = req.body;
+		const id = req.params.id;
+		const name = body.name;
+		const description = body.description;
+		const date = (new Date()).toISOString();
+
 		const { data: existsShoppingList, error: existsError } = await supabase
-			.from('shopping_lists').select('*').eq('id', id).single();
+			.from(shoppingListTable).select('*').eq('id', id).single();
 		if (existsShoppingList == null) {
 			throw new FunctionsError('Shopping list not found!');
 		}
@@ -219,98 +128,16 @@ export async function updateShoppingListById(
 			name: name,
 			description: description,
 			updated_at: date,
-			updated_by: userProfile.userId,
+			updated_by: user.id,
 		};
 
 		const { data: insertedShoppingList, error } = await supabase.from(
-			'shopping_lists',
+			shoppingListTable,
 		)
 			.update(
 				shoppingListInput,
 			).eq('id', id)
-			.select(
-				`
-				id: id,
-				name: name,
-				description: description,
-				ownerId: owner_id (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				updatedAt: updated_at,
-				updatedBy: updated_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				createdAt: created_at,
-				createdBy: created_by (
-					id: id,
-					userId: user_id,
-					username: username,
-					fullName: full_name,
-					avatarUrl: avatar_url,
-					createdAt: created_at,
-					updatedAt: updated_at
-				),
-				participants: participants(
-					id: id,
-					userId: user_id,
-					email: user_email,
-					profile: user_profile_id (
-						id: id,
-						userId: user_id,
-						username: username,
-						fullName: full_name,
-						avatarUrl: avatar_url,
-						createdAt: created_at,
-						updatedAt: updated_at
-					),
-					shoppingListId: shopping_list_id,
-					status: status,
-					invitedAt: invited_at,
-					invitedBy: invited_by (
-						id: id,
-						userId: user_id,
-						username: username,
-						fullName: full_name,
-						avatarUrl: avatar_url,
-						createdAt: created_at,
-						updatedAt: updated_at
-					),
-					createdAt: created_at,
-					createdBy: created_by (
-						id: id,
-						userId: user_id,
-						username: username,
-						fullName: full_name,
-						avatarUrl: avatar_url,
-						createdAt: created_at,
-						updatedAt: updated_at
-					),
-					updatedAt: updated_at,
-					updatedBy: updated_by (
-						id: id,
-						userId: user_id,
-						username: username,
-						fullName: full_name,
-						avatarUrl: avatar_url,
-						createdAt: created_at,
-						updatedAt: updated_at
-					)
-				)
-				
-				`,
-			).single();
+			.select(shoppingListSelect).single();
 
 		if (insertedShoppingList == null || error) {
 			console.error(error);
@@ -324,10 +151,8 @@ export async function updateShoppingListById(
 			items: [],
 		};
 
-		console.log(result);
 		return result as unknown as ShoppingList;
 	} catch (error) {
-		console.error(error);
-		throw new FunctionsError(error);
+		throw new FunctionException(error.message, error.status);
 	}
 }

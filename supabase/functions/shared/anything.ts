@@ -1,3 +1,5 @@
+// @deno-types="npm:@types/express@4"
+import { Request } from 'npm:express@4.18.2';
 import { Database } from '../types.ts';
 
 export const corsHeaders = {
@@ -13,3 +15,5 @@ export type UserProfileRow =
 export class StorageServie {
 	static avatarsBucketId = 'avatars';
 }
+
+export type ExpressRequest = Request;

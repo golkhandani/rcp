@@ -2,6 +2,7 @@ import { faker } from 'npm:@faker-js/faker';
 import {
 	generateFakeParticipantData,
 	Participant,
+	participantSelect,
 } from './participant_model.ts';
 import {
 	generateFakeShoppingItemData,
@@ -13,6 +14,8 @@ import { Database } from '../../types.ts';
 
 export type ShoppingListRow =
 	Database['public']['Tables']['shopping_lists']['Row'];
+
+export const shoppingListTable = 'shopping_lists';
 
 abstract class ShoppingList {
 	id!: string;
@@ -28,25 +31,44 @@ abstract class ShoppingList {
 		Object.assign(this, input);
 		return this;
 	}
-
-	// fromDB(
-	// 	row: ShoppingListRow,
-	// 	participants: Participant[],
-	// 	items: ShoppingItem[],
-	// ): ShoppingList {
-	// 	return {
-	// 		id: row.id,
-	// 		name: row.name,
-	// 		description: row.description,
-	// 		participants: participants,
-	// 		items: items,
-	// 		createdAt: new Date(row.created_at),
-	// 		createdBy:
-	// 		updatedAt: new Date(row.created_at),
-	// 	};
-	// }
 }
 
+const shoppingListSelect = `
+id: id,
+name: name,
+description: description,
+ownerId: owner_id (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+),
+updatedAt: updated_at,
+updatedBy: updated_by (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+),
+createdAt: created_at,
+createdBy: created_by (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+),
+participants: participants(${participantSelect})
+
+`;
 function generateFakeShoppingListData(count: number): ShoppingList[] {
 	const fakeData: ShoppingList[] = [];
 
@@ -81,5 +103,5 @@ function generateFakeShoppingListData(count: number): ShoppingList[] {
 	return fakeData;
 }
 
-export { generateFakeShoppingListData };
+export { generateFakeShoppingListData, shoppingListSelect };
 export type { ShoppingList };

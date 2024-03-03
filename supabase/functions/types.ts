@@ -54,11 +54,32 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "public_participants_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_participants_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "public_participants_shopping_list_id_fkey"
             columns: ["shopping_list_id"]
             isOneToOne: false
             referencedRelation: "shopping_lists"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_participants_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "public_participants_user_id_fkey"
@@ -73,6 +94,74 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
+          }
+        ]
+      }
+      shopping_items: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          purchased_at: string | null
+          purchased_by: string | null
+          quantity: string | null
+          shopping_list_id: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          purchased_at?: string | null
+          purchased_by?: string | null
+          quantity?: string | null
+          shopping_list_id: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          purchased_at?: string | null
+          purchased_by?: string | null
+          quantity?: string | null
+          shopping_list_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_shopping_items_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_shopping_items_purchased_by_fkey"
+            columns: ["purchased_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_shopping_items_shopping_list_id_fkey"
+            columns: ["shopping_list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_shopping_items_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["user_id"]
           }
         ]
       }
@@ -174,38 +263,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_shopping_list_any_participant:
-        | {
-            Args: {
-              input_user_id: string
-              input_shopping_list_id: string
-            }
-            Returns: boolean
-          }
-        | {
-            Args: {
-              input_user_id: string
-              input_shopping_list_id: string
-              input_created_by?: string
-            }
-            Returns: boolean
-          }
-      is_shopping_list_joined_participant:
-        | {
-            Args: {
-              input_user_id: string
-              input_shopping_list_id: string
-            }
-            Returns: boolean
-          }
-        | {
-            Args: {
-              input_user_id: string
-              input_shopping_list_id: string
-              input_created_by?: string
-            }
-            Returns: boolean
-          }
+      is_shopping_list_any_participant: {
+        Args: {
+          input_user_id: string
+          input_shopping_list_id: string
+          input_created_by?: string
+        }
+        Returns: boolean
+      }
+      is_shopping_list_joined_participant: {
+        Args: {
+          input_user_id: string
+          input_shopping_list_id: string
+          input_created_by?: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
