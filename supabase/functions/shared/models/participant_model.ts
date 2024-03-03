@@ -74,6 +74,49 @@ updatedBy: updated_by (
 )
 `;
 
+export const participantInvitationSelect = `
+id: id,
+userId: user_id,
+email: user_email,
+userProfileId: user_profile_id,
+shoppingList: shopping_list_id (
+	id,
+	name,
+	description
+),
+status: status,
+invitedAt: invited_at,
+invitedBy: invited_by (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+),
+createdAt: created_at,
+createdBy: created_by (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+),
+updatedAt: updated_at,
+updatedBy: updated_by (
+	id: id,
+	userId: user_id,
+	username: username,
+	fullName: full_name,
+	avatarUrl: avatar_url,
+	createdAt: created_at,
+	updatedAt: updated_at
+)
+`;
+
 function generateFakeParticipantData(count: number): Participant[] {
 	const fakeData: Participant[] = [];
 

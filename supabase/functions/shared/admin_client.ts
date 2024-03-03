@@ -5,9 +5,8 @@ import {
 	User,
 } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { UserProfile } from './models/user_profile_model.ts';
-import { UserProfileRow } from './anything.ts';
-// @deno-types="npm:@types/express@4"
-import { Request } from 'npm:express@4.18.2';
+import { ExpressRequest, UserProfileRow } from './anything.ts';
+
 import { ClientException } from './exceptions/client_info_exception.ts';
 
 export const supabaseAdminClient = () => {
@@ -34,7 +33,7 @@ export const jsonResponse = (data: object, status = 200) => {
 	});
 };
 
-export const getClients = (req: Request) => {
+export const getClients = (req: ExpressRequest) => {
 	const authHeader = req.headers['authorization']! as string;
 	const admin = supabaseAdminClient();
 	const supabase = supabaseUserClient(authHeader);
@@ -46,29 +45,41 @@ export const getClients = (req: Request) => {
 };
 
 export const getClientInfo = async (
-	req: Request,
-): Promise<{ supabase: SupabaseClient; user: User; profile: UserProfile }> => {
+	req: ExpressRequest,
+): Promise<
+	{
+		admin: SupabaseClient;
+		supabase: SupabaseClient;
+		user: User;
+		profile: UserProfile;
+	}
+> => {
 	try {
-		const { supabase } = getClients(req);
+		const { admin, supabase } = getClients(req);
 
 		const [user, userProfile] = await Promise.all([
 			supabase.auth.getUser(),
 			getUserProfile(req),
 		]);
-		return { supabase, user: user.data.user as User, profile: userProfile };
+		return {
+			admin,
+			supabase,
+			user: user.data.user as User,
+			profile: userProfile,
+		};
 	} catch (error) {
 		throw new ClientException('Could not get client info!', 500);
 	}
 };
 
-export const getFunctionName = (req: Request, prefix: string) => {
+export const getFunctionName = (req: ExpressRequest, prefix: string) => {
 	const fnWithPrefix = req.headers['x-function-name']! as string;
 	const fn = fnWithPrefix.split(`${prefix}--`)[1];
 	return fn;
 };
 
 export const userProfileDb = 'user_profile';
-export const getUserProfile = async (req: Request) => {
+export const getUserProfile = async (req: ExpressRequest) => {
 	const { admin, supabase } = getClients(req);
 	const { data: { user } } = await supabase.auth.getUser();
 	const { data: userProfileRow } = await admin.from('user_profile').select()

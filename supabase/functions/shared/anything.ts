@@ -24,6 +24,7 @@ export function expressApp(cb: (app: ExpressApp) => void) {
 	const app = express();
 	app.use(express.json());
 	app.use(cors());
+	app.use(express.urlencoded({ extended: true }));
 	const port = 3000;
 	cb(app);
 	app.listen(port, () => {

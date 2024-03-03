@@ -18,6 +18,11 @@ import { togglePurchasedShoppingItem } from '../shopping_items/add_or_update_sho
 import { deleteShoppingItemById } from '../shopping_items/delete_shopping_item_by_id.ts';
 import { getShoppingItemsByShoppingList } from '../shopping_items/get_shopping_items_by_shopping_list.ts';
 import { expressApp } from '../shared/anything.ts';
+import {
+	addShoppingListParticipantsById,
+	deleteShoppingListParticipantsById,
+	updateStatusShoppingListParticipantsById,
+} from '../participants/add_participant.ts';
 
 expressApp((app: ExpressApp) => {
 	const prefix = 'shopping_lists';
@@ -106,7 +111,7 @@ expressApp((app: ExpressApp) => {
 	// TODO(@golkhandani): add new participant to the list
 	app.post(`/${prefix}/:id/participants`, async (req, res) => {
 		try {
-			const result = await getShoppingListParticipantsById(req);
+			const result = await addShoppingListParticipantsById(req);
 			return res.status(200).send(result);
 		} catch (error) {
 			if (error instanceof BasicException) {
@@ -116,30 +121,15 @@ expressApp((app: ExpressApp) => {
 		}
 	});
 
-	app.put(
-		`/${prefix}/:id/participants/:participantId`,
-		async (req, res) => {
-			try {
-				const result = await getShoppingListParticipantsById(req);
-				return res.status(200).send(result);
-			} catch (error) {
-				if (error instanceof BasicException) {
-					return res.status(error.status).send({
-						error: error.message,
-					});
-				}
-				return res.status(500).send({ error: 'Something is wrong!' });
-			}
-		},
-	);
-
 	// when a user joined a shopping list we need to update the status from
 	// invited to joined
 	app.patch(
 		`/${prefix}/:id/participants/:participantId/status`,
 		async (req, res) => {
 			try {
-				const result = await getShoppingListParticipantsById(req);
+				const result = await updateStatusShoppingListParticipantsById(
+					req,
+				);
 				return res.status(200).send(result);
 			} catch (error) {
 				if (error instanceof BasicException) {
@@ -156,8 +146,8 @@ expressApp((app: ExpressApp) => {
 		`/${prefix}/:id/participants/:participantId`,
 		async (req, res) => {
 			try {
-				const result = await getShoppingListParticipantsById(req);
-				return res.status(200).send(result);
+				const result = await deleteShoppingListParticipantsById(req);
+				return res.status(204).send(result);
 			} catch (error) {
 				if (error instanceof BasicException) {
 					return res.status(error.status).send({
