@@ -49,7 +49,6 @@ class HomeBloc extends Cubit<HomeBlocState> {
         return;
       }
       emit(state.copyWith(isLoading: true));
-      await Future.delayed(const Duration(milliseconds: 1000));
       final query = state.listQueryState.copyWith(
         page: state.shoppingLists.isEmpty ? 1 : state.listQueryState.page + 1,
       );

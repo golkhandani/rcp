@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/functions/shopping_list/handler.dart';
+import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/participant_model.dart';
 import 'package:rcp/core/models/shopping_item_model.dart';
@@ -28,6 +29,10 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
     required List<Participant> participants,
     required Map<String, ShoppingItem> shoppingItems,
     required ListQueryState listQueryState,
+
+    //
+    required bool isLoadingInvitationCandidates,
+    required List<InvitationCandidate> invitationCandidates,
   }) = _ShoppingListBlocState;
 
   factory ShoppingListBlocState.init() => const ShoppingListBlocState(
@@ -40,6 +45,9 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
         participants: [],
         shoppingItems: {},
         listQueryState: ListQueryState(pageSize: 50),
+        //
+        isLoadingInvitationCandidates: false,
+        invitationCandidates: [],
       );
   factory ShoppingListBlocState.fromJson(Map<String, Object?> json) =>
       _$ShoppingListBlocStateFromJson(json);
@@ -394,16 +402,22 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     }
   }
 
-  Future<void> addParticipant({required Participant participant}) async {
+  Future<void> addParticipant({required InvitationCandidate candidate}) async {
     try {
       emit(state.copyWith(isAddingItem: true));
-      await Future.delayed(const Duration(milliseconds: 1000));
+
+      final addedParticipant = await supabase.shoppingListFuntions
+          .inviteShoppingListParticipantsById(
+        state.shoppingList!.id,
+        userId: candidate.userId,
+        email: candidate.email,
+      );
 
       emit(state.copyWith(
         isAddingItem: false,
         participants: [
-          participant.copyWith(status: ParticipantStatus.invited),
-          ...state.participants
+          addedParticipant,
+          ...state.participants,
         ],
       ));
       banner.showSuccessBanner('Participant add to the list');
@@ -416,6 +430,26 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
   }
 
   //
+
+  Future<void> getUserProfileForInvitation({
+    required String email,
+  }) async {
+    try {
+      emit(state.copyWith(isLoadingInvitationCandidates: true));
+      final userProfile =
+          await supabase.usersFunctions.userInvitationIsAvailable(email: email);
+
+      emit(state.copyWith(
+        invitationCandidates: userProfile != null ? [userProfile] : [],
+        isLoadingInvitationCandidates: false,
+      ));
+    } catch (e) {
+      _logger.error(e);
+      banner.showErrorBanner('Something went wrong!');
+    } finally {
+      emit(state.copyWith(isLoadingInvitationCandidates: false));
+    }
+  }
 
   //
 }

@@ -128,6 +128,29 @@ class ShoppingListFunctions extends SingleDomainFunctions {
     }
   }
 
+  Future<Participant> inviteShoppingListParticipantsById(
+    String id, {
+    required String userId,
+    required String email,
+  }) async {
+    try {
+      final functionName = getfnName('$id/participants');
+
+      final res = await supabaseClient.functions.post(
+        functionName,
+        body: {
+          "id": userId,
+          "email": email,
+        },
+      );
+
+      return Participant.fromJson(res.data);
+    } on FunctionException catch (e) {
+      _logger.error(e.details);
+      rethrow;
+    }
+  }
+
   // SHOPPING ITEMS
   Future<List<ShoppingItem>> getShoppingItemsByShoppingListId(
     String shoppingListId,

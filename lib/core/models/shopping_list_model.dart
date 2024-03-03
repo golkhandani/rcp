@@ -28,6 +28,28 @@ abstract class UserProfile2 with _$UserProfile2 {
       _$UserProfile2FromJson(json);
 }
 
+@freezed
+abstract class InvitationCandidate with _$InvitationCandidate {
+  @JsonSerializable(explicitToJson: true)
+  const InvitationCandidate._();
+  @JsonSerializable(explicitToJson: true)
+  const factory InvitationCandidate({
+    required String id,
+    required String userId,
+    required String username,
+    required String email,
+    String? fullName,
+    String? avatarUrl,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+  }) = _InvitationCandidate;
+
+  String get safeName => fullName ?? username;
+
+  factory InvitationCandidate.fromJson(Map<String, dynamic> json) =>
+      _$InvitationCandidateFromJson(json);
+}
+
 UserProfile2 generateFakeUserProfileData() {
   Faker faker = Faker();
   String id = faker.guid.guid();
@@ -74,6 +96,7 @@ class ShoppingList with _$ShoppingList {
     required List<Participant> participants,
     required List<ShoppingItem> items,
     required DateTime createdAt,
+    required UserProfile2 ownerId,
     required UserProfile2 createdBy,
     required DateTime updatedAt,
     required UserProfile2 updatedBy,
@@ -104,6 +127,7 @@ List<ShoppingList> generateFakeShoppingListData(int count) {
       description: description,
       participants: participants,
       items: items,
+      ownerId: createdBy,
       createdAt: createdAt,
       createdBy: createdBy,
       updatedAt: updatedAt,

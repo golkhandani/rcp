@@ -102,10 +102,15 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
                 const Gap(8),
                 AddParticipantCard(
                   isLoading: state.isAddingItem,
-                  onParticipantInvited: (p) =>
-                      widget.shoppingListBloc.addParticipant(
-                    participant: p,
+                  list: state.invitationCandidates,
+                  onEmailCheck: (email) =>
+                      widget.shoppingListBloc.getUserProfileForInvitation(
+                    email: email,
                   ),
+                  onUserInvited: (p) => widget.shoppingListBloc.addParticipant(
+                    candidate: p,
+                  ),
+                  isLoadingCandidates: state.isLoadingInvitationCandidates,
                 ),
                 const Gap(16),
                 Text(
@@ -120,6 +125,7 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
                         .textStyle,
                   ),
                 ...inviteds.map((item) => CurrentParticipantCard(
+                      isOwner: false,
                       participant: item,
                       onRemoved: () => widget.shoppingListBloc
                           .removeParticipant(participant: item),
@@ -138,6 +144,8 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
                         .textStyle,
                   ),
                 ...memebers.map((item) => CurrentParticipantCard(
+                      isOwner:
+                          item.userId == state.shoppingList?.ownerId.userId,
                       participant: item,
                       onRemoved: () => widget.shoppingListBloc
                           .removeParticipant(participant: item),
