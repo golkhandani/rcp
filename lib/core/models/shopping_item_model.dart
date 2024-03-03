@@ -26,7 +26,7 @@ class ShoppingItem with _$ShoppingItem {
   factory ShoppingItem.fromJson(Map<String, dynamic> json) =>
       _$ShoppingItemFromJson(json);
 
-  bool get isPurchased => purchasedBy != null && purchasedAt != null;
+  bool get isPurchased => purchasedBy != null || purchasedAt != null;
 }
 
 List<ShoppingItem> generateFakeShoppingItemData(int count) {

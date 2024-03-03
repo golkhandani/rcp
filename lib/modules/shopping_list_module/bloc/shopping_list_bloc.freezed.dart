@@ -25,9 +25,11 @@ mixin _$ShoppingListBlocState {
   bool get isLoadingItems => throw _privateConstructorUsedError;
   bool get isAddingItem => throw _privateConstructorUsedError;
   Map<String, bool> get isDeletingItem => throw _privateConstructorUsedError;
+  Map<String, bool> get isUpdatingItem => throw _privateConstructorUsedError;
   ShoppingList? get shoppingList => throw _privateConstructorUsedError;
   List<Participant> get participants => throw _privateConstructorUsedError;
-  List<ShoppingItem> get shoppingItems => throw _privateConstructorUsedError;
+  Map<String, ShoppingItem> get shoppingItems =>
+      throw _privateConstructorUsedError;
   ListQueryState get listQueryState => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,9 +49,10 @@ abstract class $ShoppingListBlocStateCopyWith<$Res> {
       bool isLoadingItems,
       bool isAddingItem,
       Map<String, bool> isDeletingItem,
+      Map<String, bool> isUpdatingItem,
       ShoppingList? shoppingList,
       List<Participant> participants,
-      List<ShoppingItem> shoppingItems,
+      Map<String, ShoppingItem> shoppingItems,
       ListQueryState listQueryState});
 
   $ShoppingListCopyWith<$Res>? get shoppingList;
@@ -74,6 +77,7 @@ class _$ShoppingListBlocStateCopyWithImpl<$Res,
     Object? isLoadingItems = null,
     Object? isAddingItem = null,
     Object? isDeletingItem = null,
+    Object? isUpdatingItem = null,
     Object? shoppingList = freezed,
     Object? participants = null,
     Object? shoppingItems = null,
@@ -96,6 +100,10 @@ class _$ShoppingListBlocStateCopyWithImpl<$Res,
           ? _value.isDeletingItem
           : isDeletingItem // ignore: cast_nullable_to_non_nullable
               as Map<String, bool>,
+      isUpdatingItem: null == isUpdatingItem
+          ? _value.isUpdatingItem
+          : isUpdatingItem // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>,
       shoppingList: freezed == shoppingList
           ? _value.shoppingList
           : shoppingList // ignore: cast_nullable_to_non_nullable
@@ -107,7 +115,7 @@ class _$ShoppingListBlocStateCopyWithImpl<$Res,
       shoppingItems: null == shoppingItems
           ? _value.shoppingItems
           : shoppingItems // ignore: cast_nullable_to_non_nullable
-              as List<ShoppingItem>,
+              as Map<String, ShoppingItem>,
       listQueryState: null == listQueryState
           ? _value.listQueryState
           : listQueryState // ignore: cast_nullable_to_non_nullable
@@ -150,9 +158,10 @@ abstract class _$$ShoppingListBlocStateImplCopyWith<$Res>
       bool isLoadingItems,
       bool isAddingItem,
       Map<String, bool> isDeletingItem,
+      Map<String, bool> isUpdatingItem,
       ShoppingList? shoppingList,
       List<Participant> participants,
-      List<ShoppingItem> shoppingItems,
+      Map<String, ShoppingItem> shoppingItems,
       ListQueryState listQueryState});
 
   @override
@@ -177,6 +186,7 @@ class __$$ShoppingListBlocStateImplCopyWithImpl<$Res>
     Object? isLoadingItems = null,
     Object? isAddingItem = null,
     Object? isDeletingItem = null,
+    Object? isUpdatingItem = null,
     Object? shoppingList = freezed,
     Object? participants = null,
     Object? shoppingItems = null,
@@ -199,6 +209,10 @@ class __$$ShoppingListBlocStateImplCopyWithImpl<$Res>
           ? _value._isDeletingItem
           : isDeletingItem // ignore: cast_nullable_to_non_nullable
               as Map<String, bool>,
+      isUpdatingItem: null == isUpdatingItem
+          ? _value._isUpdatingItem
+          : isUpdatingItem // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>,
       shoppingList: freezed == shoppingList
           ? _value.shoppingList
           : shoppingList // ignore: cast_nullable_to_non_nullable
@@ -210,7 +224,7 @@ class __$$ShoppingListBlocStateImplCopyWithImpl<$Res>
       shoppingItems: null == shoppingItems
           ? _value._shoppingItems
           : shoppingItems // ignore: cast_nullable_to_non_nullable
-              as List<ShoppingItem>,
+              as Map<String, ShoppingItem>,
       listQueryState: null == listQueryState
           ? _value.listQueryState
           : listQueryState // ignore: cast_nullable_to_non_nullable
@@ -229,11 +243,13 @@ class _$ShoppingListBlocStateImpl
       required this.isLoadingItems,
       required this.isAddingItem,
       required final Map<String, bool> isDeletingItem,
+      required final Map<String, bool> isUpdatingItem,
       required this.shoppingList,
       required final List<Participant> participants,
-      required final List<ShoppingItem> shoppingItems,
+      required final Map<String, ShoppingItem> shoppingItems,
       required this.listQueryState})
       : _isDeletingItem = isDeletingItem,
+        _isUpdatingItem = isUpdatingItem,
         _participants = participants,
         _shoppingItems = shoppingItems;
 
@@ -254,6 +270,14 @@ class _$ShoppingListBlocStateImpl
     return EqualUnmodifiableMapView(_isDeletingItem);
   }
 
+  final Map<String, bool> _isUpdatingItem;
+  @override
+  Map<String, bool> get isUpdatingItem {
+    if (_isUpdatingItem is EqualUnmodifiableMapView) return _isUpdatingItem;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_isUpdatingItem);
+  }
+
   @override
   final ShoppingList? shoppingList;
   final List<Participant> _participants;
@@ -264,12 +288,12 @@ class _$ShoppingListBlocStateImpl
     return EqualUnmodifiableListView(_participants);
   }
 
-  final List<ShoppingItem> _shoppingItems;
+  final Map<String, ShoppingItem> _shoppingItems;
   @override
-  List<ShoppingItem> get shoppingItems {
-    if (_shoppingItems is EqualUnmodifiableListView) return _shoppingItems;
+  Map<String, ShoppingItem> get shoppingItems {
+    if (_shoppingItems is EqualUnmodifiableMapView) return _shoppingItems;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_shoppingItems);
+    return EqualUnmodifiableMapView(_shoppingItems);
   }
 
   @override
@@ -277,7 +301,7 @@ class _$ShoppingListBlocStateImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ShoppingListBlocState(isLoading: $isLoading, isLoadingItems: $isLoadingItems, isAddingItem: $isAddingItem, isDeletingItem: $isDeletingItem, shoppingList: $shoppingList, participants: $participants, shoppingItems: $shoppingItems, listQueryState: $listQueryState)';
+    return 'ShoppingListBlocState(isLoading: $isLoading, isLoadingItems: $isLoadingItems, isAddingItem: $isAddingItem, isDeletingItem: $isDeletingItem, isUpdatingItem: $isUpdatingItem, shoppingList: $shoppingList, participants: $participants, shoppingItems: $shoppingItems, listQueryState: $listQueryState)';
   }
 
   @override
@@ -289,6 +313,7 @@ class _$ShoppingListBlocStateImpl
       ..add(DiagnosticsProperty('isLoadingItems', isLoadingItems))
       ..add(DiagnosticsProperty('isAddingItem', isAddingItem))
       ..add(DiagnosticsProperty('isDeletingItem', isDeletingItem))
+      ..add(DiagnosticsProperty('isUpdatingItem', isUpdatingItem))
       ..add(DiagnosticsProperty('shoppingList', shoppingList))
       ..add(DiagnosticsProperty('participants', participants))
       ..add(DiagnosticsProperty('shoppingItems', shoppingItems))
@@ -308,6 +333,8 @@ class _$ShoppingListBlocStateImpl
                 other.isAddingItem == isAddingItem) &&
             const DeepCollectionEquality()
                 .equals(other._isDeletingItem, _isDeletingItem) &&
+            const DeepCollectionEquality()
+                .equals(other._isUpdatingItem, _isUpdatingItem) &&
             (identical(other.shoppingList, shoppingList) ||
                 other.shoppingList == shoppingList) &&
             const DeepCollectionEquality()
@@ -326,6 +353,7 @@ class _$ShoppingListBlocStateImpl
       isLoadingItems,
       isAddingItem,
       const DeepCollectionEquality().hash(_isDeletingItem),
+      const DeepCollectionEquality().hash(_isUpdatingItem),
       shoppingList,
       const DeepCollectionEquality().hash(_participants),
       const DeepCollectionEquality().hash(_shoppingItems),
@@ -352,9 +380,10 @@ abstract class _ShoppingListBlocState implements ShoppingListBlocState {
           required final bool isLoadingItems,
           required final bool isAddingItem,
           required final Map<String, bool> isDeletingItem,
+          required final Map<String, bool> isUpdatingItem,
           required final ShoppingList? shoppingList,
           required final List<Participant> participants,
-          required final List<ShoppingItem> shoppingItems,
+          required final Map<String, ShoppingItem> shoppingItems,
           required final ListQueryState listQueryState}) =
       _$ShoppingListBlocStateImpl;
 
@@ -370,11 +399,13 @@ abstract class _ShoppingListBlocState implements ShoppingListBlocState {
   @override
   Map<String, bool> get isDeletingItem;
   @override
+  Map<String, bool> get isUpdatingItem;
+  @override
   ShoppingList? get shoppingList;
   @override
   List<Participant> get participants;
   @override
-  List<ShoppingItem> get shoppingItems;
+  Map<String, ShoppingItem> get shoppingItems;
   @override
   ListQueryState get listQueryState;
   @override

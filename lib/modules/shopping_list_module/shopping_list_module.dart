@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:great_list_view/great_list_view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -99,6 +100,10 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     bannerService.showBottomSheet(child);
   }
 
+  late AnimatedListDiffListDispatcher<ShoppingItem> dispatcher;
+  final scrollController = ScrollController();
+  final controller = AnimatedListController();
+  List<ShoppingItem> list = [];
   @override
   void initState() {
     super.initState();
@@ -114,6 +119,23 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       ..loadParticipants(
         shoppingListId: widget.shoppingListId,
       );
+
+    dispatcher = AnimatedListDiffListDispatcher<ShoppingItem>(
+      controller: controller,
+      itemBuilder: (c, item, d) =>
+          itemBuilder(c, item, d, _shoppingListBloc.state),
+      currentList: list,
+      comparator: AnimatedListDiffListComparator<ShoppingItem>(
+        sameItem: (a, b) => a.id == b.id,
+        sameContent: (a, b) => a.isPurchased == b.isPurchased,
+      ),
+    );
+  }
+
+  void swapList(List<ShoppingItem> updatedList) {
+    setState(() {
+      dispatcher.dispatchNewList(updatedList);
+    });
   }
 
   @override
@@ -201,7 +223,12 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   ),
                 ),
               ),
-              BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
+              BlocConsumer<ShoppingListBloc, ShoppingListBlocState>(
+                listener: (context, state) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    swapList(state.shoppingItems.values.toList());
+                  });
+                },
                 bloc: _shoppingListBloc,
                 builder: (context, state) {
                   if (state.isLoadingItems) {
@@ -219,38 +246,18 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                     ),
                     sliver: MultiSliver(
                       children: [
-                        SliverList.builder(
-                            itemCount: state.shoppingItems.length,
-                            itemBuilder: (
+                        AnimatedSliverList(
+                          controller: controller,
+                          delegate: AnimatedSliverChildBuilderDelegate(
+                            (context, index, data) => itemBuilder(
                               context,
-                              index,
-                            ) {
-                              final item = state.shoppingItems[index];
-
-                              return Padding(
-                                key: Key(item.id),
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: ShoppingItemCard(
-                                    onTap: () => showEditItemBottomSheet(
-                                          context,
-                                          item,
-                                        ),
-                                    item: item,
-                                    onCheckToggled: () {
-                                      _shoppingListBloc
-                                          .toggleIsPurchasedShoppingItem(
-                                        shoppingItem: item,
-                                      );
-                                    },
-                                    isDeleting:
-                                        state.isDeletingItem[item.id] ?? false,
-                                    onDeleted: () {
-                                      _shoppingListBloc.removeShoppingItem(
-                                        shoppingItem: item,
-                                      );
-                                    }),
-                              );
-                            }),
+                              dispatcher.currentList[index],
+                              data,
+                              state,
+                            ),
+                            dispatcher.currentList.length,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -260,6 +267,36 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget itemBuilder(
+    BuildContext context,
+    ShoppingItem item,
+    AnimatedWidgetBuilderData data,
+    ShoppingListBlocState state,
+  ) {
+    return Padding(
+      key: Key(item.id),
+      padding: const EdgeInsets.only(bottom: 16),
+      child: ShoppingItemCard(
+          onTap: () => showEditItemBottomSheet(
+                context,
+                item,
+              ),
+          item: item,
+          onCheckToggled: () {
+            _shoppingListBloc.toggleIsPurchasedShoppingItem(
+              shoppingItem: item,
+            );
+          },
+          isUpdating: state.isUpdatingItem[item.id] ?? false,
+          isDeleting: state.isDeletingItem[item.id] ?? false,
+          onDeleted: () {
+            _shoppingListBloc.removeShoppingItem(
+              shoppingItem: item,
+            );
+          }),
     );
   }
 }

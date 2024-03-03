@@ -23,9 +23,10 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
     required bool isLoadingItems,
     required bool isAddingItem,
     required Map<String, bool> isDeletingItem,
+    required Map<String, bool> isUpdatingItem,
     required ShoppingList? shoppingList,
     required List<Participant> participants,
-    required List<ShoppingItem> shoppingItems,
+    required Map<String, ShoppingItem> shoppingItems,
     required ListQueryState listQueryState,
   }) = _ShoppingListBlocState;
 
@@ -33,10 +34,11 @@ class ShoppingListBlocState with _$ShoppingListBlocState {
         isLoading: false,
         isLoadingItems: false,
         isDeletingItem: {},
+        isUpdatingItem: {},
         isAddingItem: false,
         shoppingList: null,
         participants: [],
-        shoppingItems: [],
+        shoppingItems: {},
         listQueryState: ListQueryState(pageSize: 50),
       );
   factory ShoppingListBlocState.fromJson(Map<String, Object?> json) =>
@@ -158,10 +160,11 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
 
       final list = await supabase.shoppingListFuntions
           .getShoppingItemsByShoppingListId(shoppingListId, query);
+      final shoppingItems = {for (var item in list) item.id: item};
       emit(state.copyWith(
         listQueryState: query,
         isLoadingItems: false,
-        shoppingItems: list,
+        shoppingItems: shoppingItems,
       ));
     } catch (e) {
       _logger.error(e);
@@ -184,8 +187,8 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         return;
       }
 
-      final updateList = List<ShoppingItem>.from(state.shoppingItems);
-      final index = updateList.indexWhere((e) => e.id == id);
+      var updateList = Map<String, ShoppingItem>.from(state.shoppingItems);
+      final exists = updateList.containsKey(id);
 
       final item = await supabase.shoppingListFuntions.addOrUpdateShoppingItem(
         state.shoppingList!.id,
@@ -194,10 +197,13 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         quantity: quantity,
       );
 
-      if (index != -1) {
-        updateList.replaceRange(index, index + 1, [item]);
+      if (exists) {
+        updateList.update(id!, (value) => item);
       } else {
-        updateList.insert(0, item);
+        updateList = {
+          item.id: item,
+          ...updateList,
+        };
       }
 
       emit(state.copyWith(
@@ -224,8 +230,9 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         state.shoppingList!.id,
         id: shoppingItem.id,
       );
-      final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
-        ..remove(shoppingItem);
+      final updatedItems = Map<String, ShoppingItem>.from(state.shoppingItems);
+
+      updatedItems.removeWhere((key, value) => key == shoppingItem.id);
 
       emit(state.copyWith(
         isDeletingItem: {
@@ -252,7 +259,35 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     required ShoppingItem shoppingItem,
   }) async {
     try {
+      if (state.isUpdatingItem[shoppingItem.id] ?? false) {
+        return;
+      }
+
+      emit(state.copyWith(
+        isUpdatingItem: {
+          ...state.isUpdatingItem,
+          shoppingItem.id: true,
+        },
+      ));
+      var updatedItems = Map<String, ShoppingItem>.from(state.shoppingItems);
       final currentIsPurchased = shoppingItem.isPurchased;
+      updatedItems.removeWhere((key, value) => key == shoppingItem.id);
+      if (!currentIsPurchased) {
+        updatedItems = {
+          ...updatedItems,
+          shoppingItem.id: shoppingItem.copyWith(
+            purchasedAt: DateTime.now(),
+          ),
+        };
+      } else {
+        updatedItems = {
+          shoppingItem.id: shoppingItem.copyWith(
+            purchasedAt: null,
+            purchasedBy: null,
+          ),
+          ...updatedItems,
+        };
+      }
 
       final updatedItem =
           await supabase.shoppingListFuntions.togglePurchasedShoppingItem(
@@ -261,17 +296,19 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         isPurchased: !currentIsPurchased,
       );
 
-      final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
-        ..remove(shoppingItem)
-        ..insert(
-          currentIsPurchased ? 0 : state.shoppingItems.length - 1,
-          shoppingItem.copyWith(
-            purchasedAt: updatedItem.purchasedAt,
-            purchasedBy: updatedItem.purchasedBy,
-          ),
-        );
+      updatedItems.update(
+        shoppingItem.id,
+        (value) => value.copyWith(
+          purchasedAt: updatedItem.purchasedAt,
+          purchasedBy: updatedItem.purchasedBy,
+        ),
+      );
 
       emit(state.copyWith(
+        isUpdatingItem: {
+          ...state.isDeletingItem,
+          shoppingItem.id: false,
+        },
         shoppingItems: updatedItems,
       ));
       banner.showSuccessBanner(
@@ -282,6 +319,13 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     } catch (e) {
       _logger.error(e);
       banner.showErrorBanner('Something went wrong!');
+    } finally {
+      emit(state.copyWith(
+        isUpdatingItem: {
+          ...state.isUpdatingItem,
+          shoppingItem.id: false,
+        },
+      ));
     }
   }
 

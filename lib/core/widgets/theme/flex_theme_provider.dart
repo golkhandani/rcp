@@ -179,6 +179,22 @@ class CustomThemeProvider extends InheritedWidget {
         // fontFamily: GoogleFonts.notoSans().fontFamily,
       );
   ThemeData get data => _flex.copyWith(
+        switchTheme: _flex.switchTheme.copyWith(
+          thumbColor: MaterialStatePropertyAll(
+            pallete.primary,
+          ),
+          trackColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return pallete.chipDisabledBackground;
+            } else {
+              return pallete.cardBackground;
+            }
+          }),
+          trackOutlineColor: MaterialStatePropertyAll(
+            pallete.primary,
+          ),
+          overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+        ),
         progressIndicatorTheme: _flex.progressIndicatorTheme.copyWith(
           color: pallete.primary,
         ),
