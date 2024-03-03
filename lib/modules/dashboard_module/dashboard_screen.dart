@@ -11,6 +11,7 @@ import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
+import 'package:rcp/modules/home_module/bloc/home_bloc.dart';
 import 'package:rcp/modules/home_module/home_module.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/modules/profile_module/profile_module.dart';
@@ -31,7 +32,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late final AuthenticationCubit _authenticationCubit = context.read();
   final ProfileBloc _profileBloc = locator.get();
-
+  final HomeBloc _homeBloc = locator.get();
   late final dahboardItems = [
     DashboardLink(
       iconData: Icons.home,
@@ -92,6 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider.value(value: _homeBloc),
         BlocProvider.value(value: _authenticationCubit),
         BlocProvider.value(value: _profileBloc),
       ],

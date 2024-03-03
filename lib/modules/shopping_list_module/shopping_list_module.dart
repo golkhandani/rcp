@@ -15,6 +15,7 @@ import 'package:rcp/core/widgets/headers/sliver_title_bar.dart';
 import 'package:rcp/core/widgets/layouts/dashboard_screen_shell.dart';
 import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/modules/home_module/bloc/home_bloc.dart';
 import 'package:rcp/modules/shopping_list_module/bloc/shopping_list_bloc.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_item_add_or_edit.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_item_card.dart';
@@ -61,6 +62,8 @@ class ShoppingListScreen extends StatefulWidget {
 }
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
+  late final HomeBloc _homeBloc = context.read();
+
   final ShoppingListBloc _shoppingListBloc = locator.get();
 
   showAddItemBottomSheet(BuildContext context) {
@@ -89,6 +92,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     final child = ShoppingListAddOrEdit(
       shoppingListBloc: _shoppingListBloc,
       shoppingList: shoppingList,
+      shoppingListUpdated: (updated) => _homeBloc.updateShoppingList(
+        shoppingList: updated,
+      ),
     );
     bannerService.showBottomSheet(child);
   }

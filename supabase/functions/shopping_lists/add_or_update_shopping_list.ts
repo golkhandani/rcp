@@ -82,7 +82,7 @@ export async function addShoppingListById(
 			participantError,
 		);
 		if (insertedParticipant == null) {
-			// TODO: revert the changes and remove insertedShoppingList
+			// TODO(@golkhandani): revert the changes and remove insertedShoppingList
 			throw new FunctionsError(
 				'Cannot create new shopping list, please try again!' +
 					participant.status,

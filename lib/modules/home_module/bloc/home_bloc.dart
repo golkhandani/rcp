@@ -59,6 +59,7 @@ class HomeBloc extends Cubit<HomeBlocState> {
       );
 
       emit(state.copyWith(
+        isPaginationDone: list.isEmpty || list.length < query.pageSize,
         listQueryState: query,
         shoppingLists: [
           ...state.shoppingLists,
