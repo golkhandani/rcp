@@ -39,7 +39,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final HomeBloc _homeBloc = locator.get();
+  late final HomeBloc _homeBloc = context.read();
 
   final List<String> items = List.generate(100, (index) => 'Item ${index + 1}');
 

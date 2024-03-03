@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/shopping_item/handler.dart';
 import 'package:rcp/core/functions/shopping_list/handler.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/participant_model.dart';
@@ -157,8 +156,8 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         page: state.shoppingItems.isEmpty ? 1 : state.listQueryState.page + 1,
       );
 
-      final list = await supabase.shoppingItemsFuntions
-          .getShoppingItemsByShoppingList(shoppingListId, query);
+      final list = await supabase.shoppingListFuntions
+          .getShoppingItemsByShoppingListId(shoppingListId, query);
       emit(state.copyWith(
         listQueryState: query,
         isLoadingItems: false,
@@ -188,7 +187,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
       final updateList = List<ShoppingItem>.from(state.shoppingItems);
       final index = updateList.indexWhere((e) => e.id == id);
 
-      final item = await supabase.shoppingItemsFuntions.addOrUpdateShoppingItem(
+      final item = await supabase.shoppingListFuntions.addOrUpdateShoppingItem(
         state.shoppingList!.id,
         id: id,
         name: name,
@@ -221,8 +220,9 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
           shoppingItem.id: true,
         },
       ));
-      await supabase.shoppingItemsFuntions.deleteShoppingItemById(
-        shoppingItem.id,
+      await supabase.shoppingListFuntions.deleteShoppingItemById(
+        state.shoppingList!.id,
+        id: shoppingItem.id,
       );
       final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
         ..remove(shoppingItem);
@@ -255,10 +255,10 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
       final currentIsPurchased = shoppingItem.isPurchased;
 
       final updatedItem =
-          await supabase.shoppingItemsFuntions.togglePurchasedShoppingItem(
+          await supabase.shoppingListFuntions.togglePurchasedShoppingItem(
         state.shoppingList!.id,
         id: shoppingItem.id,
-        isPurchased: currentIsPurchased,
+        isPurchased: !currentIsPurchased,
       );
 
       final updatedItems = List<ShoppingItem>.from(state.shoppingItems)
@@ -296,14 +296,19 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         return;
       }
 
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final list = generateFakeParticipantData(10);
+      final list = await supabase.shoppingListFuntions
+          .getShoppingListParticipantsById(shoppingListId);
+
+      final allParticipants = {
+        ...?state.shoppingList?.participants,
+        ...list,
+      }.toList();
       emit(state.copyWith(
         isLoadingItems: false,
         shoppingList: state.shoppingList?.copyWith(
-          participants: list,
+          participants: allParticipants,
         ),
-        participants: list,
+        participants: allParticipants,
       ));
     } catch (e) {
       _logger.error(e);

@@ -5,7 +5,6 @@ extension FunctionsTenancyClient on FunctionsClient {
   Future<FunctionResponse> get(
     String fn, {
     Map<String, String>? headers,
-    Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) async {
     String path = fn;
@@ -18,7 +17,6 @@ extension FunctionsTenancyClient on FunctionsClient {
 
     return await Supabase.instance.client.functions.invoke(
       path,
-      body: body,
       headers: headers,
       method: HttpMethod.get,
     );
@@ -93,7 +91,6 @@ extension FunctionsTenancyClient on FunctionsClient {
   Future<FunctionResponse> delete(
     String fn, {
     Map<String, String>? headers,
-    Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) async {
     String path = fn;
@@ -106,7 +103,6 @@ extension FunctionsTenancyClient on FunctionsClient {
 
     return await Supabase.instance.client.functions.invoke(
       path,
-      body: body,
       headers: headers,
       method: HttpMethod.delete,
     );
