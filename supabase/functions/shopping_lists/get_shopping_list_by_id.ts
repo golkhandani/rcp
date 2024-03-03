@@ -16,6 +16,8 @@ export async function getShoppingListById(req: Request) {
 	const id = req.params.id;
 	const { data: existsShoppingList, error: existsError } = await supabase
 		.from(shoppingListTable).select(shoppingListSelect).eq('id', id)
+		.range(0, 4, { referencedTable: 'items' })
+		.range(0, 4, { referencedTable: 'participants' })
 		.single();
 	return existsShoppingList;
 }

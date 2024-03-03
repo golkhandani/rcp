@@ -3,8 +3,10 @@ import { BasicException } from './../shared/exceptions/client_info_exception.ts'
 // @deno-types="npm:@types/express@4"
 import express, { Express } from 'npm:express@4.18.2';
 import cors from 'npm:cors@2.8.5';
-import { addShoppingListById } from './add_or_update_shopping_list.ts';
-import { updateShoppingListById } from './updateShoppingListById.ts';
+import {
+	addShoppingListById,
+	updateShoppingListById,
+} from './add_or_update_shopping_list.ts';
 import { deleteShoppingListById } from './delete_shopping_list_by_id.ts';
 import {
 	getShoppingListById,
@@ -89,7 +91,8 @@ expressApp((app: ExpressApp) => {
 
 	////////////////
 	// PARTICIPANTS
-
+	// some of the endpoints can be moved to participant prefix
+	// like delete/put/patch-status
 	app.get(`/${prefix}/:id/participants`, async (req, res) => {
 		try {
 			const result = await getShoppingListParticipantsById(req);
@@ -101,6 +104,71 @@ expressApp((app: ExpressApp) => {
 			return res.status(500).send({ error: 'Something is wrong!' });
 		}
 	});
+
+	app.post(`/${prefix}/:id/participants`, async (req, res) => {
+		try {
+			const result = await getShoppingListParticipantsById(req);
+			return res.status(200).send(result);
+		} catch (error) {
+			if (error instanceof BasicException) {
+				return res.status(error.status).send({ error: error.message });
+			}
+			return res.status(500).send({ error: 'Something is wrong!' });
+		}
+	});
+
+	app.put(
+		`/${prefix}/:id/participants/:participantId`,
+		async (req, res) => {
+			try {
+				const result = await getShoppingListParticipantsById(req);
+				return res.status(200).send(result);
+			} catch (error) {
+				if (error instanceof BasicException) {
+					return res.status(error.status).send({
+						error: error.message,
+					});
+				}
+				return res.status(500).send({ error: 'Something is wrong!' });
+			}
+		},
+	);
+
+	// when a user joined a shopping list we need to update the status from
+	// invited to joined
+	app.patch(
+		`/${prefix}/:id/participants/:participantId/status`,
+		async (req, res) => {
+			try {
+				const result = await getShoppingListParticipantsById(req);
+				return res.status(200).send(result);
+			} catch (error) {
+				if (error instanceof BasicException) {
+					return res.status(error.status).send({
+						error: error.message,
+					});
+				}
+				return res.status(500).send({ error: 'Something is wrong!' });
+			}
+		},
+	);
+
+	app.delete(
+		`/${prefix}/:id/participants/:participantId`,
+		async (req, res) => {
+			try {
+				const result = await getShoppingListParticipantsById(req);
+				return res.status(200).send(result);
+			} catch (error) {
+				if (error instanceof BasicException) {
+					return res.status(error.status).send({
+						error: error.message,
+					});
+				}
+				return res.status(500).send({ error: 'Something is wrong!' });
+			}
+		},
+	);
 
 	////////////////
 	// SHOPPING ITEMS

@@ -9,9 +9,9 @@ import {
 import { FunctionsError } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { ShoppingList } from '../shared/models/shopping_list_model.ts';
 import {
+	ParticipantRow,
 	participantSelect,
 	ParticipantStatus,
-	ParticpantRow,
 } from '../shared/models/participant_model.ts';
 import { FunctionException } from '../shared/exceptions/client_info_exception.ts';
 
@@ -51,7 +51,7 @@ export async function addShoppingListById(
 			);
 		}
 
-		const participant: Omit<ParticpantRow, 'id'> = {
+		const participant: Omit<ParticipantRow, 'id'> = {
 			user_id: user.id,
 			user_profile_id: profile.id,
 			shopping_list_id: insertedShoppingList.id,
@@ -74,7 +74,7 @@ export async function addShoppingListById(
 					participant,
 				).select(
 					participantSelect,
-				).single<ParticpantRow>();
+				).single<ParticipantRow>();
 
 		console.log(
 			'insertedParticipant',
@@ -95,10 +95,8 @@ export async function addShoppingListById(
 				insertedParticipant,
 				...insertedShoppingList.participants,
 			],
-			items: [],
 		};
 
-		console.log(result);
 		return result as unknown as ShoppingList;
 	} catch (error) {
 		throw new FunctionException(error.message, error.status);
@@ -146,12 +144,7 @@ export async function updateShoppingListById(
 			);
 		}
 
-		const result = {
-			...insertedShoppingList,
-			items: [],
-		};
-
-		return result as unknown as ShoppingList;
+		return insertedShoppingList as unknown as ShoppingList;
 	} catch (error) {
 		throw new FunctionException(error.message, error.status);
 	}

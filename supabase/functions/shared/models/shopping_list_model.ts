@@ -7,6 +7,7 @@ import {
 import {
 	generateFakeShoppingItemData,
 	ShoppingItem,
+	shoppingItemSelect,
 } from './shopping_item_model.ts';
 import { UserProfile } from './user_profile_model.ts';
 import { generateFakeUserProfileData } from './user_profile_model.ts';
@@ -66,8 +67,8 @@ createdBy: created_by (
 	createdAt: created_at,
 	updatedAt: updated_at
 ),
-participants: participants(${participantSelect})
-
+participants: participants(${participantSelect}),
+items: shopping_items(${shoppingItemSelect})
 `;
 function generateFakeShoppingListData(count: number): ShoppingList[] {
 	const fakeData: ShoppingList[] = [];
