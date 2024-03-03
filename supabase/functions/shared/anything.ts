@@ -1,5 +1,6 @@
 // @deno-types="npm:@types/express@4"
-import { Request } from 'npm:express@4.18.2';
+import express, { Express, Request } from 'npm:express@4.18.2';
+import cors from 'npm:cors@2.8.5';
 import { Database } from '../types.ts';
 
 export const corsHeaders = {
@@ -17,3 +18,15 @@ export class StorageServie {
 }
 
 export type ExpressRequest = Request;
+export type ExpressApp = Express;
+
+export function expressApp(cb: (app: ExpressApp) => void) {
+	const app = express();
+	app.use(express.json());
+	app.use(cors());
+	const port = 3000;
+	cb(app);
+	app.listen(port, () => {
+		console.log(`Example app listening on port ${port}`);
+	});
+}
