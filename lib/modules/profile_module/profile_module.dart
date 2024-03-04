@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           labelText: 'Delete',
                         ),
                       ),
-                      const SliverGap(106),
+                      const SliverGap(306),
                     ]),
                   )
                 ],
