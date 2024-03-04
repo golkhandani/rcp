@@ -100,7 +100,7 @@ class _DashboardShellState extends State<DashboardShell> {
           extendBody: false,
           extendBodyBehindAppBar: false,
           backgroundColor: widget.contentBackgroundColor,
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
           persistentFooterAlignment: AlignmentDirectional.bottomEnd,
