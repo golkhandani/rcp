@@ -238,7 +238,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               BlocConsumer<ShoppingListBloc, ShoppingListBlocState>(
                 listener: (context, state) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    swapList(state.shoppingItems.values.toList());
+                    if (controller.context.mounted) {
+                      swapList(state.shoppingItems.values.toList());
+                    }
                   });
                 },
                 bloc: _shoppingListBloc,
@@ -249,12 +251,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         const SliverToBoxAdapter(
                           child: LoadingCircle(),
                         ),
-                        const SliverGap(kMediumGap),
-                      ],
-                      if (!state.isLoadingItems &&
-                          state.shoppingItems.isEmpty &&
-                          !dispatcher.hasPendingTask) ...[
-                        const SliverToBoxAdapter(child: EmptyIsList()),
                         const SliverGap(kMediumGap),
                       ],
                       if (!state.isLoadingItems)
@@ -268,7 +264,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                     state,
                                   ),
                               dispatcher.currentList.length,
-                              addFadeTransition: false,
+                              // addFadeTransition: false,
                               animator: DefaultAnimatedListAnimator(
                                 movingDuration: 300.ms,
                                 dismissIncomingCurve: Curves.easeInCirc,
@@ -276,6 +272,12 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                                 reorderDuration: 300.ms,
                               )),
                         ),
+                      if (!state.isLoadingItems &&
+                          state.shoppingItems.isEmpty &&
+                          !dispatcher.hasPendingTask) ...[
+                        const SliverToBoxAdapter(child: EmptyIsList()),
+                        const SliverGap(kMediumGap),
+                      ],
                     ],
                   );
                 },

@@ -95,15 +95,14 @@ class _ShoppingListSummaryHeaderState extends State<ShoppingListSummaryHeader> {
       shadowColor: Colors.black45,
       backgroundColor: context.colorTheme.navBackground,
       toolbarHeight: actionAreaHeight,
-      expandedHeight: maxHeight - actionAreaHeight + padding,
+      expandedHeight: maxHeight,
       automaticallyImplyLeading: false,
       leadingWidth: 48,
       flexibleSpace: CustomizableSpaceBar(
         builder: (context, sr) {
-          final s = 2 * sr;
           final titleTop = safeAreaHeight +
-              (padding * s).clamp(0, padding) +
-              (actionAreaHeight * ((1 - s).clamp(0, 1)));
+              (padding * sr).clamp(0, padding) +
+              (actionAreaHeight * ((1 - sr).clamp(0, 1)));
 
           final currentHeight = (1 - sr) * height;
 
