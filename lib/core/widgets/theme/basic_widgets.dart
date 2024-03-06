@@ -441,6 +441,7 @@ class BasicBottomModalSheetFrame extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(child: child),
           ),
+          Gap(MediaQuery.of(context).viewInsets.bottom)
         ],
       ),
     );

@@ -739,6 +739,7 @@ mixin _$ShoppingList {
   UserProfile2 get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   UserProfile2 get updatedBy => throw _privateConstructorUsedError;
+  bool get isOwner => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -762,7 +763,8 @@ abstract class $ShoppingListCopyWith<$Res> {
       UserProfile2 ownerId,
       UserProfile2 createdBy,
       DateTime updatedAt,
-      UserProfile2 updatedBy});
+      UserProfile2 updatedBy,
+      bool isOwner});
 
   $UserProfile2CopyWith<$Res> get ownerId;
   $UserProfile2CopyWith<$Res> get createdBy;
@@ -792,6 +794,7 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
+    Object? isOwner = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -834,6 +837,10 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -880,7 +887,8 @@ abstract class _$$ShoppingListImplCopyWith<$Res>
       UserProfile2 ownerId,
       UserProfile2 createdBy,
       DateTime updatedAt,
-      UserProfile2 updatedBy});
+      UserProfile2 updatedBy,
+      bool isOwner});
 
   @override
   $UserProfile2CopyWith<$Res> get ownerId;
@@ -911,6 +919,7 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
+    Object? isOwner = null,
   }) {
     return _then(_$ShoppingListImpl(
       id: null == id
@@ -953,6 +962,10 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -971,7 +984,8 @@ class _$ShoppingListImpl implements _ShoppingList {
       required this.ownerId,
       required this.createdBy,
       required this.updatedAt,
-      required this.updatedBy})
+      required this.updatedBy,
+      required this.isOwner})
       : _participants = participants,
         _items = items;
 
@@ -1010,10 +1024,12 @@ class _$ShoppingListImpl implements _ShoppingList {
   final DateTime updatedAt;
   @override
   final UserProfile2 updatedBy;
+  @override
+  final bool isOwner;
 
   @override
   String toString() {
-    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, ownerId: $ownerId, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, ownerId: $ownerId, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy, isOwner: $isOwner)';
   }
 
   @override
@@ -1036,7 +1052,8 @@ class _$ShoppingListImpl implements _ShoppingList {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.updatedBy, updatedBy) ||
-                other.updatedBy == updatedBy));
+                other.updatedBy == updatedBy) &&
+            (identical(other.isOwner, isOwner) || other.isOwner == isOwner));
   }
 
   @JsonKey(ignore: true)
@@ -1052,7 +1069,8 @@ class _$ShoppingListImpl implements _ShoppingList {
       ownerId,
       createdBy,
       updatedAt,
-      updatedBy);
+      updatedBy,
+      isOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -1079,7 +1097,8 @@ abstract class _ShoppingList implements ShoppingList {
       required final UserProfile2 ownerId,
       required final UserProfile2 createdBy,
       required final DateTime updatedAt,
-      required final UserProfile2 updatedBy}) = _$ShoppingListImpl;
+      required final UserProfile2 updatedBy,
+      required final bool isOwner}) = _$ShoppingListImpl;
 
   factory _ShoppingList.fromJson(Map<String, dynamic> json) =
       _$ShoppingListImpl.fromJson;
@@ -1104,6 +1123,8 @@ abstract class _ShoppingList implements ShoppingList {
   DateTime get updatedAt;
   @override
   UserProfile2 get updatedBy;
+  @override
+  bool get isOwner;
   @override
   @JsonKey(ignore: true)
   _$$ShoppingListImplCopyWith<_$ShoppingListImpl> get copyWith =>

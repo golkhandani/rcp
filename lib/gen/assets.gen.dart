@@ -12,6 +12,14 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/comming_soon.jpeg
+  AssetGenImage get commingSoon =>
+      const AssetGenImage('assets/images/comming_soon.jpeg');
+
+  /// File path: assets/images/list_is_empty.jpeg
+  AssetGenImage get listIsEmpty =>
+      const AssetGenImage('assets/images/list_is_empty.jpeg');
+
   /// File path: assets/images/login_bg.jpeg
   AssetGenImage get loginBg =>
       const AssetGenImage('assets/images/login_bg.jpeg');
@@ -27,9 +35,55 @@ class $AssetsImagesGen {
   AssetGenImage get profilePlaceholder =>
       const AssetGenImage('assets/images/profile_placeholder.jpg');
 
+  /// File path: assets/images/shopping_item_1.jpeg
+  AssetGenImage get shoppingItem1 =>
+      const AssetGenImage('assets/images/shopping_item_1.jpeg');
+
+  /// File path: assets/images/shopping_item_2.jpeg
+  AssetGenImage get shoppingItem2 =>
+      const AssetGenImage('assets/images/shopping_item_2.jpeg');
+
+  /// File path: assets/images/shopping_item_3.jpeg
+  AssetGenImage get shoppingItem3 =>
+      const AssetGenImage('assets/images/shopping_item_3.jpeg');
+
+  /// File path: assets/images/shopping_item_4.jpeg
+  AssetGenImage get shoppingItem4 =>
+      const AssetGenImage('assets/images/shopping_item_4.jpeg');
+
+  /// File path: assets/images/shopping_list_1.jpeg
+  AssetGenImage get shoppingList1 =>
+      const AssetGenImage('assets/images/shopping_list_1.jpeg');
+
+  /// File path: assets/images/shopping_list_2.jpeg
+  AssetGenImage get shoppingList2 =>
+      const AssetGenImage('assets/images/shopping_list_2.jpeg');
+
+  /// File path: assets/images/shopping_list_3.jpeg
+  AssetGenImage get shoppingList3 =>
+      const AssetGenImage('assets/images/shopping_list_3.jpeg');
+
+  /// File path: assets/images/shopping_list_4.jpeg
+  AssetGenImage get shoppingList4 =>
+      const AssetGenImage('assets/images/shopping_list_4.jpeg');
+
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [loginBg, logo, logoComplete, profilePlaceholder];
+  List<AssetGenImage> get values => [
+        commingSoon,
+        listIsEmpty,
+        loginBg,
+        logo,
+        logoComplete,
+        profilePlaceholder,
+        shoppingItem1,
+        shoppingItem2,
+        shoppingItem3,
+        shoppingItem4,
+        shoppingList1,
+        shoppingList2,
+        shoppingList3,
+        shoppingList4
+      ];
 }
 
 class Assets {

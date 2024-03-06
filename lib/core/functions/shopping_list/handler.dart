@@ -31,7 +31,13 @@ class ShoppingListFunctions extends SingleDomainFunctions {
 
       final rawData = res.data as List<dynamic>;
 
-      final data = rawData.map((e) => ShoppingList.fromJson(e)).toList();
+      final data = rawData
+          .map((e) => ShoppingList.fromJson({
+                ...e,
+                // TODO add it to be model => check for user id be same as ownerid
+                'isOwner': true,
+              }))
+          .toList();
       return data;
     } on FunctionException catch (e) {
       _logger.error(e.details);
@@ -49,7 +55,12 @@ class ShoppingListFunctions extends SingleDomainFunctions {
         functionName,
       );
 
-      final data = ShoppingList.fromJson(res.data);
+      final data = ShoppingList.fromJson({
+        ...res.data,
+        // TODO add it to be model => check for user id be same as ownerid
+
+        'isOwner': true,
+      });
       return data;
     } on FunctionException catch (e) {
       _logger.error(e.details);
@@ -73,7 +84,12 @@ class ShoppingListFunctions extends SingleDomainFunctions {
             'description': description,
           },
         );
-        final data = ShoppingList.fromJson(res.data);
+        final data = ShoppingList.fromJson({
+          ...res.data,
+          // TODO add it to be model => check for user id be same as ownerid
+
+          'isOwner': true,
+        });
         return data;
       } else {
         final functionName = getfnName('');
@@ -84,7 +100,12 @@ class ShoppingListFunctions extends SingleDomainFunctions {
             'description': description,
           },
         );
-        final data = ShoppingList.fromJson(res.data);
+        final data = ShoppingList.fromJson({
+          ...res.data,
+          // TODO add it to be model => check for user id be same as ownerid
+
+          'isOwner': true,
+        });
         return data;
       }
     } on FunctionException catch (e) {
@@ -142,6 +163,47 @@ class ShoppingListFunctions extends SingleDomainFunctions {
           "id": userId,
           "email": email,
         },
+      );
+
+      return Participant.fromJson(res.data);
+    } on FunctionException catch (e) {
+      _logger.error(e.details);
+      rethrow;
+    }
+  }
+
+  Future<Participant> acceptInvitationShoppingListById({
+    required String shoppingListId,
+    required String invitationId,
+  }) async {
+    try {
+      final functionName =
+          getfnName('$shoppingListId/participants/$invitationId/status');
+
+      final res = await supabaseClient.functions.patch(
+        functionName,
+        body: {
+          "status": ParticipantStatus.joined.name,
+        },
+      );
+
+      return Participant.fromJson(res.data);
+    } on FunctionException catch (e) {
+      _logger.error(e.details);
+      rethrow;
+    }
+  }
+
+  Future<Participant> rejectInvitationShoppingListById({
+    required String shoppingListId,
+    required String invitationId,
+  }) async {
+    try {
+      final functionName =
+          getfnName('$shoppingListId/participants/$invitationId');
+
+      final res = await supabaseClient.functions.delete(
+        functionName,
       );
 
       return Participant.fromJson(res.data);

@@ -70,6 +70,10 @@ class NotificationBannerService {
     );
   }
 
+  closeBottomSheet() {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
   Future<T?> showBottomSheet<T>(Widget child) {
     return showModalBottomSheet<T>(
       useRootNavigator: true,
@@ -77,8 +81,12 @@ class NotificationBannerService {
       backgroundColor: context.colorTheme.cardBackground,
       isScrollControlled: true,
       constraints: BoxConstraints(
-        minHeight: context.vHeight * 0.4,
-        maxHeight: context.vHeight * 0.8,
+        minHeight: context.isNarrowWith
+            ? context.vHeight * 0.4
+            : context.vHeight * 0.4,
+        maxHeight: context.isNarrowWith
+            ? context.vHeight * 0.8
+            : context.vHeight * 0.92,
         minWidth: context.isNarrowWith ? context.vWidth : 420,
         maxWidth: context.isNarrowWith ? context.vWidth : 480,
       ),

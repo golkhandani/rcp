@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:customizable_space_bar/customizable_space_bar.dart';
@@ -10,6 +12,7 @@ import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/gen/assets.gen.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/modules/profile_module/profile_module.dart';
+import 'package:rcp/modules/shopping_list_module/widgets/shopping_list_summary_header.dart';
 import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
 class SliverProfileSummaryHeader extends StatelessWidget {
@@ -19,6 +22,9 @@ class SliverProfileSummaryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const actionAreaHeight = 64.0;
+    const padding = 16.0;
+
     return BlocBuilder<ProfileBloc, ProfileBlocState>(
       bloc: context.read(),
       builder: (context, state) {
@@ -29,19 +35,25 @@ class SliverProfileSummaryHeader extends StatelessWidget {
             elevation: 4,
             shadowColor: Colors.black,
             backgroundColor: context.colorTheme.background,
-            toolbarHeight: 64,
+            toolbarHeight: actionAreaHeight,
             expandedHeight: 92,
           );
         }
+        final nameStyle = context.typoraphyTheme.titleMedium;
+        final nameText = state.user?.profile.safeFullName ?? '';
+        final nameSize = nameText.textSize(
+          maxWidth: context.vWidth,
+          style: nameStyle.textStyle,
+        );
 
         return SliverAppBar(
-          forceElevated: false,
+          forceElevated: true,
           pinned: true,
           elevation: 2,
-          shadowColor: Colors.black38,
+          shadowColor: Colors.black45,
           backgroundColor: context.colorTheme.cardBackground,
-          toolbarHeight: 64,
-          expandedHeight: 92,
+          toolbarHeight: actionAreaHeight,
+          expandedHeight: actionAreaHeight + nameSize.height + padding,
           leadingWidth: 48,
           flexibleSpace: CustomizableSpaceBar(
             builder: (context, scrollingRate) {
@@ -51,6 +63,11 @@ class SliverProfileSummaryHeader extends StatelessWidget {
               final fg = bg.opacity < 0.5
                   ? context.colorTheme.onBackground
                   : context.colorTheme.onNavBackground;
+
+              final avatarMaxRadius = max(
+                36,
+                actionAreaHeight * (1 - scrollingRate),
+              ).toDouble();
               return AnimatedContainer(
                 color: bg,
                 padding: EdgeInsets.only(
@@ -58,14 +75,15 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const Gap(16),
                       GestureDetector(
                         onTap: () => context.goNamed(ProfileScreen.route.name),
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: avatarMaxRadius,
                             child: CircleAvatar(
                               backgroundImage: state.user?.profile.avatarUrl ==
                                       null
@@ -73,7 +91,7 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                                   : NetworkImage(
                                       state.user!.profile.avatarUrl!,
                                     ), // // Replace with user avatar URL
-                              radius: 32,
+                              radius: avatarMaxRadius,
                             ),
                           ),
                         ),
@@ -84,27 +102,26 @@ class SliverProfileSummaryHeader extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (scrollingRate < 0.9)
-                              SizedBox(
-                                height: (1 - scrollingRate) * 24,
-                                child: FittedBox(
-                                  fit: BoxFit.cover,
-                                  child: Text(
-                                    'Welcome,',
-                                    maxLines: 2,
-                                    style: context.typoraphyTheme.subtitleLarge
-                                        .copyWithColor(color: fg)
-                                        .textStyle,
-                                  ),
+                            SizedBox(
+                              height: (1 - scrollingRate) * 24,
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  'Welcome,',
+                                  maxLines: 2,
+                                  style: context.typoraphyTheme.subtitleLarge
+                                      .copyWithColor(color: fg)
+                                      .textStyle,
                                 ),
                               ),
+                            ),
                             Expanded(
-                              child: FittedBox(
-                                fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: double.infinity,
                                 child: Text(
-                                  state.user?.profile.username ?? '',
+                                  nameText,
                                   maxLines: 2,
-                                  style: context.typoraphyTheme.titleMedium
+                                  style: nameStyle
                                       .copyWithColor(color: fg)
                                       .textStyle,
                                 ),

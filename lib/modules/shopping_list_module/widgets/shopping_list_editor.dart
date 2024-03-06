@@ -49,6 +49,7 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
             current.shoppingList != null) {
           widget.shoppingListUpdated?.call(current.shoppingList!);
         }
+
         return true;
       },
       builder: (context, state) {

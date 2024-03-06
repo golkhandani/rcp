@@ -4,4 +4,5 @@ class Environment {
   static const String persistSessionKey = 'PERSIST_SESSION_KEY';
   static const String isIntroCheckedKey = 'isIntroCheckedKey';
   static const String selectedGroupKey = 'selectedGroupKey';
+  static const int safeNameLimit = 16;
 }

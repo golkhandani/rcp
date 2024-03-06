@@ -7,6 +7,7 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/models/user/user_data.dart';
+import 'package:rcp/core/widgets/constants.dart';
 import 'package:rcp/core/widgets/headers/sliver_profile_header.dart';
 import 'package:rcp/core/widgets/headers/sliver_title_bar.dart';
 import 'package:rcp/core/widgets/layouts/dashboard_screen_shell.dart';
@@ -84,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isEditing: state.isEditing,
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(kMediumGap),
                     sliver: MultiSliver(children: [
                       SliverToBoxAdapter(
                         child: CardContainer(

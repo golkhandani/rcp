@@ -1,8 +1,10 @@
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:rcp/core/extensions/string_extensions.dart';
 import 'package:rcp/core/models/participant_model.dart';
 import 'package:rcp/core/models/shopping_item_model.dart';
+import 'package:rcp/environment.dart';
 
 part 'shopping_list_model.freezed.dart';
 part 'shopping_list_model.g.dart';
@@ -22,7 +24,8 @@ abstract class UserProfile2 with _$UserProfile2 {
     required DateTime updatedAt,
   }) = _UserProfile2;
 
-  String get safeName => fullName ?? username;
+  String get safeName =>
+      fullName?.dynamicSub(Environment.safeNameLimit) ?? username;
 
   factory UserProfile2.fromJson(Map<String, dynamic> json) =>
       _$UserProfile2FromJson(json);
@@ -44,7 +47,8 @@ abstract class InvitationCandidate with _$InvitationCandidate {
     required DateTime updatedAt,
   }) = _InvitationCandidate;
 
-  String get safeName => fullName ?? username;
+  String get safeName =>
+      fullName?.dynamicSub(Environment.safeNameLimit) ?? username;
 
   factory InvitationCandidate.fromJson(Map<String, dynamic> json) =>
       _$InvitationCandidateFromJson(json);
@@ -100,40 +104,9 @@ class ShoppingList with _$ShoppingList {
     required UserProfile2 createdBy,
     required DateTime updatedAt,
     required UserProfile2 updatedBy,
+    required bool isOwner,
   }) = _ShoppingList;
 
   factory ShoppingList.fromJson(Map<String, dynamic> json) =>
       _$ShoppingListFromJson(json);
-}
-
-List<ShoppingList> generateFakeShoppingListData(int count) {
-  List<ShoppingList> fakeData = [];
-  Faker faker = Faker();
-
-  for (int i = 0; i < count; i++) {
-    String id = faker.guid.guid();
-    String name = faker.company.name();
-    String? description = faker.lorem.sentence();
-    List<Participant> participants = generateFakeParticipantData(5);
-    List<ShoppingItem> items = generateFakeShoppingItemData(5);
-    DateTime createdAt = faker.date.dateTime();
-    UserProfile2 createdBy = generateFakeUserProfileData();
-    DateTime updatedAt = faker.date.dateTime();
-    UserProfile2 updatedBy = generateFakeUserProfileData();
-
-    fakeData.add(ShoppingList(
-      id: id,
-      name: name,
-      description: description,
-      participants: participants,
-      items: items,
-      ownerId: createdBy,
-      createdAt: createdAt,
-      createdBy: createdBy,
-      updatedAt: updatedAt,
-      updatedBy: updatedBy,
-    ));
-  }
-
-  return fakeData;
 }

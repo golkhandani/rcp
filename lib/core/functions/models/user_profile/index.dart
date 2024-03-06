@@ -2,6 +2,9 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:rcp/core/extensions/string_extensions.dart';
+import 'package:rcp/environment.dart';
+
 part 'index.freezed.dart';
 part 'index.g.dart';
 
@@ -30,7 +33,9 @@ abstract class UserProfile with _$UserProfile {
     @JsonKey(name: 'updated_at') required String updatedAt,
   }) = _UserProfile;
 
-  String get safeName => fullName ?? username;
+  String get safeFullName => fullName ?? username;
+  String get safeName =>
+      fullName?.dynamicSub(Environment.safeNameLimit) ?? username;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
       _$UserProfileFromJson(json);

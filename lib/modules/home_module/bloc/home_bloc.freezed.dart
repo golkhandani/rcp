@@ -19,6 +19,7 @@ mixin _$HomeBlocState {
   bool get isPaginationDone => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isAdding => throw _privateConstructorUsedError;
+  bool get isRefreshing => throw _privateConstructorUsedError;
   ListQueryState get listQueryState => throw _privateConstructorUsedError;
   Map<String, bool> get isDeletingItem => throw _privateConstructorUsedError;
   List<ShoppingList> get shoppingLists => throw _privateConstructorUsedError;
@@ -38,6 +39,7 @@ abstract class $HomeBlocStateCopyWith<$Res> {
       {bool isPaginationDone,
       bool isLoading,
       bool isAdding,
+      bool isRefreshing,
       ListQueryState listQueryState,
       Map<String, bool> isDeletingItem,
       List<ShoppingList> shoppingLists});
@@ -61,6 +63,7 @@ class _$HomeBlocStateCopyWithImpl<$Res, $Val extends HomeBlocState>
     Object? isPaginationDone = null,
     Object? isLoading = null,
     Object? isAdding = null,
+    Object? isRefreshing = null,
     Object? listQueryState = null,
     Object? isDeletingItem = null,
     Object? shoppingLists = null,
@@ -77,6 +80,10 @@ class _$HomeBlocStateCopyWithImpl<$Res, $Val extends HomeBlocState>
       isAdding: null == isAdding
           ? _value.isAdding
           : isAdding // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isRefreshing: null == isRefreshing
+          ? _value.isRefreshing
+          : isRefreshing // ignore: cast_nullable_to_non_nullable
               as bool,
       listQueryState: null == listQueryState
           ? _value.listQueryState
@@ -114,6 +121,7 @@ abstract class _$$HomeBlocStateImplCopyWith<$Res>
       {bool isPaginationDone,
       bool isLoading,
       bool isAdding,
+      bool isRefreshing,
       ListQueryState listQueryState,
       Map<String, bool> isDeletingItem,
       List<ShoppingList> shoppingLists});
@@ -136,6 +144,7 @@ class __$$HomeBlocStateImplCopyWithImpl<$Res>
     Object? isPaginationDone = null,
     Object? isLoading = null,
     Object? isAdding = null,
+    Object? isRefreshing = null,
     Object? listQueryState = null,
     Object? isDeletingItem = null,
     Object? shoppingLists = null,
@@ -152,6 +161,10 @@ class __$$HomeBlocStateImplCopyWithImpl<$Res>
       isAdding: null == isAdding
           ? _value.isAdding
           : isAdding // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isRefreshing: null == isRefreshing
+          ? _value.isRefreshing
+          : isRefreshing // ignore: cast_nullable_to_non_nullable
               as bool,
       listQueryState: null == listQueryState
           ? _value.listQueryState
@@ -178,6 +191,7 @@ class _$HomeBlocStateImpl
       {required this.isPaginationDone,
       required this.isLoading,
       required this.isAdding,
+      required this.isRefreshing,
       required this.listQueryState,
       required final Map<String, bool> isDeletingItem,
       required final List<ShoppingList> shoppingLists})
@@ -190,6 +204,8 @@ class _$HomeBlocStateImpl
   final bool isLoading;
   @override
   final bool isAdding;
+  @override
+  final bool isRefreshing;
   @override
   final ListQueryState listQueryState;
   final Map<String, bool> _isDeletingItem;
@@ -210,7 +226,7 @@ class _$HomeBlocStateImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'HomeBlocState(isPaginationDone: $isPaginationDone, isLoading: $isLoading, isAdding: $isAdding, listQueryState: $listQueryState, isDeletingItem: $isDeletingItem, shoppingLists: $shoppingLists)';
+    return 'HomeBlocState(isPaginationDone: $isPaginationDone, isLoading: $isLoading, isAdding: $isAdding, isRefreshing: $isRefreshing, listQueryState: $listQueryState, isDeletingItem: $isDeletingItem, shoppingLists: $shoppingLists)';
   }
 
   @override
@@ -221,6 +237,7 @@ class _$HomeBlocStateImpl
       ..add(DiagnosticsProperty('isPaginationDone', isPaginationDone))
       ..add(DiagnosticsProperty('isLoading', isLoading))
       ..add(DiagnosticsProperty('isAdding', isAdding))
+      ..add(DiagnosticsProperty('isRefreshing', isRefreshing))
       ..add(DiagnosticsProperty('listQueryState', listQueryState))
       ..add(DiagnosticsProperty('isDeletingItem', isDeletingItem))
       ..add(DiagnosticsProperty('shoppingLists', shoppingLists));
@@ -237,6 +254,8 @@ class _$HomeBlocStateImpl
                 other.isLoading == isLoading) &&
             (identical(other.isAdding, isAdding) ||
                 other.isAdding == isAdding) &&
+            (identical(other.isRefreshing, isRefreshing) ||
+                other.isRefreshing == isRefreshing) &&
             (identical(other.listQueryState, listQueryState) ||
                 other.listQueryState == listQueryState) &&
             const DeepCollectionEquality()
@@ -251,6 +270,7 @@ class _$HomeBlocStateImpl
       isPaginationDone,
       isLoading,
       isAdding,
+      isRefreshing,
       listQueryState,
       const DeepCollectionEquality().hash(_isDeletingItem),
       const DeepCollectionEquality().hash(_shoppingLists));
@@ -267,6 +287,7 @@ abstract class _HomeBlocState implements HomeBlocState {
       {required final bool isPaginationDone,
       required final bool isLoading,
       required final bool isAdding,
+      required final bool isRefreshing,
       required final ListQueryState listQueryState,
       required final Map<String, bool> isDeletingItem,
       required final List<ShoppingList> shoppingLists}) = _$HomeBlocStateImpl;
@@ -277,6 +298,8 @@ abstract class _HomeBlocState implements HomeBlocState {
   bool get isLoading;
   @override
   bool get isAdding;
+  @override
+  bool get isRefreshing;
   @override
   ListQueryState get listQueryState;
   @override

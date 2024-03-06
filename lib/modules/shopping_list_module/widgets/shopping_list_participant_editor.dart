@@ -118,30 +118,28 @@ class CurrentParticipantCard extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-        ),
         borderRadius: BorderRadius.circular(13),
       ),
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Chip(
-            color: MaterialStatePropertyAll(
-              context.colorTheme.primary,
-            ),
-            labelPadding: const EdgeInsets.all(4),
-            label: Text(
-              participant.profile.fullName ?? participant.profile.username,
-              style: context.typoraphyTheme.subtitleLarge.onPrimary.textStyle,
-            ),
-          ),
-          const Gap(4),
           Expanded(
-            child: Text(
-              participant.email,
-              style: context
-                  .typoraphyTheme.subtitleMedium.onCardBackground.textStyle,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: participant.profile.fullName ??
+                        participant.profile.username,
+                    style: context
+                        .typoraphyTheme.titleSmall.onCardBackground.textStyle,
+                  ),
+                  TextSpan(
+                    text: '(${participant.email})',
+                    style: context.typoraphyTheme.subtitleMedium
+                        .onCardBackground.textStyle,
+                  ),
+                ],
+              ),
             ),
           ),
           IgnorePointer(
@@ -158,7 +156,7 @@ class CurrentParticipantCard extends StatelessWidget {
                   : participant.status == ParticipantStatus.invited
                       ? 'Cancel'
                       : 'Remove',
-              onPressed: onRemoved,
+              onPressed: isOwner ? null : onRemoved,
             ),
           ),
         ],
