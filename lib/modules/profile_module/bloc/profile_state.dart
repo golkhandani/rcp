@@ -9,6 +9,7 @@ import 'package:rcp/core/functions/models/user_profile/index.dart';
 import 'package:rcp/core/functions/models/user_username_is_available/index.dart';
 import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/models/user/user_data.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
 import 'package:rcp/core/services/profile_manager_service.dart';
@@ -122,7 +123,7 @@ class ProfileBloc extends Cubit<ProfileBlocState> {
     required String username,
     required String fullname,
   }) async {
-    UserProfile? currentProfile = state.user?.profile;
+    UserProfile2? currentProfile = state.user?.profile;
     try {
       if (currentProfile?.fullName == fullname &&
           currentProfile?.username == username) {

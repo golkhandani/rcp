@@ -25,7 +25,7 @@ const options = {
 // Test the 'hello-world' function
 const testError = async () => {
 	console.log('supabaseUrl', supabaseUrl);
-	var client: SupabaseClient = createClient(
+	const client: SupabaseClient = createClient(
 		supabaseUrl,
 		supabaseKey,
 		options,

@@ -735,7 +735,7 @@ mixin _$ShoppingList {
   List<Participant> get participants => throw _privateConstructorUsedError;
   List<ShoppingItem> get items => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  UserProfile2 get ownerId => throw _privateConstructorUsedError;
+  UserProfile2 get owner => throw _privateConstructorUsedError;
   UserProfile2 get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   UserProfile2 get updatedBy => throw _privateConstructorUsedError;
@@ -760,13 +760,13 @@ abstract class $ShoppingListCopyWith<$Res> {
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
-      UserProfile2 ownerId,
+      UserProfile2 owner,
       UserProfile2 createdBy,
       DateTime updatedAt,
       UserProfile2 updatedBy,
       bool isOwner});
 
-  $UserProfile2CopyWith<$Res> get ownerId;
+  $UserProfile2CopyWith<$Res> get owner;
   $UserProfile2CopyWith<$Res> get createdBy;
   $UserProfile2CopyWith<$Res> get updatedBy;
 }
@@ -790,7 +790,7 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
     Object? participants = null,
     Object? items = null,
     Object? createdAt = null,
-    Object? ownerId = null,
+    Object? owner = null,
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
@@ -821,9 +821,9 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      ownerId: null == ownerId
-          ? _value.ownerId
-          : ownerId // ignore: cast_nullable_to_non_nullable
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
       createdBy: null == createdBy
           ? _value.createdBy
@@ -846,9 +846,9 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
 
   @override
   @pragma('vm:prefer-inline')
-  $UserProfile2CopyWith<$Res> get ownerId {
-    return $UserProfile2CopyWith<$Res>(_value.ownerId, (value) {
-      return _then(_value.copyWith(ownerId: value) as $Val);
+  $UserProfile2CopyWith<$Res> get owner {
+    return $UserProfile2CopyWith<$Res>(_value.owner, (value) {
+      return _then(_value.copyWith(owner: value) as $Val);
     });
   }
 
@@ -884,14 +884,14 @@ abstract class _$$ShoppingListImplCopyWith<$Res>
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
-      UserProfile2 ownerId,
+      UserProfile2 owner,
       UserProfile2 createdBy,
       DateTime updatedAt,
       UserProfile2 updatedBy,
       bool isOwner});
 
   @override
-  $UserProfile2CopyWith<$Res> get ownerId;
+  $UserProfile2CopyWith<$Res> get owner;
   @override
   $UserProfile2CopyWith<$Res> get createdBy;
   @override
@@ -915,7 +915,7 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
     Object? participants = null,
     Object? items = null,
     Object? createdAt = null,
-    Object? ownerId = null,
+    Object? owner = null,
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
@@ -946,9 +946,9 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      ownerId: null == ownerId
-          ? _value.ownerId
-          : ownerId // ignore: cast_nullable_to_non_nullable
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
       createdBy: null == createdBy
           ? _value.createdBy
@@ -981,7 +981,7 @@ class _$ShoppingListImpl implements _ShoppingList {
       required final List<Participant> participants,
       required final List<ShoppingItem> items,
       required this.createdAt,
-      required this.ownerId,
+      required this.owner,
       required this.createdBy,
       required this.updatedAt,
       required this.updatedBy,
@@ -1017,7 +1017,7 @@ class _$ShoppingListImpl implements _ShoppingList {
   @override
   final DateTime createdAt;
   @override
-  final UserProfile2 ownerId;
+  final UserProfile2 owner;
   @override
   final UserProfile2 createdBy;
   @override
@@ -1029,7 +1029,7 @@ class _$ShoppingListImpl implements _ShoppingList {
 
   @override
   String toString() {
-    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, ownerId: $ownerId, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy, isOwner: $isOwner)';
+    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, owner: $owner, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy, isOwner: $isOwner)';
   }
 
   @override
@@ -1046,7 +1046,7 @@ class _$ShoppingListImpl implements _ShoppingList {
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
+            (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.createdBy, createdBy) ||
                 other.createdBy == createdBy) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -1066,7 +1066,7 @@ class _$ShoppingListImpl implements _ShoppingList {
       const DeepCollectionEquality().hash(_participants),
       const DeepCollectionEquality().hash(_items),
       createdAt,
-      ownerId,
+      owner,
       createdBy,
       updatedAt,
       updatedBy,
@@ -1094,7 +1094,7 @@ abstract class _ShoppingList implements ShoppingList {
       required final List<Participant> participants,
       required final List<ShoppingItem> items,
       required final DateTime createdAt,
-      required final UserProfile2 ownerId,
+      required final UserProfile2 owner,
       required final UserProfile2 createdBy,
       required final DateTime updatedAt,
       required final UserProfile2 updatedBy,
@@ -1116,7 +1116,7 @@ abstract class _ShoppingList implements ShoppingList {
   @override
   DateTime get createdAt;
   @override
-  UserProfile2 get ownerId;
+  UserProfile2 get owner;
   @override
   UserProfile2 get createdBy;
   @override

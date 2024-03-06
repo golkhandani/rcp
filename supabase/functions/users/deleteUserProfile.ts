@@ -5,7 +5,7 @@ import { userProfileTable } from '../shared/models/user_profile_model.ts';
 export async function deleteUserProfile(
 	req: ExpressRequest,
 ): Promise<void> {
-	// TODO: move to constant
+	//TODO(@golkhandani): move to constant
 	const avatarBucket = 'avatars';
 	// Get supabase client and required user data
 	const { admin, supabase, user, authHeader } = await getClientInfo(req);
@@ -25,7 +25,7 @@ export async function deleteUserProfile(
 		);
 	}
 
-	// TODO: can be done parallel
+	// TODO(@golkhandani): can be done parallel
 	if (files) {
 		const filesToRemove = files.map((file) => `${user?.id}/${file.name}`);
 		const { data: removedFiles, error: rfError } = await supabase.storage

@@ -24,6 +24,7 @@ abstract class UserProfile2 with _$UserProfile2 {
     required DateTime updatedAt,
   }) = _UserProfile2;
 
+  String get safeFullName => fullName ?? username;
   String get safeName =>
       fullName?.dynamicSub(Environment.safeNameLimit) ?? username;
 
@@ -100,7 +101,7 @@ class ShoppingList with _$ShoppingList {
     required List<Participant> participants,
     required List<ShoppingItem> items,
     required DateTime createdAt,
-    required UserProfile2 ownerId,
+    required UserProfile2 owner,
     required UserProfile2 createdBy,
     required DateTime updatedAt,
     required UserProfile2 updatedBy,

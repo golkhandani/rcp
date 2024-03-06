@@ -1,8 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:rcp/core/functions/models/user_profile/index.dart';
 import 'package:rcp/core/functions/users/handler.dart';
 import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 
 class ProfileManagerService {
   final StackLogger _logger = locator.logger;
@@ -14,16 +14,16 @@ class ProfileManagerService {
 
   User get user => _supabase.auth.currentUser!;
   bool? _hasValidProfile;
-  UserProfile? _profile;
-  UserProfile get profile =>
+  UserProfile2? _profile;
+  UserProfile2 get profile =>
       _profile ??
-      UserProfile(
+      UserProfile2(
         id: 'invalid',
         userId: user.id,
         username: user.email ?? user.id,
         fullName: user.email ?? user.id,
-        createdAt: DateTime.now().toString(),
-        updatedAt: DateTime.now().toString(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
   Future<bool> hasValidProfile({forceCheck = false}) async {
@@ -35,9 +35,9 @@ class ProfileManagerService {
     return _hasValidProfile!;
   }
 
-  Future<UserProfile?> _getUserProfile() async {
+  Future<UserProfile2?> _getUserProfile() async {
     try {
-      if(_supabase.auth.currentSession == null) {
+      if (_supabase.auth.currentSession == null) {
         return null;
       }
       final userProfile = await _supabase.usersFunctions.userProfileGet();

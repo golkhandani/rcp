@@ -23,7 +23,7 @@ mixin _$UserInfo {
   String get id => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
-  UserProfile get profile => throw _privateConstructorUsedError;
+  UserProfile2 get profile => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,9 +36,9 @@ abstract class $UserInfoCopyWith<$Res> {
   factory $UserInfoCopyWith(UserInfo value, $Res Function(UserInfo) then) =
       _$UserInfoCopyWithImpl<$Res, UserInfo>;
   @useResult
-  $Res call({String id, String? email, String? phone, UserProfile profile});
+  $Res call({String id, String? email, String? phone, UserProfile2 profile});
 
-  $UserProfileCopyWith<$Res> get profile;
+  $UserProfile2CopyWith<$Res> get profile;
 }
 
 /// @nodoc
@@ -75,14 +75,14 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
+              as UserProfile2,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserProfileCopyWith<$Res> get profile {
-    return $UserProfileCopyWith<$Res>(_value.profile, (value) {
+  $UserProfile2CopyWith<$Res> get profile {
+    return $UserProfile2CopyWith<$Res>(_value.profile, (value) {
       return _then(_value.copyWith(profile: value) as $Val);
     });
   }
@@ -96,10 +96,10 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       __$$UserInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String? email, String? phone, UserProfile profile});
+  $Res call({String id, String? email, String? phone, UserProfile2 profile});
 
   @override
-  $UserProfileCopyWith<$Res> get profile;
+  $UserProfile2CopyWith<$Res> get profile;
 }
 
 /// @nodoc
@@ -134,7 +134,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
-              as UserProfile,
+              as UserProfile2,
     ));
   }
 }
@@ -158,7 +158,7 @@ class _$UserInfoImpl implements _UserInfo {
   @override
   final String? phone;
   @override
-  final UserProfile profile;
+  final UserProfile2 profile;
 
   @override
   String toString() {
@@ -199,7 +199,7 @@ abstract class _UserInfo implements UserInfo {
       {required final String id,
       required final String? email,
       required final String? phone,
-      required final UserProfile profile}) = _$UserInfoImpl;
+      required final UserProfile2 profile}) = _$UserInfoImpl;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) =
       _$UserInfoImpl.fromJson;
@@ -211,7 +211,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   String? get phone;
   @override
-  UserProfile get profile;
+  UserProfile2 get profile;
   @override
   @JsonKey(ignore: true)
   _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>

@@ -145,8 +145,7 @@ class _ShoppingListAddOrEditState extends State<ShoppingListAddOrEdit> {
                         .textStyle,
                   ),
                 ...memebers.map((item) => CurrentParticipantCard(
-                      isOwner:
-                          item.userId == state.shoppingList?.ownerId.userId,
+                      isOwner: item.userId == state.shoppingList?.owner.userId,
                       participant: item,
                       onRemoved: () => widget.shoppingListBloc
                           .removeParticipant(participant: item),
