@@ -12,6 +12,7 @@ import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/widgets/layouts/scaffold_shell.dart';
 import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
+import 'package:rcp/environment.dart';
 import 'package:rcp/modules/authentication_module/auth_router.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_bloc.dart';
 import 'package:rcp/modules/authentication_module/bloc/auth_state.dart';
@@ -169,18 +170,19 @@ class _SigninScreenState extends State<SigninScreen> {
                           },
                         ),
                         const Gap(16),
-                        SupaSocialsAuth(
-                            showSuccessSnackBar: false,
-                            socialProviders: const [
-                              OAuthProvider.google,
-                              OAuthProvider.apple,
-                            ],
-                            onSuccess: (session) {
-                              if (_signedinWithEmail) {
-                                return;
-                              }
-                              context.neglectNamed(dashboardRoute.name);
-                            }),
+                        if (Environment.enabledSocialLogin)
+                          SupaSocialsAuth(
+                              showSuccessSnackBar: false,
+                              socialProviders: const [
+                                OAuthProvider.google,
+                                OAuthProvider.apple,
+                              ],
+                              onSuccess: (session) {
+                                if (_signedinWithEmail) {
+                                  return;
+                                }
+                                context.neglectNamed(dashboardRoute.name);
+                              }),
                         const Gap(16),
                         const BasicTextDivider(
                           labelText: "Don't have an account?",

@@ -35,7 +35,7 @@ class ShoppingListFunctions extends SingleDomainFunctions {
           .map((e) => ShoppingList.fromJson({
                 ...e,
                 // TODO add it to be model => check for user id be same as ownerid
-                'isOwner': true,
+                'isOwner': false,
               }))
           .toList();
       return data;

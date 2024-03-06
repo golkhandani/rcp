@@ -111,15 +111,6 @@ void main() async {
 
       final shouldRedirectToOnboarding = !sessionManagerService.hasSeenIntro;
 
-      // print("____________________");
-      // print("isAuthenticated ${isAuthenticated}");
-      // print("shouldRedirectToOnboarding ${shouldRedirectToOnboarding}");
-      // print("isAuthRoute ${isAuthRoute}");
-      // print("hasProfile ${hasProfile}");
-      // print("isDashboardRoute ${isDashboardRoute}");
-      // print("state.fullPath ${state.fullPath}");
-      // print("____________________");
-
       if (shouldRedirectToOnboarding) {
         return OnBoardingScreen.route.path;
       }

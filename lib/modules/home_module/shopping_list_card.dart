@@ -58,6 +58,8 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDeletable =
+        widget.item.participants.length == 1 && widget.item.isOwner;
     return Hero(
       tag: widget.item.id,
       child: Card(
@@ -91,22 +93,13 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                 motion: const ScrollMotion(),
                 dragDismissible: true,
                 children: [
-                  if (widget.item.isOwner)
-                    SlidableAction(
-                      onPressed: (c) => widget.onDeleted(),
-                      backgroundColor: context.colorTheme.error,
-                      foregroundColor: context.colorTheme.onError,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    ),
-                  if (!widget.item.isOwner)
-                    SlidableAction(
-                      onPressed: null,
-                      backgroundColor: context.colorTheme.error,
-                      foregroundColor: context.colorTheme.onError,
-                      icon: Icons.lock,
-                      label: 'No action available!',
-                    ),
+                  SlidableAction(
+                    onPressed: (c) => widget.onDeleted(),
+                    backgroundColor: context.colorTheme.error,
+                    foregroundColor: context.colorTheme.onError,
+                    icon: Icons.delete,
+                    label: isDeletable ? 'Delete!' : 'Leave!',
+                  ),
                 ],
               ),
               child: InkWell(

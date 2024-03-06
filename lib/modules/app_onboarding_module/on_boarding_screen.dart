@@ -50,12 +50,13 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
     final pages = [
       intro.PageViewModel(
         decoration: decoration,
-        title: "👋 Hey Fam!",
+        title: "👋 Welcome to our Shopping List App!",
         bodyWidget: Column(
           children: [
+            const SizedBox(height: 148),
             Text(
-              "Welcome to our little corner of the language-learning world! 🌍✨ Just a heads up, WordWise is my passion project – a labor of love aimed at making English essential words a breeze to learn.\n\nNow, let's keep it real. 🚀 This app isn't aiming to be the flashiest flashcard app out there. It's my personal playground, and I'm cooking up some cool features to make it better. But hey, Rome wasn't built in a day, right?",
-              style: decoration.bodyTextStyle,
+              "Simplify your shopping experience with our easy-to-use app. Create and share shopping lists with family and friends, add items effortlessly, and stay organized while shopping. Say goodbye to forgotten items and hello to stress-free shopping!",
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 148),
@@ -64,24 +65,69 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
       intro.PageViewModel(
         decoration: decoration,
-        title: "🛠️ Upgrades in the Pipeline",
-        body:
-            "I'm rolling up my sleeves to add the stuff you want most, but here's the deal: it won't be perfect. And that's cool! Think of WordWise like your favorite cozy café – it might not have a five-star chef, but it's got heart, and we're in this together.",
-      ),
-      intro.PageViewModel(
-        decoration: decoration,
-        title: "🙏 Your Patience is Key",
-        body:
-            "I get it – you might want that whiz-bang feature from the other flashcard giants. Hold tight, and we'll get there, one update at a time. Your feedback is my secret sauce, so if you have thoughts, shout them out!",
-      ),
-      intro.PageViewModel(
-        decoration: decoration,
-        title: "🚀 Ready to Roll",
+        title: "🛠️ Discover the features of our Shopping List App!",
         bodyWidget: Column(
           children: [
+            const SizedBox(height: 148),
             Text(
-              "WordWise might not be aiming for gold, but it's here to make learning essential English words a tad more fun. So, let's dive in, make mistakes, learn, and maybe share a laugh or two along the way.",
-              style: decoration.bodyTextStyle,
+              'Create Shopping Lists: Easily create new shopping lists for different occasions or categories.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Add Items Quickly: Add items to your lists with just a few taps, or use our photo recognition feature to add items by snapping a photo.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Share Lists with Others: Collaborate with family and friends by sharing your lists. Everyone can see updates in real-time.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Stay Organized: Keep track of purchased items, set quantities, and categorize your shopping lists for better organization.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      intro.PageViewModel(
+        decoration: decoration,
+        title: "🚀 Ready to get started with our Shopping List App?",
+        bodyWidget: Column(
+          children: [
+            const SizedBox(height: 148),
+            Text(
+              '1. Sign Up: Create your account to access all the features of our app. It\'s quick, easy, and free!',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '2. Create Your First List: Once you\'re signed in, create your first shopping list by tapping on the "+" button. Give your list a name and start adding items.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '3. Share with Others: Invite family members or friends to join your list and collaborate on shopping together. Simply tap on the share icon and enter their email addresses.',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '4. Start Shopping: Head to the store with your organized shopping list in hand. Mark off items as you go and enjoy a stress-free shopping experience!',
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Let's make shopping easier and more enjoyable together!",
+              style: context.typoraphyTheme.subtitleLarge.textStyle,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 48),

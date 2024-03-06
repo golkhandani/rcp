@@ -5,4 +5,5 @@ class Environment {
   static const String isIntroCheckedKey = 'isIntroCheckedKey';
   static const String selectedGroupKey = 'selectedGroupKey';
   static const int safeNameLimit = 16;
+  static const bool enabledSocialLogin = false;
 }
