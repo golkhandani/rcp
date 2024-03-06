@@ -1,16 +1,12 @@
 import { ExpressApp } from './../shared/anything.ts';
 import { BasicException } from './../shared/exceptions/client_info_exception.ts';
 
-import {
-	addShoppingListById,
-	updateShoppingListById,
-} from './add_or_update_shopping_list.ts';
-import { deleteShoppingListById } from './delete_shopping_list_by_id.ts';
-import {
-	getShoppingListById,
-	getShoppingListParticipantsById,
-} from './get_shopping_list_by_id.ts';
-import { getShoppingListsByUser } from './get_shopping_lists_by_user.ts';
+import { updateShoppingListById } from './updateShoppingListById.ts';
+import { addShoppingListById } from './addShoppingListById.ts';
+import { deleteShoppingListById } from './deleteShoppingListById.ts';
+import { getShoppingListById } from './getShoppingListById.ts';
+import { getShoppingListParticipantsById } from './getShoppingListParticipantsById.ts';
+import { getShoppingListsByUser } from './getShoppingListsByUser.ts';
 
 import { addOrUpdateShoppingItem } from '../shopping_items/add_or_update_shopping_item.ts';
 
@@ -23,76 +19,59 @@ import {
 	deleteShoppingListParticipantsById,
 	updateStatusShoppingListParticipantsById,
 } from '../participants/add_participant.ts';
+import { sendDataResponse, sendErrorResponse } from '../shared/express_app.ts';
 
+// [clean up is done]
 expressApp((app: ExpressApp) => {
 	const prefix = 'shopping_lists';
 
 	app.get(`/${prefix}/all`, async (req, res) => {
 		try {
 			const result = await getShoppingListsByUser(req);
-			return res.status(200).send(result);
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({
-					error: error.message,
-				});
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.get(`/${prefix}/:id`, async (req, res) => {
 		try {
-			const result = await getShoppingListById(req);
-			return res.status(200).send(result);
+			const result = await getShoppingListById({ req });
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.post(`/${prefix}`, async (req, res) => {
 		try {
 			const result = await addShoppingListById(req);
-			return res.status(201).send(result);
+			return sendDataResponse(res, result, 201);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.put(`/${prefix}/:id`, async (req, res) => {
 		try {
 			const result = await updateShoppingListById(req);
-			return res.status(200).send(result);
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({
-				error: 'Something is wrong!',
-				c: error,
-			});
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.delete(`/${prefix}/:id`, async (req, res) => {
 		try {
 			const result = await deleteShoppingListById(req);
-			return res.status(204).send(result);
+			return sendDataResponse(res, result, 204);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	////////////////
+	// [clean up is todo]
 	// PARTICIPANTS
 	// some of the endpoints can be moved to participant prefix
 	// like delete/put/patch-status
@@ -160,8 +139,8 @@ expressApp((app: ExpressApp) => {
 	);
 
 	////////////////
+	// [clean up is todo]
 	// SHOPPING ITEMS
-
 	app.get(`/${prefix}/:id/items`, async (req, res) => {
 		try {
 			const result = await getShoppingItemsByShoppingList(req);

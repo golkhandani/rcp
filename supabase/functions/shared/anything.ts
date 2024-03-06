@@ -1,5 +1,5 @@
 // @deno-types="npm:@types/express@4"
-import express, { Express, Request } from 'npm:express@4.18.2';
+import express, { Express, Request, Response } from 'npm:express@4.18.2';
 import cors from 'npm:cors@2.8.5';
 import { Database } from '../types.ts';
 
@@ -18,6 +18,7 @@ export class StorageServie {
 }
 
 export type ExpressRequest = Request;
+export type ExpressResponse = Response;
 export type ExpressApp = Express;
 
 export function expressApp(cb: (app: ExpressApp) => void) {

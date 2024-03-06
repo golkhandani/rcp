@@ -1,38 +1,30 @@
 {
-    "tasks": {
-        "hook": "deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts"
-    },
-    "check": {
-        "include": [
-            "supabase/"
-        ]
-    },
-    "fmt": {
-        "useTabs": true,
-        "lineWidth": 80,
-        "indentWidth": 4,
-        "semiColons": true,
-        "singleQuote": true,
-        "proseWrap": "preserve",
-        "include": [
-            "supabase/"
-        ],
-        "exclude": []
-    },
-    "lint": {
-        "include": [
-            "supabase/"
-        ],
-        "rules": {
-            "tags": [
-                "recommended"
-            ],
-            "include": [
-                "ban-untagged-todo"
-            ],
-            "exclude": [
-                "no-unused-vars"
-            ]
-        }
+  "tasks": {
+    "hook": "deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts"
+  },
+  "check": {
+    "include": ["supabase/"]
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "fmt": {
+    "useTabs": true,
+    "lineWidth": 80,
+    "indentWidth": 4,
+    "semiColons": true,
+    "singleQuote": true,
+    "proseWrap": "preserve",
+    "include": ["supabase/"],
+    "exclude": []
+  },
+  "lint": {
+    "include": ["supabase/"],
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"],
+      "exclude": ["no-unused-vars"]
     }
+  }
 }

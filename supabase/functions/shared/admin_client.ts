@@ -52,16 +52,18 @@ export const getClientInfo = async (
 		supabase: SupabaseClient;
 		user: User;
 		profile: UserProfile;
+		authHeader: string;
 	}
 > => {
 	try {
-		const { admin, supabase } = getClients(req);
+		const { admin, supabase, authHeader } = getClients(req);
 
 		const [user, userProfile] = await Promise.all([
 			supabase.auth.getUser(),
 			getUserProfile(req),
 		]);
 		return {
+			authHeader,
 			admin,
 			supabase,
 			user: user.data.user as User,
