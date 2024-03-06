@@ -9,7 +9,10 @@ import 'package:rcp/core/functions/models/user_profile/index.dart';
 import 'package:rcp/core/functions/models/user_username_is_available/index.dart';
 import 'package:rcp/core/functions/single_domain_functions.dart';
 import 'package:rcp/core/ioc.dart';
+import 'package:rcp/core/models/invitation_model.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/services/storage_service.dart';
+import 'package:rcp/modules/app_bloc/list_query_state.dart';
 
 class UsersFunctions extends SingleDomainFunctions {
   final _logger = locator.console('UsersFunctions');
@@ -59,22 +62,6 @@ class UsersFunctions extends SingleDomainFunctions {
     } catch (e) {
       _logger.error(e);
       rethrow;
-    }
-  }
-
-  Future<UserUsernameIsAvailableOutout> userUsernameIsAvailable({
-    required UserUsernameIsAvailableInput body,
-  }) async {
-    try {
-      final functionName = getfnName('username_is_available');
-      final res = await supabaseClient.functions.get(
-        functionName,
-        query: body.toJson(),
-      );
-      return UserUsernameIsAvailableOutout.fromJson(res.data);
-    } catch (e) {
-      locator.logger.error(e);
-      return const UserUsernameIsAvailableOutout(isAvailable: false);
     }
   }
 
@@ -169,6 +156,73 @@ class UsersFunctions extends SingleDomainFunctions {
       await supabaseClient.functions.delete(functionName);
     } catch (e) {
       locator.logger.error(e);
+      rethrow;
+    }
+  }
+
+  // profile check
+  Future<UserUsernameIsAvailableOutout> userUsernameIsAvailable({
+    required UserUsernameIsAvailableInput body,
+  }) async {
+    try {
+      final functionName = getfnName('username_is_available');
+      final res = await supabaseClient.functions.get(
+        functionName,
+        query: body.toJson(),
+      );
+      return UserUsernameIsAvailableOutout.fromJson(res.data);
+    } catch (e) {
+      locator.logger.error(e);
+      return const UserUsernameIsAvailableOutout(isAvailable: false);
+    }
+  }
+
+  // invitations
+  Future<InvitationCandidate?> userInvitationIsAvailable({
+    required String email,
+  }) async {
+    try {
+      final functionName = getfnName('invitation_is_available');
+      final res = await supabaseClient.functions.get(
+        functionName,
+        query: {
+          'email': email,
+        },
+      );
+
+      return InvitationCandidate.fromJson(res.data);
+    } on FunctionException catch (e) {
+      if (e.status == 404) {
+        return null;
+      }
+      _logger.error(e.status);
+      rethrow;
+    } catch (e) {
+      _logger.error(e);
+      rethrow;
+    }
+  }
+
+  Future<List<Invitation>> userInvitations({
+    required ListQueryState query,
+  }) async {
+    try {
+      final functionName = getfnName('me/invitations');
+      final res = await supabaseClient.functions.get(
+        functionName,
+        query: query.toJson(),
+      );
+
+      final rawData = res.data as List<dynamic>;
+
+      final data = rawData.map((e) => Invitation.fromJson(e)).toList();
+
+      return data;
+    } on FunctionException catch (e) {
+      _logger.error(e.status);
+      rethrow;
+    } catch (e) {
+      _logger.error(e);
       rethrow;
     }
   }

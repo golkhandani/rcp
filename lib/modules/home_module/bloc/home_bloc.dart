@@ -18,6 +18,7 @@ class HomeBlocState with _$HomeBlocState {
     required bool isPaginationDone,
     required bool isLoading,
     required bool isAdding,
+    required bool isRefreshing,
     required ListQueryState listQueryState,
     required Map<String, bool> isDeletingItem,
     required List<ShoppingList> shoppingLists,
@@ -27,6 +28,7 @@ class HomeBlocState with _$HomeBlocState {
         isPaginationDone: false,
         isLoading: false,
         isAdding: false,
+        isRefreshing: false,
         listQueryState: ListQueryState(),
         shoppingLists: [],
         isDeletingItem: {},
@@ -43,16 +45,38 @@ class HomeBloc extends Cubit<HomeBlocState> {
     required this.banner,
   }) : super(HomeBlocState.init());
 
+  Future<void> getAcceptedShoppingList({
+    required String shoppingListId,
+  }) async {
+    try {
+      final item = await supabase.shoppingListFuntions.getShoppingListById(
+        shoppingListId,
+      );
+
+      emit(state.copyWith(
+        shoppingLists: [
+          item,
+          ...state.shoppingLists,
+        ],
+      ));
+    } catch (e) {
+      _logger.error(e);
+    }
+  }
+
   Future<void> loadShoppingLists() async {
     try {
       if (state.isPaginationDone) {
         return;
       }
-      emit(state.copyWith(isLoading: true));
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final query = state.listQueryState.copyWith(
+
+      var query = state.listQueryState.copyWith(
         page: state.shoppingLists.isEmpty ? 1 : state.listQueryState.page + 1,
       );
+
+      emit(state.copyWith(
+        isLoading: true,
+      ));
 
       final list = await supabase.shoppingListFuntions.getShoppingListsByUser(
         query,
@@ -61,11 +85,33 @@ class HomeBloc extends Cubit<HomeBlocState> {
       emit(state.copyWith(
         isPaginationDone: list.isEmpty || list.length < query.pageSize,
         listQueryState: query,
-        shoppingLists: [
+        shoppingLists: {
           ...state.shoppingLists,
           ...list,
-        ],
+        }.toList(),
         isLoading: false,
+        isRefreshing: false,
+      ));
+    } catch (e) {
+      _logger.error(e);
+    }
+  }
+
+  Future<void> reloadShoppingLists() async {
+    try {
+      final newState = HomeBlocState.init();
+      final query = newState.listQueryState;
+
+      final list = await supabase.shoppingListFuntions.getShoppingListsByUser(
+        query,
+      );
+
+      emit(state.copyWith(
+        isPaginationDone: list.isEmpty || list.length < query.pageSize,
+        listQueryState: query,
+        shoppingLists: list,
+        isLoading: false,
+        isRefreshing: false,
       ));
     } catch (e) {
       _logger.error(e);

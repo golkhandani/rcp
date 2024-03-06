@@ -183,7 +183,7 @@ class BasicTextInput extends StatelessWidget {
     this.hintText,
     this.suffix,
     this.validator,
-    this.keyboardType = TextInputType.none,
+    this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.enabled = true,
     this.inputFormatters = const [],
@@ -200,7 +200,7 @@ class BasicTextInput extends StatelessWidget {
     this.hintText,
     this.suffix,
     this.validator,
-    this.keyboardType = TextInputType.none,
+    this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.enabled = true,
     this.inputFormatters = const [],
@@ -441,6 +441,7 @@ class BasicBottomModalSheetFrame extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(child: child),
           ),
+          Gap(MediaQuery.of(context).viewInsets.bottom)
         ],
       ),
     );

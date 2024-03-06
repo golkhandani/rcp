@@ -283,6 +283,296 @@ abstract class _UserProfile2 extends UserProfile2 {
       throw _privateConstructorUsedError;
 }
 
+InvitationCandidate _$InvitationCandidateFromJson(Map<String, dynamic> json) {
+  return _InvitationCandidate.fromJson(json);
+}
+
+/// @nodoc
+mixin _$InvitationCandidate {
+  String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
+  String? get fullName => throw _privateConstructorUsedError;
+  String? get avatarUrl => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $InvitationCandidateCopyWith<InvitationCandidate> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $InvitationCandidateCopyWith<$Res> {
+  factory $InvitationCandidateCopyWith(
+          InvitationCandidate value, $Res Function(InvitationCandidate) then) =
+      _$InvitationCandidateCopyWithImpl<$Res, InvitationCandidate>;
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      String username,
+      String email,
+      String? fullName,
+      String? avatarUrl,
+      DateTime createdAt,
+      DateTime updatedAt});
+}
+
+/// @nodoc
+class _$InvitationCandidateCopyWithImpl<$Res, $Val extends InvitationCandidate>
+    implements $InvitationCandidateCopyWith<$Res> {
+  _$InvitationCandidateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? username = null,
+    Object? email = null,
+    Object? fullName = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$InvitationCandidateImplCopyWith<$Res>
+    implements $InvitationCandidateCopyWith<$Res> {
+  factory _$$InvitationCandidateImplCopyWith(_$InvitationCandidateImpl value,
+          $Res Function(_$InvitationCandidateImpl) then) =
+      __$$InvitationCandidateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String userId,
+      String username,
+      String email,
+      String? fullName,
+      String? avatarUrl,
+      DateTime createdAt,
+      DateTime updatedAt});
+}
+
+/// @nodoc
+class __$$InvitationCandidateImplCopyWithImpl<$Res>
+    extends _$InvitationCandidateCopyWithImpl<$Res, _$InvitationCandidateImpl>
+    implements _$$InvitationCandidateImplCopyWith<$Res> {
+  __$$InvitationCandidateImplCopyWithImpl(_$InvitationCandidateImpl _value,
+      $Res Function(_$InvitationCandidateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userId = null,
+    Object? username = null,
+    Object? email = null,
+    Object? fullName = freezed,
+    Object? avatarUrl = freezed,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+  }) {
+    return _then(_$InvitationCandidateImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$InvitationCandidateImpl extends _InvitationCandidate {
+  const _$InvitationCandidateImpl(
+      {required this.id,
+      required this.userId,
+      required this.username,
+      required this.email,
+      this.fullName,
+      this.avatarUrl,
+      required this.createdAt,
+      required this.updatedAt})
+      : super._();
+
+  factory _$InvitationCandidateImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InvitationCandidateImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String userId;
+  @override
+  final String username;
+  @override
+  final String email;
+  @override
+  final String? fullName;
+  @override
+  final String? avatarUrl;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+
+  @override
+  String toString() {
+    return 'InvitationCandidate(id: $id, userId: $userId, username: $username, email: $email, fullName: $fullName, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InvitationCandidateImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.fullName, fullName) ||
+                other.fullName == fullName) &&
+            (identical(other.avatarUrl, avatarUrl) ||
+                other.avatarUrl == avatarUrl) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, userId, username, email,
+      fullName, avatarUrl, createdAt, updatedAt);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InvitationCandidateImplCopyWith<_$InvitationCandidateImpl> get copyWith =>
+      __$$InvitationCandidateImplCopyWithImpl<_$InvitationCandidateImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$InvitationCandidateImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _InvitationCandidate extends InvitationCandidate {
+  const factory _InvitationCandidate(
+      {required final String id,
+      required final String userId,
+      required final String username,
+      required final String email,
+      final String? fullName,
+      final String? avatarUrl,
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$InvitationCandidateImpl;
+  const _InvitationCandidate._() : super._();
+
+  factory _InvitationCandidate.fromJson(Map<String, dynamic> json) =
+      _$InvitationCandidateImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get userId;
+  @override
+  String get username;
+  @override
+  String get email;
+  @override
+  String? get fullName;
+  @override
+  String? get avatarUrl;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  @JsonKey(ignore: true)
+  _$$InvitationCandidateImplCopyWith<_$InvitationCandidateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 ShoppingListResponse _$ShoppingListResponseFromJson(Map<String, dynamic> json) {
   return _ShoppingListResponse.fromJson(json);
 }
@@ -445,9 +735,11 @@ mixin _$ShoppingList {
   List<Participant> get participants => throw _privateConstructorUsedError;
   List<ShoppingItem> get items => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  UserProfile2 get ownerId => throw _privateConstructorUsedError;
   UserProfile2 get createdBy => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
   UserProfile2 get updatedBy => throw _privateConstructorUsedError;
+  bool get isOwner => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -468,10 +760,13 @@ abstract class $ShoppingListCopyWith<$Res> {
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
+      UserProfile2 ownerId,
       UserProfile2 createdBy,
       DateTime updatedAt,
-      UserProfile2 updatedBy});
+      UserProfile2 updatedBy,
+      bool isOwner});
 
+  $UserProfile2CopyWith<$Res> get ownerId;
   $UserProfile2CopyWith<$Res> get createdBy;
   $UserProfile2CopyWith<$Res> get updatedBy;
 }
@@ -495,9 +790,11 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
     Object? participants = null,
     Object? items = null,
     Object? createdAt = null,
+    Object? ownerId = null,
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
+    Object? isOwner = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -524,6 +821,10 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      ownerId: null == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
+              as UserProfile2,
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
@@ -536,7 +837,19 @@ class _$ShoppingListCopyWithImpl<$Res, $Val extends ShoppingList>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserProfile2CopyWith<$Res> get ownerId {
+    return $UserProfile2CopyWith<$Res>(_value.ownerId, (value) {
+      return _then(_value.copyWith(ownerId: value) as $Val);
+    });
   }
 
   @override
@@ -571,10 +884,14 @@ abstract class _$$ShoppingListImplCopyWith<$Res>
       List<Participant> participants,
       List<ShoppingItem> items,
       DateTime createdAt,
+      UserProfile2 ownerId,
       UserProfile2 createdBy,
       DateTime updatedAt,
-      UserProfile2 updatedBy});
+      UserProfile2 updatedBy,
+      bool isOwner});
 
+  @override
+  $UserProfile2CopyWith<$Res> get ownerId;
   @override
   $UserProfile2CopyWith<$Res> get createdBy;
   @override
@@ -598,9 +915,11 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
     Object? participants = null,
     Object? items = null,
     Object? createdAt = null,
+    Object? ownerId = null,
     Object? createdBy = null,
     Object? updatedAt = null,
     Object? updatedBy = null,
+    Object? isOwner = null,
   }) {
     return _then(_$ShoppingListImpl(
       id: null == id
@@ -627,6 +946,10 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      ownerId: null == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
+              as UserProfile2,
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
@@ -639,6 +962,10 @@ class __$$ShoppingListImplCopyWithImpl<$Res>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as UserProfile2,
+      isOwner: null == isOwner
+          ? _value.isOwner
+          : isOwner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -654,9 +981,11 @@ class _$ShoppingListImpl implements _ShoppingList {
       required final List<Participant> participants,
       required final List<ShoppingItem> items,
       required this.createdAt,
+      required this.ownerId,
       required this.createdBy,
       required this.updatedAt,
-      required this.updatedBy})
+      required this.updatedBy,
+      required this.isOwner})
       : _participants = participants,
         _items = items;
 
@@ -688,15 +1017,19 @@ class _$ShoppingListImpl implements _ShoppingList {
   @override
   final DateTime createdAt;
   @override
+  final UserProfile2 ownerId;
+  @override
   final UserProfile2 createdBy;
   @override
   final DateTime updatedAt;
   @override
   final UserProfile2 updatedBy;
+  @override
+  final bool isOwner;
 
   @override
   String toString() {
-    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy)';
+    return 'ShoppingList(id: $id, name: $name, description: $description, participants: $participants, items: $items, createdAt: $createdAt, ownerId: $ownerId, createdBy: $createdBy, updatedAt: $updatedAt, updatedBy: $updatedBy, isOwner: $isOwner)';
   }
 
   @override
@@ -713,12 +1046,14 @@ class _$ShoppingListImpl implements _ShoppingList {
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
             (identical(other.createdBy, createdBy) ||
                 other.createdBy == createdBy) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.updatedBy, updatedBy) ||
-                other.updatedBy == updatedBy));
+                other.updatedBy == updatedBy) &&
+            (identical(other.isOwner, isOwner) || other.isOwner == isOwner));
   }
 
   @JsonKey(ignore: true)
@@ -731,9 +1066,11 @@ class _$ShoppingListImpl implements _ShoppingList {
       const DeepCollectionEquality().hash(_participants),
       const DeepCollectionEquality().hash(_items),
       createdAt,
+      ownerId,
       createdBy,
       updatedAt,
-      updatedBy);
+      updatedBy,
+      isOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -757,9 +1094,11 @@ abstract class _ShoppingList implements ShoppingList {
       required final List<Participant> participants,
       required final List<ShoppingItem> items,
       required final DateTime createdAt,
+      required final UserProfile2 ownerId,
       required final UserProfile2 createdBy,
       required final DateTime updatedAt,
-      required final UserProfile2 updatedBy}) = _$ShoppingListImpl;
+      required final UserProfile2 updatedBy,
+      required final bool isOwner}) = _$ShoppingListImpl;
 
   factory _ShoppingList.fromJson(Map<String, dynamic> json) =
       _$ShoppingListImpl.fromJson;
@@ -777,11 +1116,15 @@ abstract class _ShoppingList implements ShoppingList {
   @override
   DateTime get createdAt;
   @override
+  UserProfile2 get ownerId;
+  @override
   UserProfile2 get createdBy;
   @override
   DateTime get updatedAt;
   @override
   UserProfile2 get updatedBy;
+  @override
+  bool get isOwner;
   @override
   @JsonKey(ignore: true)
   _$$ShoppingListImplCopyWith<_$ShoppingListImpl> get copyWith =>

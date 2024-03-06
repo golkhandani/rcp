@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,7 +27,8 @@ import 'package:rcp/utils/themes.dart';
 void main() async {
   // START APP INIT
   // initialize widget and supabase
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
@@ -109,15 +111,6 @@ void main() async {
 
       final shouldRedirectToOnboarding = !sessionManagerService.hasSeenIntro;
 
-      // print("____________________");
-      // print("isAuthenticated ${isAuthenticated}");
-      // print("shouldRedirectToOnboarding ${shouldRedirectToOnboarding}");
-      // print("isAuthRoute ${isAuthRoute}");
-      // print("hasProfile ${hasProfile}");
-      // print("isDashboardRoute ${isDashboardRoute}");
-      // print("state.fullPath ${state.fullPath}");
-      // print("____________________");
-
       if (shouldRedirectToOnboarding) {
         return OnBoardingScreen.route.path;
       }
@@ -168,6 +161,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _tenancyBloc = locator.get<AppTenancyBloc>();
   final _authBloc = locator.get<AuthenticationCubit>();
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
+
   @override
   Widget build(BuildContext context) {
     const pallete = trendyTheme;

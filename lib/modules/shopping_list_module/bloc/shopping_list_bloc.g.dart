@@ -25,6 +25,11 @@ _$ShoppingListBlocStateImpl _$$ShoppingListBlocStateImplFromJson(
       ),
       listQueryState: ListQueryState.fromJson(
           json['listQueryState'] as Map<String, dynamic>),
+      isLoadingInvitationCandidates:
+          json['isLoadingInvitationCandidates'] as bool,
+      invitationCandidates: (json['invitationCandidates'] as List<dynamic>)
+          .map((e) => InvitationCandidate.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$ShoppingListBlocStateImplToJson(
@@ -39,4 +44,6 @@ Map<String, dynamic> _$$ShoppingListBlocStateImplToJson(
       'participants': instance.participants,
       'shoppingItems': instance.shoppingItems,
       'listQueryState': instance.listQueryState,
+      'isLoadingInvitationCandidates': instance.isLoadingInvitationCandidates,
+      'invitationCandidates': instance.invitationCandidates,
     };

@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import 'package:rcp/core/extensions/context_ui_extension.dart';
 import 'package:rcp/core/models/participant_model.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/packages/components/async_dropdown_menu.dart';
@@ -11,12 +12,18 @@ import 'package:rcp/packages/components/async_dropdown_menu.dart';
 class AddParticipantCard extends StatefulWidget {
   const AddParticipantCard({
     super.key,
-    required this.onParticipantInvited,
+    required this.onUserInvited,
+    required this.onEmailCheck,
     required this.isLoading,
+    required this.isLoadingCandidates,
+    required this.list,
   });
 
-  final void Function(Participant p) onParticipantInvited;
+  final void Function(String email) onEmailCheck;
+  final void Function(InvitationCandidate p) onUserInvited;
   final bool isLoading;
+  final bool isLoadingCandidates;
+  final List<InvitationCandidate> list;
 
   @override
   State<AddParticipantCard> createState() => _AddParticipantCardState();
@@ -25,25 +32,16 @@ class AddParticipantCard extends StatefulWidget {
 class _AddParticipantCardState extends State<AddParticipantCard> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
-  List<Participant> _list = [];
-  Participant? _selected;
-
-  _searchParticipants() {
-    setState(() {
-      _isLoading = true;
-    });
-    final list = generateFakeParticipantData(10);
-    setState(() {
-      _isLoading = false;
-      _list = list;
-    });
-  }
+  bool _isLoadingCandidates = false;
+  List<InvitationCandidate> _list = [];
+  InvitationCandidate? _selected;
 
   @override
   void didUpdateWidget(covariant AddParticipantCard oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     _isLoading = widget.isLoading;
+    _isLoadingCandidates = widget.isLoadingCandidates;
+    _list = widget.list;
   }
 
   @override
@@ -54,22 +52,28 @@ class _AddParticipantCardState extends State<AddParticipantCard> {
       child: Row(
         children: [
           Expanded(
-            child: AsyncDropdownMenu<Participant>(
+            child: AsyncDropdownMenu<InvitationCandidate>(
               items: _list
                   .map(
                     (p) => DropdownMenuEntry(
-                      label: p.email,
+                      label: "${p.safeName} (${p.email})",
                       value: p,
                     ),
                   )
                   .toList(),
               onChanged: (val) {
-                _searchParticipants();
+                if (_controller.text !=
+                    "${_selected?.safeName} (${_selected?.email})") {
+                  setState(() {
+                    _selected = null;
+                  });
+                  widget.onEmailCheck(val);
+                }
               },
               controller: _controller,
-              isLoading: _isLoading,
+              isLoading: _isLoadingCandidates,
               onSelected: (p) {
-                _controller.text = p.profile.fullName ?? p.profile.username;
+                _controller.text = "${p.safeName} (${p.email})";
                 setState(() {
                   _selected = p;
                 });
@@ -86,7 +90,7 @@ class _AddParticipantCardState extends State<AddParticipantCard> {
                 : () {
                     _controller.text = '';
                     _list = [];
-                    widget.onParticipantInvited(_selected!);
+                    widget.onUserInvited(_selected!);
                   },
           ),
         ],
@@ -101,52 +105,59 @@ class CurrentParticipantCard extends StatelessWidget {
     required this.participant,
     required this.onRemoved,
     required this.isLoading,
+    required this.isOwner,
   });
 
   final Participant participant;
   final void Function() onRemoved;
   final bool isLoading;
+  final bool isOwner;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-        ),
         borderRadius: BorderRadius.circular(13),
       ),
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Chip(
-            color: MaterialStatePropertyAll(
-              context.colorTheme.primary,
-            ),
-            labelPadding: const EdgeInsets.all(4),
-            label: Text(
-              participant.profile.fullName ?? participant.profile.username,
-              style: context.typoraphyTheme.subtitleLarge.onPrimary.textStyle,
-            ),
-          ),
-          const Gap(4),
           Expanded(
-            child: Text(
-              participant.email,
-              style: context
-                  .typoraphyTheme.subtitleMedium.onCardBackground.textStyle,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: participant.profile.fullName ??
+                        participant.profile.username,
+                    style: context
+                        .typoraphyTheme.titleSmall.onCardBackground.textStyle,
+                  ),
+                  TextSpan(
+                    text: '(${participant.email})',
+                    style: context.typoraphyTheme.subtitleMedium
+                        .onCardBackground.textStyle,
+                  ),
+                ],
+              ),
             ),
           ),
-          BasicElevatedButton(
-            isLoading: isLoading,
-            background: participant.status == ParticipantStatus.invited
-                ? context.colorTheme.warning
-                : context.colorTheme.error,
-            labelText: participant.status == ParticipantStatus.invited
-                ? 'Cancel'
-                : 'Remove',
-            onPressed: onRemoved,
+          IgnorePointer(
+            ignoring: isOwner,
+            child: BasicElevatedButton(
+              isLoading: isLoading,
+              background: isOwner
+                  ? context.colorTheme.primary
+                  : participant.status == ParticipantStatus.invited
+                      ? context.colorTheme.warning
+                      : context.colorTheme.error,
+              labelText: isOwner
+                  ? 'Owner'
+                  : participant.status == ParticipantStatus.invited
+                      ? 'Cancel'
+                      : 'Remove',
+              onPressed: isOwner ? null : onRemoved,
+            ),
           ),
         ],
       ),

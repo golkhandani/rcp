@@ -1,7 +1,20 @@
-import 'package:collection/collection.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 extension FunctionsTenancyClient on FunctionsClient {
+  String _getQueryString(
+    Map<String, dynamic> query,
+  ) {
+    query.removeWhere((key, value) => value == null);
+
+    String queryString = Uri(
+      queryParameters: query.map(
+        (key, value) => MapEntry(key, value.toString()),
+      ),
+    ).query;
+
+    return queryString;
+  }
+
   Future<FunctionResponse> get(
     String fn, {
     Map<String, String>? headers,
@@ -10,9 +23,7 @@ extension FunctionsTenancyClient on FunctionsClient {
     String path = fn;
 
     if (query != null) {
-      path = '$path?${query.keys.map(
-            (k) => query[k] == null ? null : '$k=${query[k]}',
-          ).whereNotNull().join('&')}';
+      path = '$path?${_getQueryString(query)}';
     }
 
     return await Supabase.instance.client.functions.invoke(
@@ -31,9 +42,7 @@ extension FunctionsTenancyClient on FunctionsClient {
     String path = fn;
 
     if (query != null) {
-      path = '$path?${query.keys.map(
-            (k) => query[k] == null ? null : '$k=${query[k]}',
-          ).whereNotNull().join('&')}';
+      path = '$path?${_getQueryString(query)}';
     }
 
     return await Supabase.instance.client.functions.invoke(
@@ -53,9 +62,7 @@ extension FunctionsTenancyClient on FunctionsClient {
     String path = fn;
 
     if (query != null) {
-      path = '$path?${query.keys.map(
-            (k) => query[k] == null ? null : '$k=${query[k]}',
-          ).whereNotNull().join('&')}';
+      path = '$path?${_getQueryString(query)}';
     }
 
     return await Supabase.instance.client.functions.invoke(
@@ -75,9 +82,9 @@ extension FunctionsTenancyClient on FunctionsClient {
     String path = fn;
 
     if (query != null) {
-      path = '$path?${query.keys.map(
-            (k) => query[k] == null ? null : '$k=${query[k]}',
-          ).whereNotNull().join('&')}';
+      query.removeWhere((key, value) => value == null);
+      String queryString = Uri(queryParameters: query).query;
+      path = '$path?$queryString';
     }
 
     return await Supabase.instance.client.functions.invoke(
@@ -96,9 +103,7 @@ extension FunctionsTenancyClient on FunctionsClient {
     String path = fn;
 
     if (query != null) {
-      path = '$path?${query.keys.map(
-            (k) => query[k] == null ? null : '$k=${query[k]}',
-          ).whereNotNull().join('&')}';
+      path = '$path?${_getQueryString(query)}';
     }
 
     return await Supabase.instance.client.functions.invoke(

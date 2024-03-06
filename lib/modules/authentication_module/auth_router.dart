@@ -18,7 +18,7 @@ fadeTransitionPageBuilder({
     restorationId: pageKey.value,
     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
         FadeTransition(opacity: animation, child: child),
-    child: const SigninScreen(),
+    child: child,
   );
 }
 

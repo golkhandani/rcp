@@ -37,6 +37,9 @@ class ProfileManagerService {
 
   Future<UserProfile?> _getUserProfile() async {
     try {
+      if(_supabase.auth.currentSession == null) {
+        return null;
+      }
       final userProfile = await _supabase.usersFunctions.userProfileGet();
       _profile = userProfile;
       return _profile;

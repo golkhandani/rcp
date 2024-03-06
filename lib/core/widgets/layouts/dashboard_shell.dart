@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -8,12 +6,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 
 import 'package:rcp/core/extensions/context_ui_extension.dart';
+import 'package:rcp/core/widgets/constants.dart';
 import 'package:rcp/core/widgets/theme/apptheme_elevated_button.dart';
 import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
-import 'package:rcp/core/widgets/theme/theme_extentions.dart';
-
-final kBlurConfig = ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0);
 
 class DashboardLink {
   final IconData iconData;
@@ -94,7 +90,7 @@ class _DashboardShellState extends State<DashboardShell> {
       child: ColorfulSafeArea(
         topColor: widget.safeAreaColor,
         bottomColor: Colors.transparent,
-        bottom: false,
+        bottom: !widget.useFloatingNavBar,
         top: false,
         child: Scaffold(
           extendBody: false,
@@ -138,10 +134,7 @@ class _DashboardShellState extends State<DashboardShell> {
   Widget _buildNarrowContainer() {
     if (widget.useFloatingNavBar) {
       final btm = MediaQuery.paddingOf(context).bottom;
-      // final width = min(
-      //   MediaQuery.sizeOf(context).width,
-      //   widget.items.length * 120,
-      // );
+
       return Stack(
         children: [
           widget.child,
@@ -249,7 +242,7 @@ class _DashboardShellState extends State<DashboardShell> {
   Widget _buildFixedNavigationBar() {
     return Container(
       height: widget.height,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(),
       decoration: BoxDecoration(
         color: widget.navigationBackgroundColor,
         boxShadow: const [
@@ -302,17 +295,19 @@ class _DashboardShellState extends State<DashboardShell> {
   }
 
   Widget _buildFloatingNavigationBar() {
-    return Container(
+    final keyboard = MediaQuery.of(context).viewInsets.bottom;
+    return AnimatedContainer(
+      duration: 100.milliseconds,
+      height: widget.height * (widget.height - keyboard).clamp(0, 1),
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(widget.borderRadius),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 1,
-            color:
-                widget.navigationBackgroundColor.darken(0.8).withOpacity(0.2),
+            offset: Offset(0, 2),
+            blurRadius: 2,
+            color: Colors.black45,
           )
         ],
       ),
@@ -328,7 +323,8 @@ class _DashboardShellState extends State<DashboardShell> {
               maxWidth: widget.navBarMaxWidth,
             ),
             padding: EdgeInsets.only(
-                right: widget.floatingActionButton != null ? 56 : 0),
+              right: widget.floatingActionButton != null ? 56 : 0,
+            ),
             color: widget.navigationBackgroundColor,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -340,35 +336,38 @@ class _DashboardShellState extends State<DashboardShell> {
                     ? widget.navigationActiveColor
                     : widget.navigationInactiveColor;
                 final fontStyle = isSelected
-                    ? context.typoraphyTheme.titleSmall.textStyle
+                    ? context.typoraphyTheme.titleTiny.textStyle
                     : context.typoraphyTheme.subtitleMedium.textStyle;
                 return GestureDetector(
                   key: Key((isSelected.hashCode + i).toString()),
                   onTap: () => widget.onTap?.call(i),
                   behavior: HitTestBehavior.opaque,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Icon(
-                          e.iconData,
-                          color: color,
-                          size: (widget.height - 16) / 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Icon(
+                            e.iconData,
+                            color: color,
+                            size: (widget.height - 16) / 2,
+                          ),
                         ),
-                      ),
-                      Text(
-                        e.label ?? '',
-                        style: fontStyle.copyWith(
-                          color: color,
-                          height: 1,
+                        Text(
+                          e.label ?? '',
+                          style: fontStyle.copyWith(
+                            color: color,
+                            height: 1,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                      .animate(value: !isSelected ? 1 : 0)
-                      .saturate()
-                      .scale(begin: const Offset(.9, .9)),
+                      ],
+                    )
+                        .animate(value: !isSelected ? 1 : 0)
+                        .saturate()
+                        .shake(hz: 2),
+                  ),
                 );
               }).toList(),
             ),

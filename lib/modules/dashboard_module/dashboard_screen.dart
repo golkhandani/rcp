@@ -16,6 +16,7 @@ import 'package:rcp/modules/home_module/home_module.dart';
 import 'package:rcp/modules/profile_module/bloc/profile_state.dart';
 import 'package:rcp/modules/profile_module/profile_module.dart';
 import 'package:rcp/modules/setting_module/setting_module.dart';
+import 'package:rcp/modules/user_inbox_module/bloc/invitation_bloc_state.dart';
 import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late final AuthenticationCubit _authenticationCubit = context.read();
   final ProfileBloc _profileBloc = locator.get();
   final HomeBloc _homeBloc = locator.get();
+  final InvitationBloc _invitationBloc = locator.get();
   late final dahboardItems = [
     DashboardLink(
       iconData: Icons.home,
@@ -93,9 +95,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: _homeBloc),
         BlocProvider.value(value: _authenticationCubit),
         BlocProvider.value(value: _profileBloc),
+        BlocProvider.value(value: _homeBloc),
+        BlocProvider.value(value: _invitationBloc),
       ],
       child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
         bloc: _authenticationCubit,
@@ -130,7 +133,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 navigationBackgroundColor: context.colorTheme.navBackground,
                 contentBackgroundColor: Colors.white,
                 safeAreaColor: color,
-                height: 56,
+                height: 64,
                 useFloatingNavBar: true,
                 handleTopSafePadding: false,
                 floatingActionButton: null,

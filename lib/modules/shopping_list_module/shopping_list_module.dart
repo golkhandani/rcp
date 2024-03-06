@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:great_list_view/great_list_view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'package:rcp/core/extensions/context_ui_extension.dart';
 import 'package:rcp/core/go_route_named.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/shopping_item_model.dart';
 import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/services/notification_banner_service.dart';
+import 'package:rcp/core/widgets/constants.dart';
 import 'package:rcp/core/widgets/headers/sliver_title_bar.dart';
 import 'package:rcp/core/widgets/layouts/dashboard_screen_shell.dart';
 import 'package:rcp/core/widgets/theme/basic_widgets.dart';
 import 'package:rcp/core/widgets/theme/flex_theme_provider.dart';
 import 'package:rcp/modules/home_module/bloc/home_bloc.dart';
+import 'package:rcp/modules/home_module/refreshable_nested_scroll_view.dart';
 import 'package:rcp/modules/shopping_list_module/bloc/shopping_list_bloc.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_item_add_or_edit.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_item_card.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_list_editor.dart';
 import 'package:rcp/modules/shopping_list_module/widgets/shopping_list_summary_header.dart';
+import 'package:rcp/modules/user_inbox_module/inbox_module.dart';
 
 final shoppingListRoute = GoRouteNamed(
   path: 'shopping_list/:shopping_list_id',
@@ -93,15 +96,18 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     final child = ShoppingListAddOrEdit(
       shoppingListBloc: _shoppingListBloc,
       shoppingList: shoppingList,
-      shoppingListUpdated: (updated) => _homeBloc.updateShoppingList(
-        shoppingList: updated,
-      ),
+      shoppingListUpdated: (updated) => _homeBloc
+          .updateShoppingList(
+            shoppingList: updated,
+          )
+          .then(
+            (value) => bannerService.closeBottomSheet(),
+          ),
     );
     bannerService.showBottomSheet(child);
   }
 
   late AnimatedListDiffListDispatcher<ShoppingItem> dispatcher;
-  final scrollController = ScrollController();
   final controller = AnimatedListController();
   List<ShoppingItem> list = [];
   @override
@@ -127,15 +133,13 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       currentList: list,
       comparator: AnimatedListDiffListComparator<ShoppingItem>(
         sameItem: (a, b) => a.id == b.id,
-        sameContent: (a, b) => a.isPurchased == b.isPurchased,
+        sameContent: (a, b) => a == b,
       ),
     );
   }
 
   void swapList(List<ShoppingItem> updatedList) {
-    setState(() {
-      dispatcher.dispatchNewList(updatedList);
-    });
+    dispatcher.dispatchNewList(updatedList);
   }
 
   @override
@@ -149,33 +153,41 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   Widget build(BuildContext context) {
     return DashboardScreenShell(
       useSafeArea: false,
-      child: CustomScrollView(
-        slivers: [
-          BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
-            bloc: _shoppingListBloc,
-            buildWhen: (p, c) => p.shoppingList != c.shoppingList,
-            builder: (context, state) {
-              final item = state.shoppingList;
-              if (item == null) {
-                return const SliverTitleBar(title: '');
-              }
-              return MultiSliver(
-                children: [
-                  ShoppingListSummaryHeader(
-                    item: item,
-                    onAddItemClicked: _addInHeader
-                        ? () => showAddItemBottomSheet(context)
-                        : null,
-                    onEditClicked: () => showListEditorBottomSheet(
-                      context,
-                      item,
-                    ),
+      child: RefreshableNestedScrollView(
+        onRefreshRequested: (handler) {
+          _shoppingListBloc.loadShoppingItems(
+            shoppingListId: widget.shoppingListId,
+            isRefreshing: true,
+          );
+          handler.onRefreshDone();
+        },
+        onMoreRequested: null,
+        header: BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
+          bloc: _shoppingListBloc,
+          buildWhen: (p, c) => p.shoppingList != c.shoppingList,
+          builder: (context, state) {
+            final item = state.shoppingList;
+            if (item == null) {
+              return const SliverTitleBar(title: '');
+            }
+            return MultiSliver(
+              children: [
+                ShoppingListSummaryHeader(
+                  item: item,
+                  onAddItemClicked: _addInHeader
+                      ? () => showAddItemBottomSheet(context)
+                      : null,
+                  onEditClicked: () => showListEditorBottomSheet(
+                    context,
+                    item,
                   ),
-                ],
-              );
-            },
-          ),
-          SliverMainAxisGroup(
+                ),
+              ],
+            );
+          },
+        ),
+        builder: (context, handler) {
+          return SliverMainAxisGroup(
             slivers: [
               SliverToBoxAdapter(
                 child: VisibilityDetector(
@@ -198,9 +210,9 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   },
                   child: Container(
                     color: context.colorTheme.background,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(vertical: kMediumGap),
                     child: BasicElevatedButton(
-                      height: 88,
+                      height: kMediumHeight,
                       onPressed: () => showAddItemBottomSheet(context),
                       labelText: "Add new item!",
                       labelWidget: Row(
@@ -211,7 +223,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                             Icons.add,
                             color: context.colorTheme.onPrimary,
                           ),
-                          const Gap(8),
+                          const Gap(kMediumGap),
                           Text(
                             'Add Item!',
                             style: context.typoraphyTheme.subtitleLarge
@@ -226,46 +238,53 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
               BlocConsumer<ShoppingListBloc, ShoppingListBlocState>(
                 listener: (context, state) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    swapList(state.shoppingItems.values.toList());
+                    if (controller.context.mounted) {
+                      swapList(state.shoppingItems.values.toList());
+                    }
                   });
                 },
                 bloc: _shoppingListBloc,
                 builder: (context, state) {
-                  if (state.isLoadingItems) {
-                    return const SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(16).copyWith(
-                      bottom: 88 + context.bottomSafePadding,
-                      top: 0,
-                    ),
-                    sliver: MultiSliver(
-                      children: [
+                  return SliverMainAxisGroup(
+                    slivers: [
+                      if (state.isLoadingItems) ...[
+                        const SliverToBoxAdapter(
+                          child: LoadingCircle(),
+                        ),
+                        const SliverGap(kMediumGap),
+                      ],
+                      if (!state.isLoadingItems)
                         AnimatedSliverList(
                           controller: controller,
                           delegate: AnimatedSliverChildBuilderDelegate(
-                            (context, index, data) => itemBuilder(
-                              context,
-                              dispatcher.currentList[index],
-                              data,
-                              state,
-                            ),
-                            dispatcher.currentList.length,
-                          ),
+                              (context, index, data) => itemBuilder(
+                                    context,
+                                    dispatcher.currentList[index],
+                                    data,
+                                    state,
+                                  ),
+                              dispatcher.currentList.length,
+                              // addFadeTransition: false,
+                              animator: DefaultAnimatedListAnimator(
+                                movingDuration: 300.ms,
+                                dismissIncomingCurve: Curves.easeInCirc,
+                                resizeDuration: 400.ms,
+                                reorderDuration: 300.ms,
+                              )),
                         ),
+                      if (!state.isLoadingItems &&
+                          state.shoppingItems.isEmpty &&
+                          !dispatcher.hasPendingTask) ...[
+                        const SliverToBoxAdapter(child: EmptyIsList()),
+                        const SliverGap(kMediumGap),
                       ],
-                    ),
+                    ],
                   );
                 },
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -278,7 +297,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   ) {
     return Padding(
       key: Key(item.id),
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: kMediumGap),
       child: ShoppingItemCard(
           onTap: () => showEditItemBottomSheet(
                 context,

@@ -8,13 +8,13 @@ const trendyTheme = CustomThemePallete(
   onPrimary: Color(0xffffffff),
   primaryContainer: Color.fromARGB(255, 56, 56, 56),
   onPrimaryContainer: Color.fromARGB(255, 255, 255, 255),
-  secondary: Color.fromARGB(255, 235, 151, 192),
+  secondary: Color.fromARGB(255, 255, 155, 84),
   onSecondary: Color.fromARGB(255, 0, 0, 0),
-  secondaryContainer: Color.fromARGB(255, 245, 115, 240),
+  secondaryContainer: Color.fromARGB(255, 245, 165, 115),
   onSecondaryContainer: Color(0xff0f1d2a),
   tertiary: Color(0xff6a5779),
   onTertiary: Color(0xffffffff),
-  tertiaryContainer: Color(0xfff1daff),
+  tertiaryContainer: Color.fromARGB(255, 255, 241, 218),
   onTertiaryContainer: Color(0xff241432),
   error: Color(0xffba1a1a),
   onError: Color(0xffffffff),
@@ -55,7 +55,7 @@ const trendyTheme = CustomThemePallete(
   warningContainer: Color(0xFFFFF59D), // Light yellow
   onWarningContainer: Colors.black,
 
-  highlight: Color(0xFF9C27B0), // Deep purple
+  highlight: Color.fromARGB(255, 240, 227, 102), // Deep purple
   onHighlight: Colors.white,
 
   backBtnBackground: Color.fromARGB(255, 181, 196, 231), // Deep orange

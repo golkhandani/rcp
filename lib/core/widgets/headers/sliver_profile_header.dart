@@ -41,8 +41,8 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
       pinned: true,
       elevation: 4,
       shadowColor: Colors.black45,
-      backgroundColor: context.colorTheme.navBackground,
-      toolbarHeight: 180,
+      backgroundColor: context.colorTheme.cardBackground,
+      toolbarHeight: 64,
       expandedHeight: 240,
       flexibleSpace: CustomizableSpaceBar(
         builder: (context, scrollingRate) {
@@ -73,7 +73,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                 ),
                                 isLabelVisible: widget.isEditing,
                                 backgroundColor:
-                                    context.colorTheme.onNavBackground,
+                                    context.colorTheme.cardBackground,
                                 largeSize: 32,
                                 alignment: Alignment.bottomRight,
                                 offset: const Offset(0, -16),
@@ -84,7 +84,8 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                                     child: Icon(
                                       Icons.edit,
                                       size: 16,
-                                      color: context.colorTheme.navBackground,
+                                      color:
+                                          context.colorTheme.onCardBackground,
                                     ),
                                   ),
                                 ]),
@@ -129,7 +130,7 @@ class _SliverProfileHeaderState extends State<SliverProfileHeader> {
                   right: 0,
                   top: 0,
                   child: BasicLinkButton(
-                    foreground: context.colorTheme.onNavBackground,
+                    foreground: context.colorTheme.onCardBackground,
                     labelText: widget.isUpdating
                         ? '...'
                         : widget.isEditing

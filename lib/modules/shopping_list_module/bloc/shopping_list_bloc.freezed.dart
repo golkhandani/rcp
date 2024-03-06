@@ -30,7 +30,10 @@ mixin _$ShoppingListBlocState {
   List<Participant> get participants => throw _privateConstructorUsedError;
   Map<String, ShoppingItem> get shoppingItems =>
       throw _privateConstructorUsedError;
-  ListQueryState get listQueryState => throw _privateConstructorUsedError;
+  ListQueryState get listQueryState => throw _privateConstructorUsedError; //
+  bool get isLoadingInvitationCandidates => throw _privateConstructorUsedError;
+  List<InvitationCandidate> get invitationCandidates =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +56,9 @@ abstract class $ShoppingListBlocStateCopyWith<$Res> {
       ShoppingList? shoppingList,
       List<Participant> participants,
       Map<String, ShoppingItem> shoppingItems,
-      ListQueryState listQueryState});
+      ListQueryState listQueryState,
+      bool isLoadingInvitationCandidates,
+      List<InvitationCandidate> invitationCandidates});
 
   $ShoppingListCopyWith<$Res>? get shoppingList;
   $ListQueryStateCopyWith<$Res> get listQueryState;
@@ -82,6 +87,8 @@ class _$ShoppingListBlocStateCopyWithImpl<$Res,
     Object? participants = null,
     Object? shoppingItems = null,
     Object? listQueryState = null,
+    Object? isLoadingInvitationCandidates = null,
+    Object? invitationCandidates = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -120,6 +127,14 @@ class _$ShoppingListBlocStateCopyWithImpl<$Res,
           ? _value.listQueryState
           : listQueryState // ignore: cast_nullable_to_non_nullable
               as ListQueryState,
+      isLoadingInvitationCandidates: null == isLoadingInvitationCandidates
+          ? _value.isLoadingInvitationCandidates
+          : isLoadingInvitationCandidates // ignore: cast_nullable_to_non_nullable
+              as bool,
+      invitationCandidates: null == invitationCandidates
+          ? _value.invitationCandidates
+          : invitationCandidates // ignore: cast_nullable_to_non_nullable
+              as List<InvitationCandidate>,
     ) as $Val);
   }
 
@@ -162,7 +177,9 @@ abstract class _$$ShoppingListBlocStateImplCopyWith<$Res>
       ShoppingList? shoppingList,
       List<Participant> participants,
       Map<String, ShoppingItem> shoppingItems,
-      ListQueryState listQueryState});
+      ListQueryState listQueryState,
+      bool isLoadingInvitationCandidates,
+      List<InvitationCandidate> invitationCandidates});
 
   @override
   $ShoppingListCopyWith<$Res>? get shoppingList;
@@ -191,6 +208,8 @@ class __$$ShoppingListBlocStateImplCopyWithImpl<$Res>
     Object? participants = null,
     Object? shoppingItems = null,
     Object? listQueryState = null,
+    Object? isLoadingInvitationCandidates = null,
+    Object? invitationCandidates = null,
   }) {
     return _then(_$ShoppingListBlocStateImpl(
       isLoading: null == isLoading
@@ -229,6 +248,14 @@ class __$$ShoppingListBlocStateImplCopyWithImpl<$Res>
           ? _value.listQueryState
           : listQueryState // ignore: cast_nullable_to_non_nullable
               as ListQueryState,
+      isLoadingInvitationCandidates: null == isLoadingInvitationCandidates
+          ? _value.isLoadingInvitationCandidates
+          : isLoadingInvitationCandidates // ignore: cast_nullable_to_non_nullable
+              as bool,
+      invitationCandidates: null == invitationCandidates
+          ? _value._invitationCandidates
+          : invitationCandidates // ignore: cast_nullable_to_non_nullable
+              as List<InvitationCandidate>,
     ));
   }
 }
@@ -247,11 +274,14 @@ class _$ShoppingListBlocStateImpl
       required this.shoppingList,
       required final List<Participant> participants,
       required final Map<String, ShoppingItem> shoppingItems,
-      required this.listQueryState})
+      required this.listQueryState,
+      required this.isLoadingInvitationCandidates,
+      required final List<InvitationCandidate> invitationCandidates})
       : _isDeletingItem = isDeletingItem,
         _isUpdatingItem = isUpdatingItem,
         _participants = participants,
-        _shoppingItems = shoppingItems;
+        _shoppingItems = shoppingItems,
+        _invitationCandidates = invitationCandidates;
 
   factory _$ShoppingListBlocStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShoppingListBlocStateImplFromJson(json);
@@ -298,10 +328,21 @@ class _$ShoppingListBlocStateImpl
 
   @override
   final ListQueryState listQueryState;
+//
+  @override
+  final bool isLoadingInvitationCandidates;
+  final List<InvitationCandidate> _invitationCandidates;
+  @override
+  List<InvitationCandidate> get invitationCandidates {
+    if (_invitationCandidates is EqualUnmodifiableListView)
+      return _invitationCandidates;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_invitationCandidates);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ShoppingListBlocState(isLoading: $isLoading, isLoadingItems: $isLoadingItems, isAddingItem: $isAddingItem, isDeletingItem: $isDeletingItem, isUpdatingItem: $isUpdatingItem, shoppingList: $shoppingList, participants: $participants, shoppingItems: $shoppingItems, listQueryState: $listQueryState)';
+    return 'ShoppingListBlocState(isLoading: $isLoading, isLoadingItems: $isLoadingItems, isAddingItem: $isAddingItem, isDeletingItem: $isDeletingItem, isUpdatingItem: $isUpdatingItem, shoppingList: $shoppingList, participants: $participants, shoppingItems: $shoppingItems, listQueryState: $listQueryState, isLoadingInvitationCandidates: $isLoadingInvitationCandidates, invitationCandidates: $invitationCandidates)';
   }
 
   @override
@@ -317,7 +358,10 @@ class _$ShoppingListBlocStateImpl
       ..add(DiagnosticsProperty('shoppingList', shoppingList))
       ..add(DiagnosticsProperty('participants', participants))
       ..add(DiagnosticsProperty('shoppingItems', shoppingItems))
-      ..add(DiagnosticsProperty('listQueryState', listQueryState));
+      ..add(DiagnosticsProperty('listQueryState', listQueryState))
+      ..add(DiagnosticsProperty(
+          'isLoadingInvitationCandidates', isLoadingInvitationCandidates))
+      ..add(DiagnosticsProperty('invitationCandidates', invitationCandidates));
   }
 
   @override
@@ -342,7 +386,13 @@ class _$ShoppingListBlocStateImpl
             const DeepCollectionEquality()
                 .equals(other._shoppingItems, _shoppingItems) &&
             (identical(other.listQueryState, listQueryState) ||
-                other.listQueryState == listQueryState));
+                other.listQueryState == listQueryState) &&
+            (identical(other.isLoadingInvitationCandidates,
+                    isLoadingInvitationCandidates) ||
+                other.isLoadingInvitationCandidates ==
+                    isLoadingInvitationCandidates) &&
+            const DeepCollectionEquality()
+                .equals(other._invitationCandidates, _invitationCandidates));
   }
 
   @JsonKey(ignore: true)
@@ -357,7 +407,9 @@ class _$ShoppingListBlocStateImpl
       shoppingList,
       const DeepCollectionEquality().hash(_participants),
       const DeepCollectionEquality().hash(_shoppingItems),
-      listQueryState);
+      listQueryState,
+      isLoadingInvitationCandidates,
+      const DeepCollectionEquality().hash(_invitationCandidates));
 
   @JsonKey(ignore: true)
   @override
@@ -384,7 +436,9 @@ abstract class _ShoppingListBlocState implements ShoppingListBlocState {
           required final ShoppingList? shoppingList,
           required final List<Participant> participants,
           required final Map<String, ShoppingItem> shoppingItems,
-          required final ListQueryState listQueryState}) =
+          required final ListQueryState listQueryState,
+          required final bool isLoadingInvitationCandidates,
+          required final List<InvitationCandidate> invitationCandidates}) =
       _$ShoppingListBlocStateImpl;
 
   factory _ShoppingListBlocState.fromJson(Map<String, dynamic> json) =
@@ -408,6 +462,10 @@ abstract class _ShoppingListBlocState implements ShoppingListBlocState {
   Map<String, ShoppingItem> get shoppingItems;
   @override
   ListQueryState get listQueryState;
+  @override //
+  bool get isLoadingInvitationCandidates;
+  @override
+  List<InvitationCandidate> get invitationCandidates;
   @override
   @JsonKey(ignore: true)
   _$$ShoppingListBlocStateImplCopyWith<_$ShoppingListBlocStateImpl>
