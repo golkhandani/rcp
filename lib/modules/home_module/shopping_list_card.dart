@@ -168,7 +168,7 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                           ),
                         ),
                       ],
-                      if (widget.item.participants.isNotEmpty && isReady) ...[
+                      if (widget.item.participants.length > 1 && isReady) ...[
                         SizedBox(
                           height: 48,
                           child: ListView(
