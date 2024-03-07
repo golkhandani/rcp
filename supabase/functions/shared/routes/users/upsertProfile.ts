@@ -1,4 +1,8 @@
-import { getClientInfo, userProfileDb } from '../../admin_client.ts';
+import {
+	getClientInfo,
+	getClients,
+	userProfileDb,
+} from '../../admin_client.ts';
 import { UserProfile } from '../../models/user_profile_model.ts';
 import { UserProfileRow } from '../../anything.ts';
 import { ApiError, ExpressRequest } from '../../express_app.ts';
@@ -10,7 +14,8 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 	const body = req.body;
 
 	// Get supabase client and required user data
-	const { supabase, user } = await getClientInfo(req);
+	const { supabase } = getClients(req);
+	const { data: { user } } = await supabase.auth.getUser();
 
 	const { data: existsUserProfile, error: eError } = await supabase.from(
 		userProfileDb,
