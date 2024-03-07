@@ -80,23 +80,17 @@ export async function deleteUserProfile(
 		}));
 	}
 
-	const { data: safeDeleteUser, error: uError } = await admin.rpc(
-		getUserByEmailCall,
-		{
-			p_email: 'deleted-user@rcp.com',
-		},
-	).select(authUserSelect)
-		.single<AuthUser>();
-
 	// delete user profile
-	const date = (new Date()).toISOString();
+	const now = new Date();
+	const date = now.toISOString();
+	const dUserName = 'deleted-user' +
+		(now.getMilliseconds() ^ now.getMinutes() ^ now.getSeconds());
 	const updatedProfile: Partial<UserProfileRow> = {
 		created_at: date,
 		updated_at: date,
 		avatar_url: null,
 		full_name: null,
-		username: 'deleted-user' + (new Date()).getMilliseconds(),
-		user_id: safeDeleteUser?.id,
+		username: dUserName,
 	};
 	const { error: dError } = await admin.from(userProfileTable).update(
 		updatedProfile,
@@ -115,7 +109,15 @@ export async function deleteUserProfile(
 	}
 
 	// delete auth
-	await admin.auth.admin.deleteUser(user.id);
+	await admin.auth.admin.updateUserById(user.id, {
+		email: `${dUserName}@rcp.rcp`,
+		phone: '',
+		password: date,
+		user_metadata: {},
+		app_metadata: {},
+		email_confirm: false,
+		phone_confirm: false,
+	});
 	await supabase.auth.admin.signOut(authHeader);
 
 	return;
