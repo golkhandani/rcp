@@ -1,4 +1,8 @@
-import { getClientInfo, userProfileDb } from '../../admin_client.ts';
+import {
+	getClientInfo,
+	getClients,
+	userProfileDb,
+} from '../../admin_client.ts';
 import { UserProfile } from '../../models/user_profile_model.ts';
 import { UserProfileRow } from '../../anything.ts';
 import { ApiError, ExpressRequest } from '../../express_app.ts';
@@ -10,7 +14,8 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 	const body = req.body;
 
 	// Get supabase client and required user data
-	const { supabase, user } = await getClientInfo(req);
+	const { supabase } = getClients(req);
+	const { data: { user } } = await supabase.auth.getUser();
 
 	const { data: existsUserProfile, error: eError } = await supabase.from(
 		userProfileDb,
@@ -19,7 +24,8 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 			'user_id',
 			user?.id,
 		)
-		.single<UserProfileRow>();
+		.limit(1)
+		.returns<UserProfileRow[]>();
 
 	if (eError) {
 		console.error(eError);
@@ -30,14 +36,14 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 		);
 	}
 
-	if (!existsUserProfile) {
+	if (existsUserProfile.length == 0) {
 		console.info('Adding UserProfile', existsUserProfile);
 	} else {
 		console.info('Updating UserProfile', existsUserProfile);
 	}
 
 	const data: UserProfileRow = {
-		...existsUserProfile,
+		...existsUserProfile[0],
 		'username': body.username,
 		'avatar_url': body.avatar_url,
 		'full_name': body.full_name,

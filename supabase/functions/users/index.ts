@@ -7,6 +7,7 @@ import { upsertProfile } from '../shared/routes/users/upsertProfile.ts';
 import { deleteUserProfile } from '../shared/routes/users/deleteUserProfile.ts';
 import { getUserInvitations } from '../shared/routes/participants/getUserInvitations.ts';
 import { invitationIsAvailable } from '../shared/routes/participants/invitationIsAvailable.ts';
+import { usernameIsAvailable } from '../shared/routes/users/usernameIsAvailable.ts';
 
 const prefix = 'users';
 
@@ -51,7 +52,7 @@ expressApp((app: ExpressApp) => {
 	// CHECK FOR PROFILE CREATION
 	app.get(`/${prefix}/username_is_available`, async (req, res) => {
 		try {
-			const result = await deleteUserProfile(req);
+			const result = await usernameIsAvailable(req);
 			return sendDataResponse(res, result, 200);
 		} catch (error) {
 			return sendErrorResponse(res, error);
