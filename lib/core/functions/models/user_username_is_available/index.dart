@@ -21,7 +21,7 @@ abstract class UserUsernameIsAvailableInput
 abstract class UserUsernameIsAvailableOutout
     with _$UserUsernameIsAvailableOutout {
   const factory UserUsernameIsAvailableOutout({
-    @JsonKey(name: 'is_available') required bool isAvailable,
+    required bool isAvailable,
   }) = _UserUsernameIsAvailableOutout;
 
   factory UserUsernameIsAvailableOutout.fromJson(Map<String, dynamic> json) =>

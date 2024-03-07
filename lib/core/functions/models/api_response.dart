@@ -13,7 +13,7 @@ class ApiError extends Error {
     return ApiError(
       message: 'Something went wrong!',
       statusCode: 500,
-      errorCode: 10500,
+      errorCode: 90500,
     );
   }
 
