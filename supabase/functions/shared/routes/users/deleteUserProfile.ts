@@ -1,6 +1,11 @@
 import { getClientInfo } from '../../admin_client.ts';
 import { ApiError, ExpressRequest } from '../../express_app.ts';
+import {
+	ParticipantRow,
+	participantTable,
+} from '../../models/participant_model.ts';
 import { userProfileTable } from '../../models/user_profile_model.ts';
+import { deleteShoppingListById } from '../shoppingLists/deleteShoppingListById.ts';
 
 export async function deleteUserProfile(
 	req: ExpressRequest,
@@ -26,7 +31,7 @@ export async function deleteUserProfile(
 	}
 
 	// TODO(@golkhandani): can be done parallel
-	if (files) {
+	if (files.length > 0) {
 		const filesToRemove = files.map((file) => `${user?.id}/${file.name}`);
 		const { data: removedFiles, error: rfError } = await supabase.storage
 			.from(avatarBucket)
@@ -43,11 +48,45 @@ export async function deleteUserProfile(
 		}
 	}
 
+	// TODO(@golkhandani): for now it's removing everything related to user
+
+	const { data: userParticipation, error: pError } = await admin.from(
+		participantTable,
+	).delete().eq('user_id', user.id).select()
+		.returns<ParticipantRow[]>();
+
+	if (pError) {
+		console.error(fError);
+		throw new ApiError(
+			'Cannot delete data! Please try again!',
+			500,
+			202500,
+		);
+	}
+
+	if (userParticipation.length > 0) {
+		await Promise.all(userParticipation.map(async (item) => {
+			const shoppingListId = item.shopping_list_id;
+			req.params.id = shoppingListId;
+			//use already exits function
+
+			await deleteShoppingListById(req);
+		}));
+	}
 	// delete user profile
-	await admin.from(userProfileTable).delete().eq(
+	const { error: dError } = await admin.from(userProfileTable).delete().eq(
 		'user_id',
 		user.id,
 	);
+
+	if (dError) {
+		console.error(dError);
+		throw new ApiError(
+			'Cannot delete data! Please try again!',
+			500,
+			204500,
+		);
+	}
 
 	// delete auth
 	await admin.auth.admin.deleteUser(user.id);
