@@ -154,14 +154,17 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     return DashboardScreenShell(
       useSafeArea: false,
       child: RefreshableNestedScrollView(
-        onRefreshRequested: (handler) {
-          _shoppingListBloc.loadShoppingItems(
-            shoppingListId: widget.shoppingListId,
-            isRefreshing: true,
-          );
-          handler.onRefreshDone();
+        onRefreshRequested: (rs) {
+          _shoppingListBloc
+              .reloadShoppingItems(
+                shoppingListId: widget.shoppingListId,
+                isRefreshing: true,
+              )
+              .then((value) => rs.onRefreshDone());
         },
-        onMoreRequested: null,
+        onMoreRequested: (rs) => _shoppingListBloc.loadShoppingItems(
+          shoppingListId: widget.shoppingListId,
+        ),
         header: BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
           bloc: _shoppingListBloc,
           buildWhen: (p, c) => p.shoppingList != c.shoppingList,
@@ -235,52 +238,73 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                   ),
                 ),
               ),
+              BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
+                bloc: _shoppingListBloc,
+                builder: (context, state) => SliverMainAxisGroup(slivers: [
+                  if (state.isLoadingItems &&
+                      dispatcher.currentList.isEmpty) ...[
+                    const SliverToBoxAdapter(
+                      child: LoadingCircle(),
+                    ),
+                    const SliverGap(kMediumGap),
+                  ],
+                ]),
+              ),
               BlocConsumer<ShoppingListBloc, ShoppingListBlocState>(
+                bloc: _shoppingListBloc,
                 listener: (context, state) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (state.shoppingItems.isEmpty) {
+                      return;
+                    }
                     if (controller.context.mounted) {
                       swapList(state.shoppingItems.values.toList());
                     }
                   });
                 },
-                bloc: _shoppingListBloc,
                 builder: (context, state) {
                   return SliverMainAxisGroup(
                     slivers: [
-                      if (state.isLoadingItems) ...[
+                      if (state.shoppingItems.isNotEmpty)
+                        AnimatedSliverList(
+                          controller: controller,
+                          delegate: AnimatedSliverChildBuilderDelegate(
+                            (context, index, data) => itemBuilder(
+                              context,
+                              dispatcher.currentList[index],
+                              data,
+                              state,
+                            ),
+                            dispatcher.currentList.length,
+                            addFadeTransition: false,
+                            animator: DefaultAnimatedListAnimator(
+                              movingDuration: 200.ms,
+                              dismissIncomingCurve: Curves.easeInCirc,
+                              resizeDuration: 200.ms,
+                              reorderDuration: 200.ms,
+                            ),
+                          ),
+                        ),
+                      if (state.isLoadingItems &&
+                          dispatcher.currentList.isNotEmpty) ...[
                         const SliverToBoxAdapter(
                           child: LoadingCircle(),
                         ),
                         const SliverGap(kMediumGap),
                       ],
-                      if (!state.isLoadingItems)
-                        AnimatedSliverList(
-                          controller: controller,
-                          delegate: AnimatedSliverChildBuilderDelegate(
-                              (context, index, data) => itemBuilder(
-                                    context,
-                                    dispatcher.currentList[index],
-                                    data,
-                                    state,
-                                  ),
-                              dispatcher.currentList.length,
-                              // addFadeTransition: false,
-                              animator: DefaultAnimatedListAnimator(
-                                movingDuration: 300.ms,
-                                dismissIncomingCurve: Curves.easeInCirc,
-                                resizeDuration: 400.ms,
-                                reorderDuration: 300.ms,
-                              )),
-                        ),
-                      if (!state.isLoadingItems &&
-                          state.shoppingItems.isEmpty &&
-                          !dispatcher.hasPendingTask) ...[
-                        const SliverToBoxAdapter(child: EmptyIsList()),
-                        const SliverGap(kMediumGap),
-                      ],
                     ],
                   );
                 },
+              ),
+              BlocBuilder<ShoppingListBloc, ShoppingListBlocState>(
+                bloc: _shoppingListBloc,
+                builder: (context, state) => SliverMainAxisGroup(slivers: [
+                  if (!state.isLoadingItems && state.shoppingItems.isEmpty) ...[
+                    const SliverToBoxAdapter(child: EmptyIsList())
+                        .animate(delay: 500.ms),
+                    const SliverGap(kMediumGap),
+                  ],
+                ]),
               ),
             ],
           );

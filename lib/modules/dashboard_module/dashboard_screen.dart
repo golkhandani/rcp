@@ -83,9 +83,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _profileBloc.getUserInfo();
+    _homeBloc.loadShoppingLists();
+    _invitationBloc.loadInvitations();
   }
-
-  final List<String> items = List.generate(100, (index) => 'Item ${index + 1}');
 
   @override
   Widget build(BuildContext context) {
