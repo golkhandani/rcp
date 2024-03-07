@@ -86,81 +86,83 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
         safeareaColor: context.colorTheme.background,
         bodyColor: context.colorTheme.background,
         child: BasicBackgroundContainer(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightForFinite(
-                    width: 420,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Gap(48),
-                      AppLogo(
-                        labelText: 'Profile!',
-                        foregroundColor: context.colorTheme.secondary,
-                      ),
-                      const Gap(24),
-                      BasicTextInput.secondary(
-                        fieldName: 'username_field',
-                        labelText: 'Username',
-                        controller: _usernameController,
-                        keyboardType: TextInputType.emailAddress,
-                        inputFormatters: [
-                          LowerCaseTextFormatter(),
-                        ],
-                        validator: ValidationBuilder()
-                            .minLength(8)
-                            .maxLength(16)
-                            .required()
-                            .regExp(
-                              RegExp(r"^\S+\w{8,32}\S{1,}"),
-                              'Username should not contains space or special characters!',
-                            )
-                            .build(),
-                      ),
-                      const Gap(8),
-                      BasicTextInput.secondary(
-                        fieldName: 'fullname_field',
-                        labelText: 'Full Name',
-                        controller: _fullnameController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: ValidationBuilder()
-                            .minLength(4)
-                            .maxLength(42)
-                            .required()
-                            .build(),
-                      ),
-                      const Gap(32),
-                      BlocBuilder<ProfileBloc, ProfileBlocState>(
-                        bloc: _profileBloc,
-                        builder: (context, state) {
-                          return BasicElevatedButton(
-                            background: context.colorTheme.secondary,
-                            foreground: context.colorTheme.onSecondary,
-                            isLoading: state.isLoading,
-                            width: MediaQuery.sizeOf(context).width,
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              _createProfile();
-                            },
-                            labelText: 'Create',
-                          );
-                        },
-                      ),
-                      const Gap(32),
-                      BasicLinkButton(
-                        foreground: context.colorTheme.primary,
-                        labelText: 'Signin!',
-                        onPressed: _goToSignin,
-                      ),
-                    ],
+          child: MobileFrame(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.tightForFinite(
+                      width: 420,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Gap(48),
+                        AppLogo(
+                          labelText: 'Profile!',
+                          foregroundColor: context.colorTheme.secondary,
+                        ),
+                        const Gap(24),
+                        BasicTextInput.secondary(
+                          fieldName: 'username_field',
+                          labelText: 'Username',
+                          controller: _usernameController,
+                          keyboardType: TextInputType.emailAddress,
+                          inputFormatters: [
+                            LowerCaseTextFormatter(),
+                          ],
+                          validator: ValidationBuilder()
+                              .minLength(8)
+                              .maxLength(16)
+                              .required()
+                              .regExp(
+                                RegExp(r"^\S+\w{8,32}\S{1,}"),
+                                'Username should not contains space or special characters!',
+                              )
+                              .build(),
+                        ),
+                        const Gap(8),
+                        BasicTextInput.secondary(
+                          fieldName: 'fullname_field',
+                          labelText: 'Full Name',
+                          controller: _fullnameController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: ValidationBuilder()
+                              .minLength(4)
+                              .maxLength(42)
+                              .required()
+                              .build(),
+                        ),
+                        const Gap(32),
+                        BlocBuilder<ProfileBloc, ProfileBlocState>(
+                          bloc: _profileBloc,
+                          builder: (context, state) {
+                            return BasicElevatedButton(
+                              background: context.colorTheme.secondary,
+                              foreground: context.colorTheme.onSecondary,
+                              isLoading: state.isLoading,
+                              width: MediaQuery.sizeOf(context).width,
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                _createProfile();
+                              },
+                              labelText: 'Create',
+                            );
+                          },
+                        ),
+                        const Gap(32),
+                        BasicLinkButton(
+                          foreground: context.colorTheme.primary,
+                          labelText: 'Signin!',
+                          onPressed: _goToSignin,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
