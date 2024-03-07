@@ -1,4 +1,8 @@
-import { getClientInfo, userProfileDb } from '../../admin_client.ts';
+import {
+	getClientInfo,
+	getClients,
+	userProfileDb,
+} from '../../admin_client.ts';
 import { UsernameAvailability } from '../../models/user_profile_model.ts';
 import { UserProfileRow } from '../../anything.ts';
 import { ApiError, ExpressRequest } from '../../express_app.ts';
@@ -9,14 +13,14 @@ export async function usernameIsAvailable(
 	// TODO(@golkhandani): parse and validate input
 	const query = req.query;
 	// Get supabase client and required user data
-	const { admin, user } = await getClientInfo(req);
-
+	const { admin, supabase } = getClients(req);
+	const { data: { user } } = await supabase.auth.getUser();
 	const { data: userProfiles, error } = await admin.from(userProfileDb)
 		.select()
 		.eq(
 			'username',
 			query.username,
-		).neq('user_id', user.id)
+		).neq('user_id', user!.id)
 		.limit(1)
 		.returns<UserProfileRow[]>();
 
