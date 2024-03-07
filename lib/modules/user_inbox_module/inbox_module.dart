@@ -57,7 +57,6 @@ class _InboxScreenState extends State<InboxScreen>
   void initState() {
     super.initState();
     tabController.addListener(_updateTitle);
-    _invitationBloc.loadInvitations();
   }
 
   @override

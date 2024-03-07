@@ -46,7 +46,7 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
       var query = state.queryState.copyWith(
         page: state.invitations.isEmpty ? 1 : state.queryState.page + 1,
       );
-      final list = await supabase.usersFunctions.userInvitations(
+      final list = await supabase.invitationsFunctions.userInvitations(
         query: query,
       );
 
@@ -70,7 +70,7 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
     try {
       final newState = InvitationBlocState.init();
       final query = newState.queryState;
-      final list = await supabase.usersFunctions.userInvitations(
+      final list = await supabase.invitationsFunctions.userInvitations(
         query: query,
       );
       emit(state.copyWith(
@@ -96,7 +96,7 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
         },
       ));
 
-      await supabase.shoppingListFuntions.rejectInvitationShoppingListById(
+      await supabase.participantsFunctions.rejectInvitationShoppingListById(
         invitationId: invitation.id,
         shoppingListId: invitation.shoppingList.id,
       );
@@ -135,7 +135,7 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
         },
       ));
 
-      await supabase.shoppingListFuntions.acceptInvitationShoppingListById(
+      await supabase.participantsFunctions.acceptInvitationShoppingListById(
         invitationId: invitation.id,
         shoppingListId: invitation.shoppingList.id,
       );

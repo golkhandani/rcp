@@ -157,6 +157,10 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     bool isRefreshing = false,
   }) async {
     try {
+      if (state.shoppingItems.isNotEmpty &&
+          state.shoppingItems.length < state.listQueryState.pageSize) {
+        return;
+      }
       var query = state.listQueryState.copyWith(
         page: state.shoppingItems.isEmpty ? 1 : state.listQueryState.page + 1,
       );
@@ -166,7 +170,35 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
 
       emit(state.copyWith(isLoadingItems: true));
 
-      final list = await supabase.shoppingListFuntions
+      final list = await supabase.shoppingItemsFunctions
+          .getShoppingItemsByShoppingListId(shoppingListId!, query);
+      final shoppingItems = {for (var item in list) item.id: item};
+      emit(state.copyWith(
+        listQueryState: query,
+        isLoadingItems: false,
+        shoppingList: state.shoppingList?.copyWith(
+          items: shoppingItems.values.take(3).toList(),
+        ),
+        shoppingItems: {
+          ...state.shoppingItems,
+          ...shoppingItems,
+        },
+      ));
+    } catch (e) {
+      _logger.error(e);
+    } finally {
+      emit(state.copyWith(isLoadingItems: false));
+    }
+  }
+
+  Future<void> reloadShoppingItems({
+    required String? shoppingListId,
+    bool isRefreshing = false,
+  }) async {
+    try {
+      const query = ListQueryState();
+
+      final list = await supabase.shoppingItemsFunctions
           .getShoppingItemsByShoppingListId(shoppingListId!, query);
       final shoppingItems = {for (var item in list) item.id: item};
       emit(state.copyWith(
@@ -204,7 +236,8 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
       var updateList = Map<String, ShoppingItem>.from(state.shoppingItems);
       final exists = updateList.containsKey(id);
 
-      final item = await supabase.shoppingListFuntions.addOrUpdateShoppingItem(
+      final item =
+          await supabase.shoppingItemsFunctions.addOrUpdateShoppingItem(
         state.shoppingList!.id,
         id: id,
         name: name,
@@ -240,7 +273,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
           shoppingItem.id: true,
         },
       ));
-      await supabase.shoppingListFuntions.deleteShoppingItemById(
+      await supabase.shoppingItemsFunctions.deleteShoppingItemById(
         state.shoppingList!.id,
         id: shoppingItem.id,
       );
@@ -304,7 +337,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
       }
 
       final updatedItem =
-          await supabase.shoppingListFuntions.togglePurchasedShoppingItem(
+          await supabase.shoppingItemsFunctions.togglePurchasedShoppingItem(
         state.shoppingList!.id,
         id: shoppingItem.id,
         isPurchased: !currentIsPurchased,
@@ -354,7 +387,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
         return;
       }
 
-      final list = await supabase.shoppingListFuntions
+      final list = await supabase.participantsFunctions
           .getShoppingListParticipantsById(shoppingListId);
 
       emit(state.copyWith(
@@ -408,7 +441,7 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
     try {
       emit(state.copyWith(isAddingItem: true));
 
-      final addedParticipant = await supabase.shoppingListFuntions
+      final addedParticipant = await supabase.participantsFunctions
           .inviteShoppingListParticipantsById(
         state.shoppingList!.id,
         userId: candidate.userId,
@@ -438,8 +471,8 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
   }) async {
     try {
       emit(state.copyWith(isLoadingInvitationCandidates: true));
-      final userProfile =
-          await supabase.usersFunctions.userInvitationIsAvailable(email: email);
+      final userProfile = await supabase.invitationsFunctions
+          .userInvitationIsAvailable(email: email);
 
       emit(state.copyWith(
         invitationCandidates: userProfile != null ? [userProfile] : [],

@@ -70,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _homeBloc.loadShoppingLists();
     _dispatcher = AnimatedListDiffListDispatcher<ShoppingList>(
       controller: _animatedListController,
       itemBuilder: (c, item, d) => itemBuilder(
