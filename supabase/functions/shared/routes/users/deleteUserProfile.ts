@@ -1,9 +1,15 @@
 import { getClientInfo } from '../../admin_client.ts';
+import { UserProfileRow } from '../../anything.ts';
 import { ApiError, ExpressRequest } from '../../express_app.ts';
 import {
 	ParticipantRow,
 	participantTable,
 } from '../../models/participant_model.ts';
+import {
+	AuthUser,
+	authUserSelect,
+	getUserByEmailCall,
+} from '../../models/user_profile_model.ts';
 import { userProfileTable } from '../../models/user_profile_model.ts';
 import { deleteShoppingListById } from '../shoppingLists/deleteShoppingListById.ts';
 
@@ -73,8 +79,28 @@ export async function deleteUserProfile(
 			await deleteShoppingListById(req);
 		}));
 	}
+
+	const { data: safeDeleteUser, error: uError } = await admin.rpc(
+		getUserByEmailCall,
+		{
+			p_email: 'deleted-user@rcp.com',
+		},
+	).select(authUserSelect)
+		.single<AuthUser>();
+
 	// delete user profile
-	const { error: dError } = await admin.from(userProfileTable).delete().eq(
+	const date = (new Date()).toISOString();
+	const updatedProfile: Partial<UserProfileRow> = {
+		created_at: date,
+		updated_at: date,
+		avatar_url: null,
+		full_name: null,
+		username: 'deleted-user' + (new Date()).getMilliseconds(),
+		user_id: safeDeleteUser?.id,
+	};
+	const { error: dError } = await admin.from(userProfileTable).update(
+		updatedProfile,
+	).eq(
 		'user_id',
 		user.id,
 	);
