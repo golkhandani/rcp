@@ -115,6 +115,9 @@ class EmptyIsList extends StatelessWidget {
             Container(
               height: MediaQuery.sizeOf(context).width,
               width: MediaQuery.sizeOf(context).width,
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height / 2,
+                  ),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(

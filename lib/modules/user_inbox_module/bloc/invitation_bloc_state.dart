@@ -18,14 +18,17 @@ class InvitationBlocState with _$InvitationBlocState {
     required Map<String, bool> isUpdating,
     required bool isLoading,
     required ListQueryState queryState,
+    required bool isPaginationDone,
     required List<Invitation> invitations,
   }) = _InvitationBlocState;
 
   factory InvitationBlocState.init() => const InvitationBlocState(
-      isUpdating: {},
-      isLoading: false,
-      invitations: [],
-      queryState: ListQueryState());
+        isUpdating: {},
+        isLoading: false,
+        invitations: [],
+        isPaginationDone: false,
+        queryState: ListQueryState(),
+      );
 }
 
 class InvitationBloc extends Cubit<InvitationBlocState> {
@@ -42,6 +45,10 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
 
   Future<void> loadInvitations() async {
     try {
+      if (state.isPaginationDone) {
+        return;
+      }
+
       emit(state.copyWith(isLoading: true));
       var query = state.queryState.copyWith(
         page: state.invitations.isEmpty ? 1 : state.queryState.page + 1,
@@ -57,6 +64,7 @@ class InvitationBloc extends Cubit<InvitationBlocState> {
           ...state.invitations,
           ...list,
         }.toList(),
+        isPaginationDone: list.length < query.pageSize,
       ));
     } catch (e) {
       _logger.error(e);

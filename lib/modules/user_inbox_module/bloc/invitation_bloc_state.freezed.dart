@@ -19,6 +19,7 @@ mixin _$InvitationBlocState {
   Map<String, bool> get isUpdating => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   ListQueryState get queryState => throw _privateConstructorUsedError;
+  bool get isPaginationDone => throw _privateConstructorUsedError;
   List<Invitation> get invitations => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,6 +37,7 @@ abstract class $InvitationBlocStateCopyWith<$Res> {
       {Map<String, bool> isUpdating,
       bool isLoading,
       ListQueryState queryState,
+      bool isPaginationDone,
       List<Invitation> invitations});
 
   $ListQueryStateCopyWith<$Res> get queryState;
@@ -57,6 +59,7 @@ class _$InvitationBlocStateCopyWithImpl<$Res, $Val extends InvitationBlocState>
     Object? isUpdating = null,
     Object? isLoading = null,
     Object? queryState = null,
+    Object? isPaginationDone = null,
     Object? invitations = null,
   }) {
     return _then(_value.copyWith(
@@ -72,6 +75,10 @@ class _$InvitationBlocStateCopyWithImpl<$Res, $Val extends InvitationBlocState>
           ? _value.queryState
           : queryState // ignore: cast_nullable_to_non_nullable
               as ListQueryState,
+      isPaginationDone: null == isPaginationDone
+          ? _value.isPaginationDone
+          : isPaginationDone // ignore: cast_nullable_to_non_nullable
+              as bool,
       invitations: null == invitations
           ? _value.invitations
           : invitations // ignore: cast_nullable_to_non_nullable
@@ -100,6 +107,7 @@ abstract class _$$InvitationBlocStateImplCopyWith<$Res>
       {Map<String, bool> isUpdating,
       bool isLoading,
       ListQueryState queryState,
+      bool isPaginationDone,
       List<Invitation> invitations});
 
   @override
@@ -120,6 +128,7 @@ class __$$InvitationBlocStateImplCopyWithImpl<$Res>
     Object? isUpdating = null,
     Object? isLoading = null,
     Object? queryState = null,
+    Object? isPaginationDone = null,
     Object? invitations = null,
   }) {
     return _then(_$InvitationBlocStateImpl(
@@ -135,6 +144,10 @@ class __$$InvitationBlocStateImplCopyWithImpl<$Res>
           ? _value.queryState
           : queryState // ignore: cast_nullable_to_non_nullable
               as ListQueryState,
+      isPaginationDone: null == isPaginationDone
+          ? _value.isPaginationDone
+          : isPaginationDone // ignore: cast_nullable_to_non_nullable
+              as bool,
       invitations: null == invitations
           ? _value._invitations
           : invitations // ignore: cast_nullable_to_non_nullable
@@ -150,6 +163,7 @@ class _$InvitationBlocStateImpl implements _InvitationBlocState {
       {required final Map<String, bool> isUpdating,
       required this.isLoading,
       required this.queryState,
+      required this.isPaginationDone,
       required final List<Invitation> invitations})
       : _isUpdating = isUpdating,
         _invitations = invitations;
@@ -166,6 +180,8 @@ class _$InvitationBlocStateImpl implements _InvitationBlocState {
   final bool isLoading;
   @override
   final ListQueryState queryState;
+  @override
+  final bool isPaginationDone;
   final List<Invitation> _invitations;
   @override
   List<Invitation> get invitations {
@@ -176,7 +192,7 @@ class _$InvitationBlocStateImpl implements _InvitationBlocState {
 
   @override
   String toString() {
-    return 'InvitationBlocState(isUpdating: $isUpdating, isLoading: $isLoading, queryState: $queryState, invitations: $invitations)';
+    return 'InvitationBlocState(isUpdating: $isUpdating, isLoading: $isLoading, queryState: $queryState, isPaginationDone: $isPaginationDone, invitations: $invitations)';
   }
 
   @override
@@ -190,6 +206,8 @@ class _$InvitationBlocStateImpl implements _InvitationBlocState {
                 other.isLoading == isLoading) &&
             (identical(other.queryState, queryState) ||
                 other.queryState == queryState) &&
+            (identical(other.isPaginationDone, isPaginationDone) ||
+                other.isPaginationDone == isPaginationDone) &&
             const DeepCollectionEquality()
                 .equals(other._invitations, _invitations));
   }
@@ -200,6 +218,7 @@ class _$InvitationBlocStateImpl implements _InvitationBlocState {
       const DeepCollectionEquality().hash(_isUpdating),
       isLoading,
       queryState,
+      isPaginationDone,
       const DeepCollectionEquality().hash(_invitations));
 
   @JsonKey(ignore: true)
@@ -215,6 +234,7 @@ abstract class _InvitationBlocState implements InvitationBlocState {
       {required final Map<String, bool> isUpdating,
       required final bool isLoading,
       required final ListQueryState queryState,
+      required final bool isPaginationDone,
       required final List<Invitation> invitations}) = _$InvitationBlocStateImpl;
 
   @override
@@ -223,6 +243,8 @@ abstract class _InvitationBlocState implements InvitationBlocState {
   bool get isLoading;
   @override
   ListQueryState get queryState;
+  @override
+  bool get isPaginationDone;
   @override
   List<Invitation> get invitations;
   @override

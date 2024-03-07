@@ -180,9 +180,13 @@ class UsersFunctions extends SingleDomainFunctions {
     try {
       final functionName = getfnName('me');
       await supabaseClient.functions.delete(functionName);
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
-      locator.logger.error(e);
-      rethrow;
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
