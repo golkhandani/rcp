@@ -6,7 +6,10 @@ import {
 	shoppingListTable,
 	ShoppingListWithoutIsOwner,
 } from '../../models/shopping_list_model.ts';
-import { participantTable } from '../../models/participant_model.ts';
+import {
+	ParticipantStatus,
+	participantTable,
+} from '../../models/participant_model.ts';
 import { ApiError } from '../../express_app.ts';
 import { participantSelect } from '../../models/participant_model.ts';
 import { Participant } from '../../models/participant_model.ts';
@@ -56,6 +59,7 @@ export async function deleteShoppingListById(
 			participantTable,
 		).select(participantSelect, { count: 'exact' }).neq('user_id', user.id)
 		.eq('shopping_list_id', id)
+		.eq('status', ParticipantStatus.joined)
 		.returns<Participant[]>();
 
 	if (opcError) {
@@ -75,12 +79,11 @@ export async function deleteShoppingListById(
 	const isOwnerOnlyParticipant = otherParticipantCount == 0;
 
 	if (isOwner && isOwnerOnlyParticipant) {
+		// remove user and invited people
+		// by targeting the whole shopping list
 		const { data: deletedOwner, error: deError } = await supabase.from(
 			participantTable,
-		).delete().eq(
-			'user_id',
-			user.id,
-		).eq('shopping_list_id', id).select();
+		).delete().eq('shopping_list_id', id).select();
 
 		if (!deletedOwner || deError) {
 			console.error(deError);
