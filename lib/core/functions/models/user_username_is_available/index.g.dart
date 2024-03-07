@@ -21,11 +21,11 @@ Map<String, dynamic> _$$UserUsernameIsAvailableInputImplToJson(
 _$UserUsernameIsAvailableOutoutImpl
     _$$UserUsernameIsAvailableOutoutImplFromJson(Map<String, dynamic> json) =>
         _$UserUsernameIsAvailableOutoutImpl(
-          isAvailable: json['is_available'] as bool,
+          isAvailable: json['isAvailable'] as bool,
         );
 
 Map<String, dynamic> _$$UserUsernameIsAvailableOutoutImplToJson(
         _$UserUsernameIsAvailableOutoutImpl instance) =>
     <String, dynamic>{
-      'is_available': instance.isAvailable,
+      'isAvailable': instance.isAvailable,
     };

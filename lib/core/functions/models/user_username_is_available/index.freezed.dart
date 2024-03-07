@@ -177,7 +177,6 @@ UserUsernameIsAvailableOutout _$UserUsernameIsAvailableOutoutFromJson(
 
 /// @nodoc
 mixin _$UserUsernameIsAvailableOutout {
-  @JsonKey(name: 'is_available')
   bool get isAvailable => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -194,7 +193,7 @@ abstract class $UserUsernameIsAvailableOutoutCopyWith<$Res> {
       _$UserUsernameIsAvailableOutoutCopyWithImpl<$Res,
           UserUsernameIsAvailableOutout>;
   @useResult
-  $Res call({@JsonKey(name: 'is_available') bool isAvailable});
+  $Res call({bool isAvailable});
 }
 
 /// @nodoc
@@ -231,7 +230,7 @@ abstract class _$$UserUsernameIsAvailableOutoutImplCopyWith<$Res>
       __$$UserUsernameIsAvailableOutoutImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'is_available') bool isAvailable});
+  $Res call({bool isAvailable});
 }
 
 /// @nodoc
@@ -262,15 +261,13 @@ class __$$UserUsernameIsAvailableOutoutImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserUsernameIsAvailableOutoutImpl
     implements _UserUsernameIsAvailableOutout {
-  const _$UserUsernameIsAvailableOutoutImpl(
-      {@JsonKey(name: 'is_available') required this.isAvailable});
+  const _$UserUsernameIsAvailableOutoutImpl({required this.isAvailable});
 
   factory _$UserUsernameIsAvailableOutoutImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$UserUsernameIsAvailableOutoutImplFromJson(json);
 
   @override
-  @JsonKey(name: 'is_available')
   final bool isAvailable;
 
   @override
@@ -310,14 +307,12 @@ class _$UserUsernameIsAvailableOutoutImpl
 abstract class _UserUsernameIsAvailableOutout
     implements UserUsernameIsAvailableOutout {
   const factory _UserUsernameIsAvailableOutout(
-          {@JsonKey(name: 'is_available') required final bool isAvailable}) =
-      _$UserUsernameIsAvailableOutoutImpl;
+      {required final bool isAvailable}) = _$UserUsernameIsAvailableOutoutImpl;
 
   factory _UserUsernameIsAvailableOutout.fromJson(Map<String, dynamic> json) =
       _$UserUsernameIsAvailableOutoutImpl.fromJson;
 
   @override
-  @JsonKey(name: 'is_available')
   bool get isAvailable;
   @override
   @JsonKey(ignore: true)

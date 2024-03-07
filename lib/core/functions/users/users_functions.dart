@@ -196,10 +196,20 @@ class UsersFunctions extends SingleDomainFunctions {
         functionName,
         query: body.toJson(),
       );
-      return UserUsernameIsAvailableOutout.fromJson(res.data);
+
+      final parsed = ApiResponse.tryParse<UserUsernameIsAvailableOutout>(
+        res.data,
+        UserUsernameIsAvailableOutout.fromJson,
+      );
+
+      return parsed.doc!;
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
-      locator.logger.error(e);
-      return const UserUsernameIsAvailableOutout(isAvailable: false);
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 }
