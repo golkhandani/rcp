@@ -77,7 +77,6 @@ class ShoppingListBloc extends Cubit<ShoppingListBlocState> {
           isLoading: false,
           shoppingList: shoppingList,
         ));
-        return;
       }
 
       final fetchedData =

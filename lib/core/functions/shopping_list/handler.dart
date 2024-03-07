@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/functions/extentions.dart';
+import 'package:rcp/core/functions/models/api_response.dart';
 import 'package:rcp/core/functions/single_domain_functions.dart';
 import 'package:rcp/core/ioc.dart';
 import 'package:rcp/core/models/participant_model.dart';
@@ -28,20 +29,18 @@ class ShoppingListFunctions extends SingleDomainFunctions {
         functionName,
         query: listQueryState.toJson(),
       );
-
-      final rawData = res.data as List<dynamic>;
-
-      final data = rawData
-          .map((e) => ShoppingList.fromJson({
-                ...e,
-                // TODO add it to be model => check for user id be same as ownerid
-                'isOwner': false,
-              }))
-          .toList();
-      return data;
+      final parsed = ApiResponse.tryParse<ShoppingList>(
+        res.data,
+        ShoppingList.fromJson,
+      );
+      return parsed.docs!;
     } on FunctionException catch (e) {
-      _logger.error(e.details);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
+    } catch (e) {
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
@@ -50,21 +49,19 @@ class ShoppingListFunctions extends SingleDomainFunctions {
   ) async {
     try {
       final functionName = getfnName(id);
-
-      final res = await supabaseClient.functions.get(
-        functionName,
+      final res = await supabaseClient.functions.get(functionName);
+      final parsed = ApiResponse.tryParse<ShoppingList>(
+        res.data,
+        ShoppingList.fromJson,
       );
-
-      final data = ShoppingList.fromJson({
-        ...res.data,
-        // TODO add it to be model => check for user id be same as ownerid
-
-        'isOwner': true,
-      });
-      return data;
+      return parsed.doc!;
     } on FunctionException catch (e) {
-      _logger.error(e.details);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
+    } catch (e) {
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
@@ -84,13 +81,12 @@ class ShoppingListFunctions extends SingleDomainFunctions {
             'description': description,
           },
         );
-        final data = ShoppingList.fromJson({
-          ...res.data,
-          // TODO add it to be model => check for user id be same as ownerid
 
-          'isOwner': true,
-        });
-        return data;
+        final parsed = ApiResponse.tryParse<ShoppingList>(
+          res.data,
+          ShoppingList.fromJson,
+        );
+        return parsed.doc!;
       } else {
         final functionName = getfnName('');
         final res = await supabaseClient.functions.post(
@@ -100,17 +96,19 @@ class ShoppingListFunctions extends SingleDomainFunctions {
             'description': description,
           },
         );
-        final data = ShoppingList.fromJson({
-          ...res.data,
-          // TODO add it to be model => check for user id be same as ownerid
-
-          'isOwner': true,
-        });
-        return data;
+        final parsed = ApiResponse.tryParse<ShoppingList>(
+          res.data,
+          ShoppingList.fromJson,
+        );
+        return parsed.doc!;
       }
     } on FunctionException catch (e) {
-      _logger.error(e.details);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
+    } catch (e) {
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
@@ -123,8 +121,12 @@ class ShoppingListFunctions extends SingleDomainFunctions {
         functionName,
       );
     } on FunctionException catch (e) {
-      _logger.error(e.details);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
+    } catch (e) {
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 

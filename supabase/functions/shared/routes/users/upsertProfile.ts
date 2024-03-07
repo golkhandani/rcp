@@ -6,7 +6,7 @@ import { userProfileTable } from '../../models/user_profile_model.ts';
 import { userProfileSelect } from '../../models/user_profile_model.ts';
 
 export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
-	// TODO: parse and validate the data
+	// TODO(@golkhandani): parse and validate the data
 	const body = req.body;
 
 	// Get supabase client and required user data

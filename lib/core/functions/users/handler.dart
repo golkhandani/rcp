@@ -5,6 +5,7 @@ import 'package:image/image.dart' as img;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:rcp/core/functions/extentions.dart';
+import 'package:rcp/core/functions/models/api_response.dart';
 import 'package:rcp/core/functions/models/user_profile/index.dart';
 import 'package:rcp/core/functions/models/user_username_is_available/index.dart';
 import 'package:rcp/core/functions/single_domain_functions.dart';
@@ -23,29 +24,38 @@ class UsersFunctions extends SingleDomainFunctions {
           supabaseClient,
         );
 
-  Future<UserProfile> userRawProfileGet() async {
+  Future<UserProfile2> userRawProfileGet() async {
     try {
       final functionName = getfnName('me');
       final res = await supabaseClient.functions.get(functionName);
-      if (res.data == null) {
-        throw FunctionException(status: 404);
-      }
-      var profile = UserProfile.fromJson(res.data);
-      return profile;
+
+      final parsed = ApiResponse.tryParse<UserProfile2>(
+        res.data,
+        UserProfile2.fromJson,
+      );
+
+      return parsed.doc!;
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
-      locator.logger.error(e);
-      rethrow;
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
-  Future<UserProfile> userProfileGet() async {
+  Future<UserProfile2> userProfileGet() async {
     try {
       final functionName = getfnName('me');
       final res = await supabaseClient.functions.get(functionName);
-      if (res.data == null) {
-        throw FunctionException(status: 404);
-      }
-      var profile = UserProfile.fromJson(res.data);
+
+      final parsed = ApiResponse.tryParse<UserProfile2>(
+        res.data,
+        UserProfile2.fromJson,
+      );
+
+      var profile = parsed.doc!;
 
       if (profile.avatarUrl != null) {
         try {
@@ -59,13 +69,17 @@ class UsersFunctions extends SingleDomainFunctions {
       }
 
       return profile;
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
       _logger.error(e);
-      rethrow;
+      throw ApiError.unknown();
     }
   }
 
-  Future<UserProfile> userProfileUpdate({
+  Future<UserProfile2> userProfileUpdate({
     required UserProfileUpdateInput body,
   }) async {
     try {
@@ -75,7 +89,12 @@ class UsersFunctions extends SingleDomainFunctions {
       final functionName = getfnName('me');
 
       final res = await supabaseClient.functions.put(functionName, body: input);
-      var profile = UserProfile.fromJson(res.data);
+      final parsed = ApiResponse.tryParse<UserProfile2>(
+        res.data,
+        UserProfile2.fromJson,
+      );
+
+      var profile = parsed.doc!;
 
       if (profile.avatarUrl != null) {
         try {
@@ -85,12 +104,17 @@ class UsersFunctions extends SingleDomainFunctions {
           profile = profile.copyWith(avatarUrl: signedUrl);
         } catch (e) {
           _logger.error(e);
+          rethrow;
         }
       }
       return profile;
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
       _logger.error(e);
-      rethrow;
+      throw ApiError.unknown();
     }
   }
 
@@ -100,7 +124,7 @@ class UsersFunctions extends SingleDomainFunctions {
     return img.encodeJpg(pngImageResized, quality: 60);
   }
 
-  Future<UserProfile> userProfileUpdateAvatar({
+  Future<UserProfile2> userProfileUpdateAvatar({
     required PlatformFile file,
   }) async {
     try {
@@ -144,9 +168,13 @@ class UsersFunctions extends SingleDomainFunctions {
       );
 
       return await userProfileUpdate(body: updateProfile);
+    } on FunctionException catch (e) {
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
-      locator.logger.error(e);
-      rethrow;
+      _logger.error(e);
+      throw ApiError.unknown();
     }
   }
 
@@ -190,16 +218,22 @@ class UsersFunctions extends SingleDomainFunctions {
         },
       );
 
-      return InvitationCandidate.fromJson(res.data);
+      final parsed = ApiResponse.tryParse<InvitationCandidate>(
+        res.data,
+        InvitationCandidate.fromJson,
+      );
+
+      return parsed.doc!;
     } on FunctionException catch (e) {
       if (e.status == 404) {
         return null;
       }
-      _logger.error(e.status);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
       _logger.error(e);
-      rethrow;
+      throw ApiError.unknown();
     }
   }
 
@@ -213,17 +247,19 @@ class UsersFunctions extends SingleDomainFunctions {
         query: query.toJson(),
       );
 
-      final rawData = res.data as List<dynamic>;
+      final parsed = ApiResponse.tryParse<Invitation>(
+        res.data,
+        Invitation.fromJson,
+      );
 
-      final data = rawData.map((e) => Invitation.fromJson(e)).toList();
-
-      return data;
+      return parsed.docs!;
     } on FunctionException catch (e) {
-      _logger.error(e.status);
-      rethrow;
+      final res = ApiResponse.tryParseError(e.details);
+      _logger.error("${e.details}");
+      throw res.error!;
     } catch (e) {
       _logger.error(e);
-      rethrow;
+      throw ApiError.unknown();
     }
   }
 }

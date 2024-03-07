@@ -80,7 +80,7 @@ _$ShoppingListImpl _$$ShoppingListImplFromJson(Map<String, dynamic> json) =>
           .map((e) => ShoppingItem.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      ownerId: UserProfile2.fromJson(json['ownerId'] as Map<String, dynamic>),
+      owner: UserProfile2.fromJson(json['owner'] as Map<String, dynamic>),
       createdBy:
           UserProfile2.fromJson(json['createdBy'] as Map<String, dynamic>),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -97,7 +97,7 @@ Map<String, dynamic> _$$ShoppingListImplToJson(_$ShoppingListImpl instance) =>
       'participants': instance.participants.map((e) => e.toJson()).toList(),
       'items': instance.items.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt.toIso8601String(),
-      'ownerId': instance.ownerId.toJson(),
+      'owner': instance.owner.toJson(),
       'createdBy': instance.createdBy.toJson(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'updatedBy': instance.updatedBy.toJson(),

@@ -115,8 +115,8 @@ export const sortOrders = ['asc', 'desc'] as const;
 export type SortOrder = typeof sortOrders[number];
 
 export class Pagination {
-	public page: number = 1;
-	public pageSize: number = 10;
+	public page = 1;
+	public pageSize = 10;
 	public sortKey?: string;
 	public sortOrder?: SortOrder;
 

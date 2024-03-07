@@ -6,7 +6,7 @@ import { ApiError, ExpressRequest } from '../../express_app.ts';
 export async function usernameIsAvailable(
 	req: ExpressRequest,
 ): Promise<UsernameAvailability> {
-	// TODO: parse and validate input
+	// TODO(@golkhandani): parse and validate input
 	const query = req.query;
 	// Get supabase client and required user data
 	const { admin, supabase, user, authHeader } = await getClientInfo(req);

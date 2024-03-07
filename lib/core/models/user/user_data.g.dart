@@ -11,7 +11,7 @@ _$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
-      profile: UserProfile.fromJson(json['profile'] as Map<String, dynamic>),
+      profile: UserProfile2.fromJson(json['profile'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$UserInfoImplToJson(_$UserInfoImpl instance) =>

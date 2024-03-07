@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:rcp/core/functions/models/user_profile/index.dart';
+import 'package:rcp/core/models/shopping_list_model.dart';
 import 'package:rcp/core/models/uuid_extention.dart';
 
 part 'user_data.freezed.dart';
@@ -18,7 +18,7 @@ abstract class UserInfo with _$UserInfo {
     required UUID id,
     required String? email,
     required String? phone,
-    required UserProfile profile,
+    required UserProfile2 profile,
   }) = _UserInfo;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
