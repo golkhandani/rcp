@@ -24,7 +24,8 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 			'user_id',
 			user?.id,
 		)
-		.single<UserProfileRow>();
+		.limit(1)
+		.returns<UserProfileRow[]>();
 
 	if (eError) {
 		console.error(eError);
@@ -35,14 +36,14 @@ export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 		);
 	}
 
-	if (!existsUserProfile) {
+	if (existsUserProfile.length == 0) {
 		console.info('Adding UserProfile', existsUserProfile);
 	} else {
 		console.info('Updating UserProfile', existsUserProfile);
 	}
 
 	const data: UserProfileRow = {
-		...existsUserProfile,
+		...existsUserProfile[0],
 		'username': body.username,
 		'avatar_url': body.avatar_url,
 		'full_name': body.full_name,
