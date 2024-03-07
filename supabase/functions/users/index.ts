@@ -2,11 +2,11 @@ import { getClients } from '../shared/admin_client.ts';
 import { ExpressApp, expressApp } from '../shared/anything.ts';
 
 import { sendDataResponse, sendErrorResponse } from '../shared/express_app.ts';
-import { getUserProfile } from './getUserProfile.ts';
-import { upsertProfile } from './upsertProfile.ts';
-import { deleteUserProfile } from './deleteUserProfile.ts';
-import { getUserInvitations } from './getUserInvitations.ts';
-import { invitationIsAvailable } from './invitationIsAvailable.ts';
+import { getUserProfile } from '../shared/routes/users/getUserProfile.ts';
+import { upsertProfile } from '../shared/routes/users/upsertProfile.ts';
+import { deleteUserProfile } from '../shared/routes/users/deleteUserProfile.ts';
+import { getUserInvitations } from '../shared/routes/participants/getUserInvitations.ts';
+import { invitationIsAvailable } from '../shared/routes/participants/invitationIsAvailable.ts';
 
 const prefix = 'users';
 

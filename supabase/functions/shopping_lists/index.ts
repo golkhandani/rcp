@@ -1,25 +1,24 @@
 import { ExpressApp } from './../shared/anything.ts';
 import { BasicException } from './../shared/exceptions/client_info_exception.ts';
 
-import { updateShoppingListById } from './updateShoppingListById.ts';
-import { addShoppingListById } from './addShoppingListById.ts';
-import { deleteShoppingListById } from './deleteShoppingListById.ts';
-import { getShoppingListById } from './getShoppingListById.ts';
-import { getShoppingListParticipantsById } from './getShoppingListParticipantsById.ts';
-import { getShoppingListsByUser } from './getShoppingListsByUser.ts';
+import { updateShoppingListById } from '../shared/routes/shoppingLists/updateShoppingListById.ts';
+import { addShoppingListById } from '../shared/routes/shoppingLists/addShoppingListById.ts';
+import { deleteShoppingListById } from '../shared/routes/shoppingLists/deleteShoppingListById.ts';
+import { getShoppingListById } from '../shared/routes/shoppingLists/getShoppingListById.ts';
+import { getShoppingListParticipantsById } from '../shared/routes/participants/getShoppingListParticipantsById.ts';
+import { getShoppingListsByUser } from '../shared/routes/shoppingLists/getShoppingListsByUser.ts';
 
-import { addOrUpdateShoppingItem } from '../shopping_items/add_or_update_shopping_item.ts';
+import { addOrUpdateShoppingItem } from '../shared/routes/shoppingItems/addOrUpdateShoppingItem.ts';
 
-import { togglePurchasedShoppingItem } from '../shopping_items/add_or_update_shopping_item.ts';
-import { deleteShoppingItemById } from '../shopping_items/delete_shopping_item_by_id.ts';
-import { getShoppingItemsByShoppingList } from '../shopping_items/get_shopping_items_by_shopping_list.ts';
+import { togglePurchasedShoppingItem } from '../shared/routes/shoppingItems/togglePurchasedShoppingItem.ts';
+import { deleteShoppingItemById } from '../shared/routes/shoppingItems/deleteShoppingItemById.ts';
+import { getShoppingItemsByShoppingList } from '../shared/routes/shoppingItems/getShoppingItemsByShoppingList.ts';
 import { expressApp } from '../shared/anything.ts';
-import {
-	addShoppingListParticipantsById,
-	deleteShoppingListParticipantsById,
-	updateStatusShoppingListParticipantsById,
-} from '../participants/add_participant.ts';
+
+import { deleteShoppingListParticipantsById } from '../shared/routes/participants/deleteShoppingListParticipantsById.ts';
+import { updateStatusShoppingListParticipantsById } from '../shared/routes/participants/updateStatusShoppingListParticipantsById.ts';
 import { sendDataResponse, sendErrorResponse } from '../shared/express_app.ts';
+import { addShoppingListParticipantsById } from '../shared/routes/participants/addShoppingListParticipantsById.ts';
 
 // [clean up is done]
 expressApp((app: ExpressApp) => {
@@ -71,32 +70,25 @@ expressApp((app: ExpressApp) => {
 	});
 
 	////////////////
-	// [clean up is todo]
-	// PARTICIPANTS
+	//#region PARTICIPANTS
+
 	// some of the endpoints can be moved to participant prefix
 	// like delete/put/patch-status
 	app.get(`/${prefix}/:id/participants`, async (req, res) => {
 		try {
 			const result = await getShoppingListParticipantsById(req);
-			return res.status(200).send(result);
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
-	// TODO(@golkhandani): add new participant to the list
 	app.post(`/${prefix}/:id/participants`, async (req, res) => {
 		try {
 			const result = await addShoppingListParticipantsById(req);
-			return res.status(200).send(result);
+			return sendDataResponse(res, result, 201);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
@@ -109,14 +101,9 @@ expressApp((app: ExpressApp) => {
 				const result = await updateStatusShoppingListParticipantsById(
 					req,
 				);
-				return res.status(200).send(result);
+				return sendDataResponse(res, result, 200);
 			} catch (error) {
-				if (error instanceof BasicException) {
-					return res.status(error.status).send({
-						error: error.message,
-					});
-				}
-				return res.status(500).send({ error: 'Something is wrong!' });
+				return sendErrorResponse(res, error);
 			}
 		},
 	);
@@ -125,55 +112,50 @@ expressApp((app: ExpressApp) => {
 		`/${prefix}/:id/participants/:participantId`,
 		async (req, res) => {
 			try {
-				const result = await deleteShoppingListParticipantsById(req);
-				return res.status(204).send(result);
+				const result = await deleteShoppingListParticipantsById(
+					req,
+				);
+				return sendDataResponse(res, result, 204);
 			} catch (error) {
-				if (error instanceof BasicException) {
-					return res.status(error.status).send({
-						error: error.message,
-					});
-				}
-				return res.status(500).send({ error: 'Something is wrong!' });
+				return sendErrorResponse(res, error);
 			}
 		},
 	);
 
+	//#endregion
+
 	////////////////
-	// [clean up is todo]
-	// SHOPPING ITEMS
+	// #region SHOPPING ITEMS
 	app.get(`/${prefix}/:id/items`, async (req, res) => {
 		try {
-			const result = await getShoppingItemsByShoppingList(req);
-			return res.status(200).send(result);
+			const result = await getShoppingItemsByShoppingList(
+				req,
+			);
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.post(`/${prefix}/:id/items`, async (req, res) => {
 		try {
-			const result = await addOrUpdateShoppingItem(req);
-			return res.status(201).send(result);
+			const result = await addOrUpdateShoppingItem(
+				req,
+			);
+			return sendDataResponse(res, result, 201);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
 	app.put(`/${prefix}/:id/items/:shoppingItemId`, async (req, res) => {
 		try {
-			const result = await addOrUpdateShoppingItem(req);
-			return res.status(200).send(result);
+			const result = await addOrUpdateShoppingItem(
+				req,
+			);
+			return sendDataResponse(res, result, 200);
 		} catch (error) {
-			if (error instanceof BasicException) {
-				return res.status(error.status).send({ error: error.message });
-			}
-			return res.status(500).send({ error: 'Something is wrong!' });
+			return sendErrorResponse(res, error);
 		}
 	});
 
@@ -181,15 +163,12 @@ expressApp((app: ExpressApp) => {
 		`/${prefix}/:id/items/:shoppingItemId/purchased`,
 		async (req, res) => {
 			try {
-				const result = await togglePurchasedShoppingItem(req);
-				return res.status(200).send(result);
+				const result = await togglePurchasedShoppingItem(
+					req,
+				);
+				return sendDataResponse(res, result, 200);
 			} catch (error) {
-				if (error instanceof BasicException) {
-					return res.status(error.status).send({
-						error: error.message,
-					});
-				}
-				return res.status(500).send({ error: 'Something is wrong!' });
+				return sendErrorResponse(res, error);
 			}
 		},
 	);
@@ -198,16 +177,14 @@ expressApp((app: ExpressApp) => {
 		`/${prefix}/:id/items/:shoppingItemId`,
 		async (req, res) => {
 			try {
-				const result = await deleteShoppingItemById(req);
-				return res.status(204).send(result);
+				const result = await deleteShoppingItemById(
+					req,
+				);
+				return sendDataResponse(res, result, 204);
 			} catch (error) {
-				if (error instanceof BasicException) {
-					return res.status(error.status).send({
-						error: error.message,
-					});
-				}
-				return res.status(500).send({ error: 'Something is wrong!' });
+				return sendErrorResponse(res, error);
 			}
 		},
 	);
+	//#endregion
 });

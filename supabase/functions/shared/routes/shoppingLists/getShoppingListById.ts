@@ -1,11 +1,11 @@
-import { getClientInfo } from '../shared/admin_client.ts';
+import { getClientInfo } from '../../admin_client.ts';
 import {
 	ShoppingList,
 	shoppingListTable,
 	ShoppingListWithoutIsOwner,
-} from '../shared/models/shopping_list_model.ts';
-import { shoppingListSelect } from '../shared/models/shopping_list_model.ts';
-import { ApiError, ExpressRequest } from '../shared/express_app.ts';
+} from '../../models/shopping_list_model.ts';
+import { shoppingListSelect } from '../../models/shopping_list_model.ts';
+import { ApiError, ExpressRequest } from '../../express_app.ts';
 
 export async function getShoppingListById(
 	{ req }: { req: ExpressRequest },

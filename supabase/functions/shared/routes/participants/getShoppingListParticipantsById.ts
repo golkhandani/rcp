@@ -1,10 +1,10 @@
 import {
 	participantSelect,
 	participantTable,
-} from './../shared/models/participant_model.ts';
-import { getClientInfo } from '../shared/admin_client.ts';
-import { ApiError, ExpressRequest } from '../shared/express_app.ts';
-import { Participant } from '../shared/models/participant_model.ts';
+} from '../../models/participant_model.ts';
+import { getClientInfo } from '../../admin_client.ts';
+import { ApiError, ExpressRequest } from '../../express_app.ts';
+import { Participant } from '../../models/participant_model.ts';
 
 export async function getShoppingListParticipantsById(
 	req: ExpressRequest,
@@ -25,7 +25,7 @@ export async function getShoppingListParticipantsById(
 
 	if (error) {
 		console.error(error);
-		throw new ApiError('Cannot get data! Please try again!', 500, 20500);
+		throw new ApiError('Cannot get data! Please try again!', 500, 201500);
 	}
 	return participants;
 }

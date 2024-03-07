@@ -1,16 +1,16 @@
-import { shoppingItemTable } from './../shared/models/shopping_item_model.ts';
-import { getClientInfo } from '../shared/admin_client.ts';
-import { ExpressRequest } from '../shared/anything.ts';
+import { shoppingItemTable } from '../../models/shopping_item_model.ts';
+import { getClientInfo } from '../../admin_client.ts';
+import { ExpressRequest } from '../../anything.ts';
 import {
 	shoppingListSelect,
 	shoppingListTable,
 	ShoppingListWithoutIsOwner,
-} from '../shared/models/shopping_list_model.ts';
-import { participantTable } from '../shared/models/participant_model.ts';
-import { ApiError } from '../shared/express_app.ts';
-import { participantSelect } from '../shared/models/participant_model.ts';
-import { Participant } from '../shared/models/participant_model.ts';
-import { ShoppingList } from '../shared/models/shopping_list_model.ts';
+} from '../../models/shopping_list_model.ts';
+import { participantTable } from '../../models/participant_model.ts';
+import { ApiError } from '../../express_app.ts';
+import { participantSelect } from '../../models/participant_model.ts';
+import { Participant } from '../../models/participant_model.ts';
+import { ShoppingList } from '../../models/shopping_list_model.ts';
 
 export async function deleteShoppingListById(
 	req: ExpressRequest,

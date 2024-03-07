@@ -1,11 +1,11 @@
-import { getClientInfo } from '../shared/admin_client.ts';
+import { getClientInfo } from '../../admin_client.ts';
 import {
 	ParticipantInvitation,
 	participantInvitationSelect,
 	ParticipantStatus,
 	participantTable,
-} from '../shared/models/participant_model.ts';
-import { ApiError, ExpressRequest } from '../shared/express_app.ts';
+} from '../../models/participant_model.ts';
+import { ApiError, ExpressRequest } from '../../express_app.ts';
 
 export async function getUserInvitations(
 	req: ExpressRequest,

@@ -1,9 +1,9 @@
-import { getClientInfo, userProfileDb } from '../shared/admin_client.ts';
-import { UserProfile } from '../shared/models/user_profile_model.ts';
-import { UserProfileRow } from '../shared/anything.ts';
-import { ApiError, ExpressRequest } from '../shared/express_app.ts';
-import { userProfileTable } from '../shared/models/user_profile_model.ts';
-import { userProfileSelect } from '../shared/models/user_profile_model.ts';
+import { getClientInfo, userProfileDb } from '../../admin_client.ts';
+import { UserProfile } from '../../models/user_profile_model.ts';
+import { UserProfileRow } from '../../anything.ts';
+import { ApiError, ExpressRequest } from '../../express_app.ts';
+import { userProfileTable } from '../../models/user_profile_model.ts';
+import { userProfileSelect } from '../../models/user_profile_model.ts';
 
 export async function upsertProfile(req: ExpressRequest): Promise<UserProfile> {
 	// TODO: parse and validate the data

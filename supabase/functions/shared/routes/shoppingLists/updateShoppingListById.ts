@@ -1,16 +1,16 @@
-import { ExpressRequest } from '../shared/anything.ts';
-import { getClientInfo } from '../shared/admin_client.ts';
+import { ExpressRequest } from '../../anything.ts';
+import { getClientInfo } from '../../admin_client.ts';
 import {
 	ShoppingListRow,
 	shoppingListSelect,
 	shoppingListTable,
-} from '../shared/models/shopping_list_model.ts';
+} from '../../models/shopping_list_model.ts';
 import { FunctionsError } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import {
 	ShoppingList,
 	ShoppingListWithoutIsOwner,
-} from '../shared/models/shopping_list_model.ts';
-import { FunctionException } from '../shared/exceptions/client_info_exception.ts';
+} from '../../models/shopping_list_model.ts';
+import { FunctionException } from '../../exceptions/client_info_exception.ts';
 
 export async function updateShoppingListById(
 	req: ExpressRequest,

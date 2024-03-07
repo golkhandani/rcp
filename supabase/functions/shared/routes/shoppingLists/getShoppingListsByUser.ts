@@ -1,12 +1,12 @@
-import { ExpressRequest } from './../shared/anything.ts';
-import { getClientInfo } from '../shared/admin_client.ts';
+import { ExpressRequest } from '../../anything.ts';
+import { getClientInfo } from '../../admin_client.ts';
 import {
 	ShoppingList,
 	shoppingListSelect,
-} from '../shared/models/shopping_list_model.ts';
-import { participantTable } from '../shared/models/participant_model.ts';
-import { ParticipantStatus } from '../shared/models/participant_model.ts';
-import { ApiError, Pagination } from '../shared/express_app.ts';
+} from '../../models/shopping_list_model.ts';
+import { participantTable } from '../../models/participant_model.ts';
+import { ParticipantStatus } from '../../models/participant_model.ts';
+import { ApiError, Pagination } from '../../express_app.ts';
 
 export async function getShoppingListsByUser(
 	req: ExpressRequest,
